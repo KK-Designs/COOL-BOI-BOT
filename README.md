@@ -7,7 +7,7 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands
 ---
 
 # Commands
-![Commands](image_2021-09-04_121715.png?raw=true "COOL BOI BOT Commands")
+![Commands](commands.png?raw=true "COOL BOI BOT Commands")
 
 # Features
 
