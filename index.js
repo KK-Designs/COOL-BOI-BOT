@@ -11,7 +11,12 @@ const reqEvent = (event) => require(`./events/${event}`);
 const Detector = require('discord-crasher-detector');
 const isURI = require('@stdlib/assert-is-uri');
 const startup = require('./startup.js');
-const UTILS = require('./utils.js');
+const color = require('./color.json');
+const updateNotifier = require('update-notifier');
+const pkg = require('./package.json');
+
+updateNotifier({ pkg }).notify();
+
 try {
 	startup(client, Discord);
 
@@ -308,11 +313,11 @@ if (args[0].value === "644054016476577812") {
 				await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
 
 
-				const levelembed = new Discord.MessageEmbed()
+				const levelembed = new MessageEmbed()
 					.setAuthor(message.author.username, message.author.displayAvatarURL({ dymamic: true }))
 					.setDescription(`${message.author}, You have leveled up to level ${(levelfetch + 1)}!`)
 					.setTimestamp()
-					.setColor(message.channel.type === 'GUILD_TEXT' ? message.author.displayHexColor : '#FFB700');
+					.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 				if (db.get('blockcmds_' + message.guild.id) === 'level') {
 					// ...
 				}
@@ -356,11 +361,13 @@ if (args[0].value === "644054016476577812") {
 
 		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-		if (command && blockedUsers.includes(message.author.id)) return message.reply({embeds: [
-      new MessageEmbed()
-        .setColor('RED')
-        .setDescription(`<:X_:807305490160943104> You are blocked from using commands`),
-    ]});
+		if (command && blockedUsers.includes(message.author.id)) {
+			return message.reply({ embeds: [
+				new MessageEmbed()
+					.setColor('RED')
+					.setDescription('<:X_:807305490160943104> You are blocked from using commands'),
+			] });
+		}
 
 		if (message.guild) {
 			if (db.get('loggingchannel_' + message.guild.id) == null) {
@@ -399,59 +406,67 @@ if (args[0].value === "644054016476577812") {
 							dynamic: true,
 						}))
 						.setTimestamp()
-						.setColor(message.channel.type === 'GUILD_TEXT' ? message.author.displayHexColor : '#FFB700');
+						.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 					return message.channel.send({ embeds: [embed] });
 				}
 			}
 		}
-    //console.log(db.get('blockcmds_' + message.guild.id)[1].includes(commandName));
+		// console.log(db.get('blockcmds_' + message.guild.id)[1].includes(commandName));
 		if (message.guild) {
 			if (db.get('blockcmds_' + message.guild.id) === '0') {
 
 			}
-			else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {        
+			else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {
 				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> That is a blacklisted command!`),
-				]});
-			} else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName)) {        
-        return message.reply({ embeds: [
+						.setDescription('<:X_:807305490160943104> That is a blacklisted command!'),
+				] });
+			}
+			else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName)) {
+				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> That is a blacklisted command!`),
-				]});      
-      }
+						.setDescription('<:X_:807305490160943104> That is a blacklisted command!'),
+				] });
+			}
 		}
+
+    if (command.permissions == undefined) {
+      command.permissions = 'EMBED_LINKS';
+    }
+    if (command.clientPermissons == undefined) {
+      command.permissions = 'EMBED_LINKS';
+    }
 
 		if (command.permissions && message.channel.type === 'GUILD_TEXT') {
 			const authorPerms = message.channel.permissionsFor(message.author);
 			if (!authorPerms || !authorPerms.has(command.permissions)) {
-				return message.reply({embeds: [
+				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> You do not have permission to use this command.`),
-				]});
+						.setDescription('<:X_:807305490160943104> You do not have permission to use this command.'),
+				] });
 			}
 		}
 
 		if (command.clientPermissons && message.channel.type === 'GUILD_TEXT') {
 			const clientPerms = message.channel.permissionsFor(guild.me);
 			if (!clientPerms || !clientPerms.has(command.clientPermissons)) {
-				return message.reply({embeds: [
+				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.`),
-				]});
+						.setDescription('<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.'),
+				] });
 			}
 		}
-    
+
 		if (command.guildOnly && message.channel.type === 'DM') {
-			return message.reply({embeds: [
-        new MessageEmbed()
-          .setColor('RED')
-          .setDescription(`That is a server only command. I can\'t execute those inside DMs. Use \`!help [command name]\` to if it is server only command.`),
-      ]});
+			return message.reply({ embeds: [
+				new MessageEmbed()
+					.setColor('RED')
+					.setDescription('That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.'),
+			] });
 		}
 
 		command.execute(message, args, client);
@@ -494,10 +509,16 @@ if (args[0].value === "644054016476577812") {
 
 	client.on('guildMemberRemove', reqEvent('guildMemberRemove'));
 
-	  client.login(process.env.BOT_TOKEN);
+  process.on('unhandledRejection', async error => { 
+    let user = await client.users.fetch('776848090564657153');
+    user.send({ embeds: [new MessageEmbed()
+      .setColor(color.fail)
+			.setDescription(`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``),
+    ]});
+  });
 
+	  client.login(process.env.BOT_TOKEN);    
 }
-catch (err) {
-	client.users.fetch('776848090564657153').then(user => user.send('Your bad at coding and messed something up here\n' + err));
+catch (err) {	
 	return console.error(err);
 }

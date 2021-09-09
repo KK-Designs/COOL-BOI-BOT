@@ -22,8 +22,8 @@ module.exports = {
 		if (messagefetch == null) messagefetch = '0';
 		if (levelfetch == null) levelfetch = '0';
 
-		let status;
-		if (member.presence.status === 'online') {
+		let status = '#00ff5e';
+		/*if (member.presence.status === 'online') {
 			status = '#00ff5e';
 		}
 		else if (member.presence.status === 'dnd') {
@@ -34,7 +34,7 @@ module.exports = {
 		}
 		else if (member.presence.status === 'offline') {
 			status = '#454545';
-		}
+		}*/
 
 		const Canvas = require('canvas');
 		const { registerFont } = require('canvas');
@@ -113,9 +113,9 @@ module.exports = {
 		const gradient = await Canvas.loadImage('./gradient.png');
 		ctx.drawImage(gradient, 256, 256, 256, 256);
 
-		const welattachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+		const rankAttachment = new Discord.MessageAttachment(canvas.toBuffer(), 'rank-card.png');
 
-		message.channel.send({ content: welattachment, reply: { messageReference: message.id } });
+		message.reply({ files: [ rankAttachment ] });
 
 	},
 };

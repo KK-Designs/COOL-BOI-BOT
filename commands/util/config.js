@@ -9,7 +9,7 @@ module.exports = {
 		const db = require('quick.db');
 		const prefix = require('discord-prefix');
 		const color = require('../../color.json');
-		const guildPrefix = prefix.getPrefix(message.channel.type === 'dm' ? message.author.id : message.guild.id);
+		const guildPrefix = prefix.getPrefix(message.channel.type === 'DM' ? message.author.id : message.guild.id);
 		const { MessageEmbed } = require('discord.js');
 
 		const embed = new MessageEmbed()

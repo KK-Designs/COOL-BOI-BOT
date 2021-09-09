@@ -7,7 +7,7 @@ module.exports = {
 		const fetch = require('node-fetch');
 		const sendError = require('../../error.js');
 		const color = require('../../color.json');
-		const querystring = require('querystring');
+		const querystring = require('qs');
 		const { MessageEmbed } = require('discord.js');
 		const trim = (str, max) => ((str.length > max) ? `${str.slice(0, max - 3)}...` : str);
 

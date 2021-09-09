@@ -7,8 +7,9 @@ module.exports = {
 	category: 'other',
 	async execute(message, args) {
 		const sendError = require('../../error.js');
-		if (!args.length) return sendError('You need to supply search term like `${prefix}discordjs member`', message.channel);
-
+		const prefix = require('discord-prefix');
+		const guildPrefix = prefix.getPrefix(message.channel.type === 'DM' ? message.author.id : message.guild.id);
+		if (!args.length) return sendError(`You need to supply search term like \`${guildPrefix}discordjs member\``, message.channel);
 		const user = message.author;
 		const { MessageEmbed } = require('discord.js');
 		const { MessageActionRow, MessageButton } = require('discord.js');
@@ -26,7 +27,7 @@ module.exports = {
 					      .setStyle('DANGER'),
 			        );
 				message.channel.send({ embeds: [embed], components: [deletemsg], reply: { messageReference: message.id } }).then(m => {
-					const filter = i => i.customId === 'danger';// && i.user.id === message.author.id;
+					const filter = i => i.customId === 'danger';
 
 					const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
 
@@ -35,6 +36,7 @@ module.exports = {
 							if (i.customId === 'danger') {
 								await i.reply({ content: '<:check:807305471282249738> I have deleted the message', ephemeral: true });
 								await m.delete();
+								await message.delete();
 							}
 						}
 						else {

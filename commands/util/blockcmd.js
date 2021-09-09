@@ -29,11 +29,11 @@ module.exports = {
 		  }
 
 		if (args[0].toLowerCase() === 'level') {
-			await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : ""]);
+			await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
 			return message.channel.send({ content: `Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `, reply: { messageReference: message.id } });
 		}
 
-		await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : ""]);
+		await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
 		message.channel.send({ content: `Succesfuly blocked the command ${command.name}`, reply: { messageReference: message.id } });
 
 	},

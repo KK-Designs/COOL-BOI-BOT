@@ -4,6 +4,6 @@ module.exports = {
   	cooldown: 1.5,
   	category: 'fun',
 	execute(message, args) {
-		message.channel.send({ content: 'https://tenor.com/view/yeet-lion-king-simba-rafiki-throw-gif-16194362', reply: { messageReference: message.id } });
+		message.reply({ content: 'https://tenor.com/view/yeet-lion-king-simba-rafiki-throw-gif-16194362' });
 	},
 };

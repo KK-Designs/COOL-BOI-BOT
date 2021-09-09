@@ -7,7 +7,7 @@ module.exports = {
 	cooldown: 3,
 	category: 'info',
 	clientPermissons: 'EMBED_LINKS',
-	execute(message, args) {
+	execute(message, args) {		
 		const { MessageEmbed } = require('discord.js');
 		let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
@@ -18,8 +18,8 @@ module.exports = {
 		const roles = member.roles.cache.map(role => role.toString());
 		let color = member.displayHexColor;
 		if (color == '#000000') color = '#C0C0C0';
-		let status;
-		if (member.presence.status === 'online') {
+		let status = "<:offline:806216568660164659> Unavailable";
+		/*if (member.presence.status === 'online') {
 			status = '<:online:806215585415168040> Online';
 		}
 		else if (member.presence.status === 'dnd') {
@@ -30,7 +30,7 @@ module.exports = {
 		}
 		else if (member.presence.status === 'offline') {
 			status = '<:offline:806216568660164659> offline';
-		}
+		}*/
 
 		const embed = new MessageEmbed()
 			.setTitle(`${member.user.username}`)
@@ -38,8 +38,8 @@ module.exports = {
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
-			.addField('Account Created', member.user.createdAt.toDateString(), true)
-			.addField('Joined Server', member.joinedAt.toDateString(), true)
+			.addField('Account Created', `<t:${Math.floor(member.user.createdAt / 1000)}:f>`, true)
+			.addField('Joined Server', `<t:${Math.floor(member.joinedAt / 1000)}:f>`, true)
 			.addField('Current VC: ', member.voice.channel == null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
 			.addField('Status: ', status, true)
 			.addField('Roles', roles.join(' **|** '), true)

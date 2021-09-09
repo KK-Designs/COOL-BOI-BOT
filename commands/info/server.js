@@ -9,20 +9,22 @@ module.exports = {
 		const guild = message.guild;
 		const { MessageEmbed } = require('discord.js');
 		const serverName = guild.name;
-		const serverIcon = message.guild.iconURL();
-		const infoembed = new MessageEmbed()
-			.setColor(message.guild.me.displayHexColor)
-			.setTitle('Server Info')
-			.setThumbnail(serverIcon)
-			.setDescription(`${message.guild}'s information`)
-			.addField('Owner', `The owner of this server is ${message.guild.owner}`)
-			.addField('Server ID: ', guild.id)
-			.addField('Server Created: ', guild.createdAt.toDateString())
-			.addField('Member Count', `This server has ${message.guild.memberCount} members`)
-			.addField('Emoji Count', `This server has ${message.guild.emojis.cache.size} emojis`)
-			.addField('Roles Count', `This server has ${message.guild.roles.cache.size} roles`)
-			.setFooter(serverName, serverIcon);
+		const serverIcon = guild.iconURL();		
+		guild.fetchOwner().then(owner => {
+			const infoembed = new MessageEmbed()
+				.setColor(guild.me.displayHexColor)
+				.setTitle('Server Info')
+				.setThumbnail(serverIcon)
+				.setDescription(`${guild}'s information`)
+				.addField('Owner', `The owner of this server is ${owner}`)
+				.addField('Server ID: ', guild.id)
+				.addField('Server Created: ', `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>`)
+				.addField('Member Count', `This server has ${guild.memberCount} members`)
+				.addField('Emoji Count', `This server has ${guild.emojis.cache.size} emojis`)
+				.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
+				.setFooter(serverName, serverIcon);
 
-		message.channel.send({ embeds: [ infoembed ], reply: { messageReference: message.id } });
+			message.channel.send({ embeds: [ infoembed ], reply: { messageReference: message.id } });
+		});
 	},
 };

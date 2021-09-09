@@ -1,4 +1,5 @@
 module.exports = async client => {
+	require('dotenv').config();
 	const version = '13.1.0';
 	console.log('Ready!');
 	console.log('© COOL BOI BOT 2021');
@@ -12,7 +13,7 @@ module.exports = async client => {
 		});
 	}, 15000);
 
-	const user = await client.users.fetch('776848090564657153');
+	const user = await client.users.fetch(process.env.OWNER_ID);
 	user.send('Bot is on <:check:807305471282249738>');
 
 	client.api.applications(client.user.id).commands.post({

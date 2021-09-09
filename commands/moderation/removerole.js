@@ -11,7 +11,7 @@ module.exports = {
 		const sendError = require('../../error.js');
 		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 
-		const member = message.mentions.members.last() || message.member;
+		const member = message.mentions.members.last() || await client.users.fetch(args[1]) || message.member;
 
 		if (!role) return sendError('Please provide a valid role', message.channel);
 

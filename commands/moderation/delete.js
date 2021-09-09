@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ['purge', 'clear'],
 	usage: '(number)',
 	permissions: 'MANAGE_MESSAGES',
-	clientPermissons: ['MANAGE_MESSAGES', 'EMBED_LINKS'],
+	clientPermissons: 'MANAGE_MESSAGES',
 	cooldown: 3,
 	category: 'moderation',
 	async execute(message, args) {

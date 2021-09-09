@@ -23,10 +23,6 @@ module.exports = async message => {
 	// Let's perform a coherence check here and make sure we got *something*
 	if (!deletionLog) return console.log(`A message by ${message.author.tag} was deleted, but no relevant audit logs were found.`);
 
-	simplydjs.ghostPing(message, {
-		embedColor: color.bot_theme, // default: #075FFF
-		embedFoot: 'COOL BOI BOT MESSAGE LOGGING', // default: 'Ghost Ping.'
-	});
 	// We now grab the user object of the person who deleted the message
 	// Let us also grab the target of this action to double check things
 	const { executor, target } = deletionLog;

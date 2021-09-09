@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'level',
+	name: 'level2',
 	description: 'Gets your server rank card',
 	cooldown: 2,
 	category: 'general',
