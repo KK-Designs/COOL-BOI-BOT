@@ -1,36 +1,35 @@
-module.exports = (client, Discord) => {
-	const start_giveaway = require('./giveaway.js');
-	const fs = require('fs');
-	client.commands = new Discord.Collection();
-	client.queue = new Discord.Collection();
-	const commands = client.commands = new Discord.Collection();
+const fs = require('fs');
+const {
+  Collection
+} = require("discord.js");
+const start_giveaway = require('./giveaway.js');
+module.exports = (client) => {
 
-	const commandFolders = fs.readdirSync('./commands');
+  client.queue = new Collection();
+  const commandFolders = fs.readdirSync('./commands');
+  const categories = new Collection();
 
-	for (const folder of commandFolders) {
-		const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+  for (const categoryName of commandFolders) {
+    const categoryCmds = new Collection();
+    const commandFiles = fs.readdirSync(`./commands/${categoryName}`).filter(file => file.endsWith('.js'));
 
-		for (const file of commandFiles) {
-			const command = require(`./commands/${folder}/${file}`);
-			client.commands.set(command.name, command);
-		}
-	}
+    for (const file of commandFiles) {
+      console.log("Loading command %s (%s)", file, categoryName);
+      const command = require(`./commands/${categoryName}/${file}`);
 
-	const {
-		Collection,
-	} = require('discord.js');
-	const categories = new Collection();
+      client.commands.set(command.name, command);
+      categoryCmds.set(command.name, command);
+    }
+    categories.set(categoryName, categoryCmds);
+  }
+  client.commands.forEach(command => {
+    const category = categories.get(command.category) ?? new Collection();
 
-	commands.forEach(command => {
-		const category = categories.get(command.category);
-		if (category) {
-			category.set(command.name, command);
-		}
-		else {
-			categories.set(command.category, new Collection().set(command.name, command));
-		}
-	});
-
-	start_giveaway(client);
-
+    if (category) {
+      category.set(command.name, command);
+    } else {
+      categories.set(command.category, new Collection().set(command.name, command));
+    }
+  });
+  start_giveaway(client);
 };
