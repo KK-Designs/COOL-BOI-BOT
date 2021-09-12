@@ -1,7 +1,7 @@
-const {getLogChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
-const color = require('../color.json');
+const color = require("../color.json");
 const db = require('quick.db');
+/** @type {(...args: import("discord.js").ClientEvents["messageUpdate"]) => Promise<any>} */
 module.exports = async (message, messageNew) => {
   if (message.partial)
     return;
@@ -12,7 +12,10 @@ module.exports = async (message, messageNew) => {
   if (message.author.bot)
     return;
 
-  if (!getLogChannel(message.guild, db))
+  const modLogChannelID = db.get('loggingchannel_' + message.guild.id);
+  const modLogChannel = message.guild.channels.cache.get(modLogChannelID);
+
+  if (!modLogChannel)
     return;
 
   const embed = new MessageEmbed()
@@ -21,15 +24,8 @@ module.exports = async (message, messageNew) => {
     .setDescription(`${message.author} edited a message in ${message.channel}`)
     .addField('Old message:', `${message}`, true)
     .addField('New message:', `${messageNew}`, true)
-    .setFooter('COOL BOI BOT MESSAGE LOGGING')
+    .setFooter(`COOL BOI BOT MESSAGE LOGGING`)
     .setTimestamp();
-  //modLogChannel.send({ embeds: [embed] }).catch();
-  const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
-  const webhook = webhooks.first();
 
-  await webhook.send({
-    username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-    embeds: [embed]
-  });
+  await modLogChannel.send({embeds: [embed]});
 };

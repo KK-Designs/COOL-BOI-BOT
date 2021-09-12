@@ -50,6 +50,10 @@ module.exports = {
     if (embed.description.length >= 4096) {
       embed.description = `${embed.description.substr(0, 4093)}...`;
     }
+<<<<<<< HEAD
     message.reply({embeds: [embed]});
+=======
+    message.reply({embeds: [embed]})
+>>>>>>> 9197496 (Inital commit)
   }
 };

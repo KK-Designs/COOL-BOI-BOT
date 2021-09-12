@@ -19,12 +19,17 @@ module.exports = async (message) => {
     return;
 
   runDetector(message);
+<<<<<<< HEAD
   if (message.author.bot)
     return;
 
   if (message.channel.type === "GUILD_TEXT") {
     await handleLevels(message);
     setGuildDefaults(message.guild);
+=======
+  if (message.channel.type === "GUILD_TEXT" && !message.author.bot) {
+    await handleLevels(message);
+>>>>>>> 9197496 (Inital commit)
   }
   //db.delete(`blockedusers_${client.user.id}`, '776848090564657153')
   const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
@@ -35,7 +40,11 @@ module.exports = async (message) => {
 
   const [, matchedPrefix] = message.content.match(prefixRegex);
 
+<<<<<<< HEAD
   if (!message.content.startsWith(matchedPrefix))
+=======
+  if (!message.content.startsWith(matchedPrefix) || message.author.bot)
+>>>>>>> 9197496 (Inital commit)
     return;
 
   const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
@@ -65,6 +74,10 @@ module.exports = async (message) => {
     return void await message.channel.send({embeds: [embed]});
   }
   if (message.guild) {
+<<<<<<< HEAD
+=======
+    setGuildDefaults(message.guild);
+>>>>>>> 9197496 (Inital commit)
     if (cmdIsBlocked(message.guild, command.name))
       return void await message.reply({content: `<:no:803069123918823454> That is a blacklisted command!`});
 
@@ -160,7 +173,11 @@ function userIsBlocked(user) {
   const {client} = user;
   const blockedUsers = db.get('blockedusers_' + client.user.id);
   
+<<<<<<< HEAD
   return blockedUsers?.includes(user.id);
+=======
+  return blockedUsers.includes(user.id);
+>>>>>>> 9197496 (Inital commit)
   
 }
 /**
@@ -195,7 +212,20 @@ async function runDetector(message, videoUrl = message.content) {
   if (!isURI(videoUrl))
     return;
 
+<<<<<<< HEAD
   const analysis = await Detector.AnalyzeVideo(videoUrl, true);
 
   return analysis.crasher ?? false;
+=======
+  const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(() => {return;});
+
+  if (analysis?.crasher) {
+    await message.delete();
+    await message.channel.send({content: 'Please don\'t send videos that crashes the discord client.', reply: {messageReference: message.id}});
+
+    return true;
+  }
+
+  return false;
+>>>>>>> 9197496 (Inital commit)
 }

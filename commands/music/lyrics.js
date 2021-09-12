@@ -1,7 +1,10 @@
 const {MessageEmbed} = require("discord.js");
 const color = require('../../color.json');
 const solenolyrics = require("solenolyrics");
+<<<<<<< HEAD
 const fetch = require("node-fetch").default;
+=======
+>>>>>>> 9197496 (Inital commit)
 module.exports = {
   name: "lyrics",
   description: "🎶 Get lyrics for the currently playing song",
@@ -21,7 +24,11 @@ module.exports = {
     try {
       //lyrics = await lyricsFinder(queue.songs[0].title, "");
       msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
+<<<<<<< HEAD
       lyrics = await getLyrics(queue.songs[0].title);
+=======
+      lyrics = await solenolyrics.requestLyricsFor(queue.songs[0].title);
+>>>>>>> 9197496 (Inital commit)
       if (!lyrics)
         lyrics = `No lyrics found for ${queue.songs[0].title}.`;
     } catch (error) {
@@ -30,7 +37,11 @@ module.exports = {
     let lyricsEmbed = new MessageEmbed()
       .setAuthor(`${queue.songs[0].title} — Lyrics`, "https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif", queue.songs[0].url)
       .setThumbnail(queue.songs[0].img)
+<<<<<<< HEAD
       .setColor(message.guild?.me.displayHexColor ?? color.bot_theme)
+=======
+      .setColor(message.channel.type === "DM" ? color.bot_theme : message.guild.me.displayHexColor)
+>>>>>>> 9197496 (Inital commit)
       .setDescription(lyrics)
       .setTimestamp()
       .setFooter(message.author.username, message.author.displayAvatarURL({dynamic: true}));
@@ -51,8 +62,13 @@ module.exports = {
 
     let lyrics;
     try {
+<<<<<<< HEAD
       await interaction.deferReply();
       lyrics = await getLyrics(queue.songs[0].title)
+=======
+      await interaction.reply(`Fetching lyrics for ${queue.songs[0].title}...`);
+      lyrics = await solenolyrics.requestLyricsFor(queue.songs[0].title)
+>>>>>>> 9197496 (Inital commit)
         ?? `No lyrics found for ${queue.songs[0].title}.`;
     } catch (error) {
       console.error(error);
@@ -64,12 +80,17 @@ module.exports = {
       .setColor(interaction.channel.type === "DM" ? color.bot_theme : interaction.guild.me.displayHexColor)
       .setDescription(lyrics)
       .setTimestamp()
+<<<<<<< HEAD
       .setFooter(interaction.user.username, interaction.user.displayAvatarURL({dynamic: true}));
+=======
+      .setFooter(interaction.author.username, interaction.author.displayAvatarURL({dynamic: true}));
+>>>>>>> 9197496 (Inital commit)
     if (lyricsEmbed.description.length >= 2048) {
       lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
     }
     await interaction.editReply({embeds: [lyricsEmbed]}).catch(console.error);
   }
+<<<<<<< HEAD
 };
 async function getLyrics(title) {
   const url = new URL("/lyrics", "https://some-random-api.ml");
@@ -85,3 +106,6 @@ async function getLyrics(title) {
 
   return json.lyrics;
 }
+=======
+};
+>>>>>>> 9197496 (Inital commit)

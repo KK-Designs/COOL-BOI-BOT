@@ -29,6 +29,8 @@
     "canvas-extras": "^1.0.7",
     "cool-ascii-faces": "^1.3.4",
     "cputilization": "^1.0.0",
+    "deepmerge": "^4.2.2",
+    "discord-badges": "^1.2.3",
     "discord-crasher-detector": "^1.0.3",
     "discord-gamecord": "^1.1.4",
     "discord-giveaways": "github:Androz2091/discord-giveaways#discord.js-v13",

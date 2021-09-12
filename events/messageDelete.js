@@ -1,7 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const db = require('quick.db');
 const color = require("../color.json");
-const {getLogChannel} = require('../utils.js');
 /** @type {(...args: import("discord.js").ClientEvents["messageDelete"]) => Promise<any>} */
 module.exports = async message => {
   if (message.partial)
@@ -13,12 +12,14 @@ module.exports = async message => {
   if (message.author.bot)
     return;
 
-  if (message.content === '')
+  if (!message.content)
     return;
 
   const messageChannel = message.channel.name;
+  const logchannelID = db.get('loggingchannel_' + message.guild.id);
+  const logchannel = message.guild.channels.cache.get(logchannelID);
 
-  if (!getLogChannel(message.guild, db))
+  if (!logchannel)
     return;
 
   // ignore direct messages
@@ -45,14 +46,14 @@ module.exports = async message => {
     .setAuthor(executor.tag, executor.displayAvatarURL({dynamic: true}))
     .setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}, by ${executor.tag}`)
     .setDescription(message.content)
-    .setFooter('COOL BOI BOT MESSAGE LOGGING')
+    .setFooter(`COOL BOI BOT MESSAGE LOGGING`)
     .setTimestamp();
   const delembed1 = new MessageEmbed()
     .setColor(color.bot_theme)
-  // .setAuthor(executor.tag,  executor.displayAvatarURL({ dynamic: true }))
+    //.setAuthor(executor.tag,  executor.displayAvatarURL({ dynamic: true }))
     .setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}`)
     .setDescription(message.content)
-    .setFooter('COOL BOI BOT MESSAGE LOGGING')
+    .setFooter(`COOL BOI BOT MESSAGE LOGGING`)
     .setTimestamp();
 
   if (message.author.bot)
@@ -61,25 +62,9 @@ module.exports = async message => {
   // And now we can update our output with a bit more information
   // We will also run a check to make sure the log we got was for the same author's message
   if (target.id === message.author.id) {
-    //modLogChannel.send({ embeds: [ delembed ] });
-    const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
-    const webhook = webhooks.first();
-
-    await webhook.send({
-      username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-      embeds: [delembed1]
-    });
+    await logchannel.send({embeds: [delembed]});
   } else {
-    //modLogChannel.send({ embeds: [ delembed1 ] });
-    const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
-    const webhook = webhooks.first();
-
-    await webhook.send({
-      username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-      embeds: [delembed]
-    });
+    await logchannel.send({embeds: [delembed1]});
   }
 
 };

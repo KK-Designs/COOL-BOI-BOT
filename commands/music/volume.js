@@ -23,7 +23,11 @@ module.exports = {
       return message.reply({content: "There is nothing playing in this server."});
 
     if (!args[0])
+<<<<<<< HEAD
       return message.reply({content: `The current volume is: **${serverQueue.volume}**`});
+=======
+      return message.reply({ content: `The current volume is: **${serverQueue.volume}**` })
+>>>>>>> 9197496 (Inital commit)
 
     const volume = Number.parseInt(args[0]);
 
@@ -34,7 +38,11 @@ module.exports = {
       return message.reply({content: 'You can\'t set the volume more than 150. or lower than 0'});
 
     serverQueue.volume = volume;
+<<<<<<< HEAD
     serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
+=======
+    serverQueue.player.state.resource.setVolumeLogarithmic(volume / 100);
+>>>>>>> 9197496 (Inital commit)
     let xd = new MessageEmbed()
       .setDescription(`I have set the volume to: **${args[0]}/100**`)
       .setAuthor("Server Volume Manager", "https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif")

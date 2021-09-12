@@ -23,6 +23,7 @@ module.exports = {
     if (!message.member?.voice.channelId) {
       return await message.reply({content: 'You need to join a voice channel to use this command.'});
     }
+<<<<<<< HEAD
     const res = await getOrCreateConnection(message.member.voice.channel);
 
     if (!res.connection)
@@ -38,6 +39,16 @@ module.exports = {
 
     res.connection.subscribe(player);
     await entersState(player, AudioPlayerStatus.Playing, 20_000);
+=======
+    const {connection} = await getOrCreateConnection(message.member.voice.channel);
+
+    if (!connection)
+      return await message.reply("VC Error: Connection Refused");
+
+    if (connection.joinConfig.channelId !== message.member.voice.channelId)
+      return await message.reply("I'm still playing music in another channel");
+
+>>>>>>> 9197496 (Inital commit)
     await message.reply("Success");
   },
   async	executeSlash(interaction) {
@@ -84,7 +95,17 @@ async function getOrCreateConnection(channel) {
     connection,
     /** @returns {AudioPlayer} */
     get player() {
+<<<<<<< HEAD
       return connection.state.subscription?.player;
+=======
+      let player = connection.state.subscription?.player;
+      if (!player) {
+        player = makePlayer();
+        connection.subscribe(player);
+      }
+
+      return player;
+>>>>>>> 9197496 (Inital commit)
     }
   };
 }

@@ -75,14 +75,14 @@ const pbInfo = {
   y: 192,
   width: 400,
   height: 25
-};
+}
 /**
  * @param {import("discord.js").GuildMember} member
  */
 async function makeCard(member) {
   const messagefetch = db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 0;
   const levelfetch = db.fetch(`level_${member.guild.id}_${member.user.id}`) ?? 0;
-  const status = statuses[member.presence?.status ?? "offline"];
+  //const status = statuses[member.presence?.status ?? "offline"];
   const canvas = Canvas.createCanvas(700, 250);
   const ctx = canvas.getContext('2d');
   let totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
@@ -125,8 +125,8 @@ async function makeCard(member) {
   ctx.lineWidth = 7;
   ctx.clip();
   // Fill with gradient
-  ctx.strokeStyle = status;
-  //ctx.strokeStyle = statuses.online;
+  //ctx.strokeStyle = status;
+  ctx.strokeStyle = statuses.online;
   ctx.beginPath();
   ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
   ctx.stroke();

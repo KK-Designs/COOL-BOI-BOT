@@ -1,19 +1,27 @@
-const {getLogChannel} = require('../utils.js');
-const {getWelcomeChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
-const color = require('../color.json');
+const color = require("../color.json");
 const db = require('quick.db');
+/** @type {(...args: import("discord.js").ClientEvents["guildMemberRemove"]) => Promise<any>} */
 module.exports = async member => {
+ 
+  const guild = member.guild;
+  const modLogChannelID = db.get('loggingchannel_' + guild.id);
+  const modLogChannel = guild.channels.cache.get(modLogChannelID);
+  //member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
+  // Send the message to a designated channel on a server:
+  const welcomeChannelID = db.get('welcomechannel_' + member.guild.id);
+  const welcomeChannel = member.guild.channels.cache.get(welcomeChannelID);
+
   // Do nothing if the channel wasn't found on this server
-  if (!getWelcomeChannel(member.guild, db))
+  if (!welcomeChannel)
     return;
 
   // Send the message, mentioning the member
-  getWelcomeChannel(member.guild, db).send({content: `${member} just left the server  :c`});
-  if (!getLogChannel(member.guild, db))
+  await welcomeChannel.send({content: `${member} just left the server  :c`});
+  if (!modLogChannel)
     return;
 
-  if (member.bot)
+  if (member.user.bot)
     return;
 
   const embed = new MessageEmbed()
@@ -22,17 +30,10 @@ module.exports = async member => {
     .setDescription(`${member} left ${member.guild.name}`)
     .addField('Joined:', `${member.joinedAt.toDateString()}`, true)
     .addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
-    .setFooter('COOL BOI BOT MEMBER LOGGING')
+    .setFooter(`COOL BOI BOT MEMBER LOGGING`)
     .setTimestamp();
-  //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-  const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
-  const webhook = webhooks.first();
 
-  await webhook.send({
-    username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-    embeds: [embed]
-  });
+  return await modLogChannel.send({embeds: [embed]});
   // we'll send to the welcome channel.
 
 };
