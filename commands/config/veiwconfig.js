@@ -1,31 +1,30 @@
+const {MessageEmbed} = require('discord.js');
+const db = require('quick.db');
+const prefix = require('discord-prefix');
+const color = require("../../color.json");
+const config = require("../../config.json");
 module.exports = {
-	name: 'viewconfig',
-	description: 'View the bots configuration',
-	cooldown: 2,
-	guildOnly: true,
-	category: 'config',
-	aliases: ['configuration'],
-	execute(message, args, client) {
-		const db = require('quick.db');
-		const prefix = require('discord-prefix');
-		const color = require('../../color.json');
-		const guildPrefix = prefix.getPrefix(message.channel.type === 'DM' ? message.author.id : message.guild.id);
-		const { MessageEmbed } = require('discord.js');
+  name: 'config',
+  description: 'View the bots configuration',
+  cooldown: 2,
+  guildOnly: true,
+  category: 'config',
+  aliases: ['configuration', 'viewconfig'],
+  execute(message, args, client) {
+    const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
+    const embed = new MessageEmbed()
+      .setTitle(`${message.guild.name} config`)
+      .setThumbnail(message.guild.iconURL())
+      .addFields(
+        {name: '**Prefix**', value: `${guildPrefix}`, inline: true},
+        {name: '**Audit logging channel**', value: `${db.get('loggingchannel_' + message.guild.id) === '0' ? `None, do \`${guildPrefix}setlogChannel [#channel]\` to configure this.` : '<#' + db.get('loggingchannel_' + message.guild.id) + '>'}`, inline: true},
+        {name: '**Welcome channel**', value: `${db.get('welcomechannel_' + message.guild.id) === '0' ? `None, do \`${guildPrefix}setwelcomeChannel [#channel]\` to configure this.` : '<#' + db.get('welcomechannel_' + message.guild.id) + '>'}`, inline: true}
+      )
+      .setTimestamp()
+      .setFooter(message.guild.name, message.guild.iconURL())
+      .setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-		const embed = new MessageEmbed()
-			.setTitle(`${message.guild.name} config`)
-			.setThumbnail(message.guild.iconURL())
-			.addFields(
-				{ name: '**Prefix**', value: `${guildPrefix == null ? '!' : guildPrefix}`, inline: true },
-				{ name: '**Audit logging channel**', value: `${db.get('loggingchannel_' + message.guild.id) === '0' ? `None, do \`${guildPrefix == null ? '!' : guildPrefix}setlogChannel [#channel]\` to configure this.` : '<#' + db.get('loggingchannel_' + message.guild.id) + '>'}`, inline: true },
-				{ name: '**Welcome channel**', value: `${db.get('welcomechannel_' + message.guild.id) === '0' ? `None, do \`${guildPrefix == null ? '!' : guildPrefix}setwelcomeChannel [#channel]\` to configure this.` : '<#' + db.get('welcomechannel_' + message.guild.id) + '>'}`, inline: true },
-			)
-			.setTimestamp()
-			.setFooter(message.guild.name, message.guild.iconURL())
-			.setColor(message.channel.type === 'dm' ? '#FFB700' : message.guild.me.displayHexColor,
-			);
+    message.reply({embeds: [embed]});
 
-		message.channel.send({ embeds: [ embed ], reply: { messageReference: message.id } });
-
-	},
+  }
 };
