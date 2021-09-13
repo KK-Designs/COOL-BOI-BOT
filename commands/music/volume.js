@@ -34,7 +34,7 @@ module.exports = {
       return message.reply({content: 'You can\'t set the volume more than 150. or lower than 0'});
 
     serverQueue.volume = volume;
-    serverQueue.player.state.resource.setVolumeLogarithmic(volume / 100);
+    serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
     let xd = new MessageEmbed()
       .setDescription(`I have set the volume to: **${args[0]}/100**`)
       .setAuthor("Server Volume Manager", "https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif")

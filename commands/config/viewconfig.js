@@ -9,7 +9,7 @@ module.exports = {
   cooldown: 2,
   guildOnly: true,
   category: 'config',
-  aliases: ['configuration', 'viewconfig'],
+  aliases: ['configuration'],
   execute(message, args, client) {
     const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
     const embed = new MessageEmbed()
