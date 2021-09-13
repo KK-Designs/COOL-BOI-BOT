@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 const Discord = require('discord.js');
 const deployCommands = require("../deploy");
 module.exports = async client => {
-=======
-const deployCommands = require("../deploy");
-module.exports = async client => {
-  const Discord = require('discord.js');
->>>>>>> 9197496 (Inital commit)
   const version = Discord.version;
 
   console.log(`Ready!`);

@@ -19,17 +19,10 @@ module.exports = {
           const advice = JSON.parse(res.text);
 
           setTimeout(() => {
-<<<<<<< HEAD
             message.reply({content: `📜  "${advice.slip.advice}"`});
           }, 750);
         } else {
           message.reply({content: `Opps, well this is an error. If this continues dm <@765686109073440808>. \n \nSpeficic error: ${err}`});
-=======
-            message.reply({ content: `📜  "${advice.slip.advice}"` })
-          }, 750);
-        } else {
-          message.reply({ content: `Opps, well this is an error. If this continues dm <@765686109073440808>. \n \nSpeficic error: ${err}` })
->>>>>>> 9197496 (Inital commit)
           console.error(`REST call failed: ${err}, status code: ${res.status}`);
         }
       });
