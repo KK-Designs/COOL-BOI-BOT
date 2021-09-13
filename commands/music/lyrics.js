@@ -1,6 +1,7 @@
 const {MessageEmbed} = require("discord.js");
 const color = require('../../color.json');
 const solenolyrics = require("solenolyrics");
+const fetch = require("node-fetch").default;
 module.exports = {
   name: "lyrics",
   description: "🎶 Get lyrics for the currently playing song",
@@ -20,7 +21,7 @@ module.exports = {
     try {
       //lyrics = await lyricsFinder(queue.songs[0].title, "");
       msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
-      lyrics = await solenolyrics.requestLyricsFor(queue.songs[0].title);
+      lyrics = await getLyrics(queue.songs[0].title);
       if (!lyrics)
         lyrics = `No lyrics found for ${queue.songs[0].title}.`;
     } catch (error) {
@@ -50,8 +51,8 @@ module.exports = {
 
     let lyrics;
     try {
-      await interaction.reply(`Fetching lyrics for ${queue.songs[0].title}...`);
-      lyrics = await solenolyrics.requestLyricsFor(queue.songs[0].title)
+      await interaction.deferReply();
+      lyrics = await getLyrics(queue.songs[0].title)
         ?? `No lyrics found for ${queue.songs[0].title}.`;
     } catch (error) {
       console.error(error);
@@ -63,10 +64,24 @@ module.exports = {
       .setColor(interaction.channel.type === "DM" ? color.bot_theme : interaction.guild.me.displayHexColor)
       .setDescription(lyrics)
       .setTimestamp()
-      .setFooter(interaction.author.username, interaction.author.displayAvatarURL({dynamic: true}));
+      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({dynamic: true}));
     if (lyricsEmbed.description.length >= 2048) {
       lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
     }
     await interaction.editReply({embeds: [lyricsEmbed]}).catch(console.error);
   }
 };
+async function getLyrics(title) {
+  const url = new URL("/lyrics", "https://some-random-api.ml");
+
+  url.searchParams.set("title", title);
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
+  }
+  const json = await res.json();
+  console.log(json)
+
+  return json.lyrics;
+}
