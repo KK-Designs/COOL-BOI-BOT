@@ -33,7 +33,7 @@ module.exports = {
     if (color === '#000000')
       color = '#C0C0C0';
 
-    //const status = statuses[member.presence?.status ?? "offline"];
+    const status = statuses[member.presence?.status ?? "offline"];
     const embed = new MessageEmbed()
       .setTitle(`${member.user.username}`)
       .setColor(color)
@@ -43,7 +43,7 @@ module.exports = {
       .addField('Account Created', member.user.createdAt.toDateString(), true)
       .addField('Joined Server', member.joinedAt.toDateString(), true)
       .addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
-      //.addField('Status: ', status, true)
+      .addField('Status: ', status, true)
       .addField('Roles', roles.join(' **|** '), true)
       .setFooter('Powered by the COOL BOI BOT', member.user.displayAvatarURL({dynamic: true}))
       .setTimestamp();
@@ -59,7 +59,7 @@ module.exports = {
     if (color === '#000000')
       color = '#C0C0C0';
 
-    //const status = statuses[member.presence?.status ?? "offline"];
+    const status = statuses[member.presence?.status ?? "offline"];
     const embed = new MessageEmbed()
       .setTitle(`${member.user.username}`)
       .setColor(color)
@@ -69,7 +69,7 @@ module.exports = {
       .addField('Account Created', member.user.createdAt.toDateString(), true)
       .addField('Joined Server', member.joinedAt.toDateString(), true)
       .addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
-      //.addField('Status: ', status, true)
+      .addField('Status: ', status, true)
       .addField('Roles', roles.join(' **|** '), true)
       .setFooter('Powered by the COOL BOI BOT', member.user.displayAvatarURL({dynamic: true}))
       .setTimestamp();

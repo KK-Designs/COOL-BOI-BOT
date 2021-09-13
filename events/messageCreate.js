@@ -195,14 +195,7 @@ async function runDetector(message, videoUrl = message.content) {
   if (!isURI(videoUrl))
     return;
 
-  const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(() => {return;});
+  const analysis = await Detector.AnalyzeVideo(videoUrl, true);
 
-  if (analysis?.crasher) {
-    await message.delete();
-    await message.channel.send({content: 'Please don\'t send videos that crashes the discord client.', reply: {messageReference: message.id}});
-
-    return true;
-  }
-
-  return false;
+  return analysis.crasher ?? false;
 }
