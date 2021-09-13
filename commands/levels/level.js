@@ -22,8 +22,11 @@ module.exports = {
 		if (messagefetch == null) messagefetch = '0';
 		if (levelfetch == null) levelfetch = '0';
 
-		let status = '#00ff5e';
-		/*if (member.presence.status === 'online') {
+		let status;
+		if (!member.presence) {
+			status = '#454545';
+		}
+		else if (member.presence.status === 'online') {
 			status = '#00ff5e';
 		}
 		else if (member.presence.status === 'dnd') {
@@ -31,10 +34,7 @@ module.exports = {
 		}
 		else if (member.presence.status === 'idle') {
 			status = '#ff9d00';
-		}
-		else if (member.presence.status === 'offline') {
-			status = '#454545';
-		}*/
+		}		
 
 		const Canvas = require('canvas');
 		const { registerFont } = require('canvas');

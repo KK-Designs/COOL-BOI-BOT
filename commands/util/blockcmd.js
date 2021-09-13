@@ -8,14 +8,20 @@ module.exports = {
 	category: 'util',
 	async execute(message, args, client) {
 	 const db = require('quick.db');
+	 const { MessageEmbed } = require('discord.js');
 	 const { suggest } = require('@laboralphy/did-you-mean');
+	 const color = require('../../color.json');
 	 const { commands } = message.client;
 	 const name = args[0].toLowerCase();
 	 const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
-		if (args[0].toLowerCase() === 'none') {
-			message.channel.send('Unblocked all commands');
-			return db.set(`blockcmds_${message.guild.id}`, '0');
+		if (args[0].toLowerCase() === 'clear' || args[0].toLowerCase() === 'none') {
+			message.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(color.success)
+					.setDescription('<:check:807305471282249738> Unblocked all commands'),
+			]});
+			return await db.set(`blockcmds_${message.guild.id}`, '0');
 		}
 
 		if (!command) {
@@ -25,16 +31,27 @@ module.exports = {
 			if (!result.length) {
 			  error = 'that\'s not a valid command!';
 			}
-			return message.reply({ content: `${error}` });
+			return message.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(color.fail)
+					.setDescription(`<:X_:807305490160943104> ${error}`),
+			]});
 		  }
 
 		if (args[0].toLowerCase() === 'level') {
 			await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
-			return message.channel.send({ content: `Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `, reply: { messageReference: message.id } });
+			return message.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(color.success)
+					.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `),
+			]});
 		}
 
 		await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
-		message.channel.send({ content: `Succesfuly blocked the command ${command.name}`, reply: { messageReference: message.id } });
-
+		message.reply({ embeds: [
+			new MessageEmbed()
+				.setColor(color.success)
+				.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}`),
+		]});
 	},
 };

@@ -7,10 +7,9 @@ module.exports = async message => {
 	if (message.content === '') return;
 	const messageChannel = message.channel.name;
 	const db = require('quick.db');
-	const simplydjs = require('simply-djs');
-	var logchannel = db.get('loggingchannel_' + message.guild.id);
-	var logchannel = message.guild.channels.cache.get(logchannel);
-	if (!logchannel) return;
+	var modLogChannel = db.get('loggingchannel_' + message.guild.id);
+	var modLogChannel = message.guild.channels.cache.get(modLogChannel);
+	if (!modLogChannel) return;
 	// ignore direct messages
 	if (!message.guild) return;
 	const fetchedLogs = await message.guild.fetchAuditLogs({
@@ -47,10 +46,26 @@ module.exports = async message => {
 	// And now we can update our output with a bit more information
 	// We will also run a check to make sure the log we got was for the same author's message
 	if (target.id === message.author.id) {
-		logchannel.send({ embeds: [ delembed ] });
+		//modLogChannel.send({ embeds: [ delembed ] });
+		const webhooks = await modLogChannel.fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({		
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [delembed1],
+		});
 	}
 	else {
-		logchannel.send({ embeds: [ delembed1 ] });
+		//modLogChannel.send({ embeds: [ delembed1 ] });
+		const webhooks = await modLogChannel.fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({		
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [delembed],
+		});
 	}
 
 };

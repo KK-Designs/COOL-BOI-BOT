@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const client = new Discord.Client({ intents: 24287, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'], ws: { properties: { $browser: 'Discord iOS' } } });
+const client = new Discord.Client({ intents: 32767, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'], ws: { properties: { $browser: 'Discord iOS' } } });
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
 const prefix = require('discord-prefix');
@@ -339,12 +339,23 @@ if (args[0].value === "644054016476577812") {
 			}
 		}
 		const blockedUsers = await db.get('blockedusers_' + client.user.id);
-
+   
 		const guild = message.guild;
 
 		if (!message.guild) {
 			prefix.setPrefix('!', message.author.id);
 		}
+
+    const args1 = message.content.slice(1).trim().split(/ +/);    
+    const command1 = client.commands.get("prefix");
+
+    prefixViewCommand(args1, command1);
+
+    function prefixViewCommand(args, command) {            
+      if (message.content.toLowerCase() === "!prefix") {               
+        return command.execute(message, args, client);          
+      }              
+    }    
 
 		const defaultPrefix = '!';
 		let guildPrefix = prefix.getPrefix(message.channel.type === 'GUILD_TEXT' ? message.guild.id : message.author.id);
@@ -359,8 +370,8 @@ if (args[0].value === "644054016476577812") {
 		const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
 
-		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
+		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));    
+    
 		if (command && blockedUsers.includes(message.author.id)) {
 			return message.reply({ embeds: [
 				new MessageEmbed()
@@ -381,8 +392,7 @@ if (args[0].value === "644054016476577812") {
 			}
 		}
 
-		if (!command) return;
-
+		if (!command) return;               
 
 		if (commands) {
 
@@ -411,19 +421,19 @@ if (args[0].value === "644054016476577812") {
 				}
 			}
 		}
-		// console.log(db.get('blockcmds_' + message.guild.id)[1].includes(commandName));
+		
 		if (message.guild) {
 			if (db.get('blockcmds_' + message.guild.id) === '0') {
-
+       
 			}
-			else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {
+			else if (db.get('blockcmds_' + message.guild.id) && db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {
 				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
 						.setDescription('<:X_:807305490160943104> That is a blacklisted command!'),
 				] });
 			}
-			else if (db.get('blockcmds_' + message.guild.id)[1].includes(commandName)) {
+			else if (db.get('blockcmds_' + message.guild.id) && db.get('blockcmds_' + message.guild.id)[1].includes(commandName)) {
 				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
@@ -467,9 +477,22 @@ if (args[0].value === "644054016476577812") {
 					.setColor('RED')
 					.setDescription('That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.'),
 			] });
-		}
+		}            
 
-		command.execute(message, args, client);
+    prefixViewCommand1(args, command);
+
+    function prefixViewCommand1(args, command) {                    
+      if (commandName === `prefix`) {               
+        command.execute(message, args, client);
+        return true;          
+      } else {
+        return false;
+      }      
+    }
+
+    if (!prefixViewCommand1()) {
+		  command.execute(message, args, client);
+    }
 
 		// the user can type the command ... your command code goes here :)
 

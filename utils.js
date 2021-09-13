@@ -41,7 +41,7 @@ module.exports = {
 		else if (message.partial == false) {
 			return false;
 		}
-	},
+	},	
 	getUserFromMention(mention) {
 		if (!mention) throw new Error('INVALID args\nPlease provide a valid argument for mention');
 

@@ -5,12 +5,12 @@ module.exports = async message => {
 	if (message.first().channel.name == 'server-logs') return;
 	const messageChannel = message.first().channel.name;
 	const db = require('quick.db');
-	var logchannel = db.get('loggingchannel_' + message.first().guild.id);
-	var logchannel = message.first().guild.channels.cache.get(logchannel);
+	var modLogChannel = db.get('loggingchannel_' + message.first().guild.id);
+	var modLogChannel = message.first().guild.channels.cache.get(modLogChannel);
 
 	const channel = message.first().channel;
 
-	if (logchannel) {
+	if (modLogChannel) {
 		const messageArray = [...message.values()];
 		messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
 		let stringedArray = messageArray.join('\n'); // We join the array using \n to separate the lines
@@ -25,7 +25,15 @@ module.exports = async message => {
 			.setDescription(`${stringedArray}`)
 			.setFooter('COOL BOI BOT MESSAGE LOGGING')
 			.setTimestamp();
-		logchannel.send({ embeds: [embed] }).catch(console.error);
+				//modLogChannel.send({ embeds: [embed] }).catch(console.error);
+	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhook = webhooks.first();
+
+	await webhook.send({		
+		username: 'COOL BOI BOT Logging',
+		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+		embeds: [embed],
+	});
 	}
 
 };

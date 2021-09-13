@@ -267,7 +267,7 @@ module.exports = {
 				{ name: `${aliasename}`, value: `${aliasesinfo}`, inline: true },
 				{ name: '**Permissions**', value: `${perms}`, inline: true },
 				{ name: '**Bot Permissions**', value: `\`${command.clientPermissons == undefined ? 'VIEW_CHANNEL' : command.clientPermissons}\`, \`SEND_MESSAGES\` `, inline: true },
-				{ name: '**Last updated**', value: `${new Date((fs.statSync(`/root/COOL-BOI-BOT/commands/${command.category}/${command.name}.js`).mtime)).toLocaleString('en-US', { timeZone: 'America/los_angeles' }) || 'No date avavible'}`, inline: true },
+				{ name: '**Last updated**', value: `${new Date((fs.statSync(`/root/COOL-BOI-BOT/commands/${command.category}/${command.name.toLowerCase()}.js`).mtime)).toLocaleString('en-US', { timeZone: 'America/los_angeles' }) || 'No date avavible'}`, inline: true },
 			)
 			.addField(data1.toString(), '** **')
 			.setDescription('[] arguments mean required, and () arguments mean optional. If theres none it means the there are no arguments nedded to run the command')

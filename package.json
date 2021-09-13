@@ -8,6 +8,7 @@
     "start": "pm2 start index.js --no-autorestart",
     "stop": "pm2 stop index.js",
     "restart": "pm2 restart index.js --no-autorestart",
+    "monit": "pm2 monit",
     "check": "npx npm-check",
     "lint": "eslint ."
   },
@@ -25,7 +26,6 @@
     "canvas-extras": "^1.0.7",
     "cool-ascii-faces": "^1.3.4",
     "cputilization": "^1.0.0",
-    "discord-badges": "^1.2.3",
     "discord-crasher-detector": "^1.0.3",
     "discord-gamecord": "^1.1.4",
     "discord-giveaways": "github:Androz2091/discord-giveaways#discord.js-v13",
@@ -51,6 +51,7 @@
     "qs": "^6.10.1",
     "quick.db": "^7.1.3",
     "simply-djs": "^1.1.2",
+    "smartestchatbot": "^2.0.1",
     "solenolyrics": "^5.0.0",
     "string-progressbar": "^1.0.4",
     "update-notifier": "^5.1.0",
