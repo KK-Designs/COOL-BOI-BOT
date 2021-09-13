@@ -19,8 +19,12 @@ module.exports = async (message) => {
     return;
 
   runDetector(message);
-  if (message.channel.type === "GUILD_TEXT" && !message.author.bot) {
+  if (message.author.bot)
+    return;
+
+  if (message.channel.type === "GUILD_TEXT") {
     await handleLevels(message);
+    setGuildDefaults(message.guild);
   }
   //db.delete(`blockedusers_${client.user.id}`, '776848090564657153')
   const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
@@ -31,7 +35,7 @@ module.exports = async (message) => {
 
   const [, matchedPrefix] = message.content.match(prefixRegex);
 
-  if (!message.content.startsWith(matchedPrefix) || message.author.bot)
+  if (!message.content.startsWith(matchedPrefix))
     return;
 
   const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
@@ -61,7 +65,6 @@ module.exports = async (message) => {
     return void await message.channel.send({embeds: [embed]});
   }
   if (message.guild) {
-    setGuildDefaults(message.guild);
     if (cmdIsBlocked(message.guild, command.name))
       return void await message.reply({content: `<:no:803069123918823454> That is a blacklisted command!`});
 
@@ -157,7 +160,7 @@ function userIsBlocked(user) {
   const {client} = user;
   const blockedUsers = db.get('blockedusers_' + client.user.id);
   
-  return blockedUsers.includes(user.id);
+  return blockedUsers?.includes(user.id);
   
 }
 /**
