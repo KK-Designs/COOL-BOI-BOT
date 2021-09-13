@@ -34,12 +34,7 @@ module.exports = {
       .setImage(img)
       .setFooter(user.username, user.displayAvatarURL({dynamic: true}))
       .setTimestamp()
-<<<<<<< HEAD
       .setColor(message.guild?.me.displayHexColor ?? color.discord);
-=======
-      .setColor(message.channel.type === "DM" ? color.discord : message.guild.me.displayHexColor
-      );
->>>>>>> 9197496 (Inital commit)
 
     message.channel.send({embeds: [embed]});
   },

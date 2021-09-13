@@ -5,11 +5,7 @@ module.exports = {
   category: 'general',
   options: {},
   async execute(message, args) {
-<<<<<<< HEAD
     message.reply({content: `My invte link is: \nhttps://discord.com/api/oauth2/authorize?client_id=${message.client.user.id}&permissions=2453142983&scope=bot%20applications.commands`});
-=======
-    message.reply({ content: `My invte link is: \nhttps://discord.com/api/oauth2/authorize?client_id=${message.client.user.id}&permissions=2453142983&scope=bot%20applications.commands` })
->>>>>>> 9197496 (Inital commit)
   },
   async executeSlash(interaction, client) {
     await interaction.reply({

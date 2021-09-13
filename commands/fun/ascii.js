@@ -17,15 +17,9 @@ module.exports = {
     }
     figlet(asciitext, (err, data) => {
       if (err)
-<<<<<<< HEAD
         if (asciitext.length >= 2000) {
           return message.reply({content: 'I can\'t send messages longer than 2000 characters.'});
         }
-=======
-      if (asciitext.length >= 2000) {
-        return message.reply({content: 'I can\'t send messages longer than 2000 characters.'});
-      }
->>>>>>> 9197496 (Inital commit)
       message.reply({content: `Here is your ascii text:\n\`\`\`${data}\`\`\``});
     });
   },

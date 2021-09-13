@@ -97,8 +97,4 @@ function exampleEmbed(
     .addField(`Cloudiness:`, `${cloudness}`, true)
     .setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
     .setFooter('Powered by the COOL BOI BOT');
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9197496 (Inital commit)

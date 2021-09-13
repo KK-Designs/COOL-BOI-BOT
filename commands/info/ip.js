@@ -93,10 +93,6 @@ module.exports = {
         .setFooter(user.username, user.displayAvatarURL({dynamic: true}))
         .setTimestamp();
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 9197496 (Inital commit)
     await interaction.reply({embeds: [embed], ephemeral: true});
 
   }

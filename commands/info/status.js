@@ -33,12 +33,7 @@ module.exports = {
         .addField("More Statistics", `[Click here](https://stats.uptimerobot.com/n81XLfGOEv/786433082 "See bot status on the web")`)
         .setFooter(`© COOL BOI BOT 2021 | v${version}`, client.user.displayAvatarURL({dynamic: true}))
         .setTimestamp()
-<<<<<<< HEAD
         .setColor(message.guild?.me.displayHexColor ?? color.discord);
-=======
-        .setColor(message.channel.type === "DM" ? color.discord : message.guild.me.displayHexColor
-        );
->>>>>>> 9197496 (Inital commit)
 
       message.reply({embeds: [statusembed]});
     });

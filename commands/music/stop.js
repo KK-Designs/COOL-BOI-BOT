@@ -11,10 +11,6 @@ module.exports = {
     if (!channel)
       return message.reply({content: 'You need to be in a voice channel to do this.'});
 
-<<<<<<< HEAD
-=======
-    channel.leave();
->>>>>>> 9197496 (Inital commit)
     const serverQueue = message.client.queue.get(message.guild.id);
 
     if (!serverQueue)

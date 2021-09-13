@@ -40,11 +40,7 @@ module.exports = {
     if (!args[0]) {
       return sendError('Please provide text for me to emojify (i.e. `!emojify hello`)', message.channel);
     }
-<<<<<<< HEAD
     const user = message.author;
-=======
-    const user = message.author
->>>>>>> 9197496 (Inital commit)
     let msg = message.content.slice(message.content.indexOf(args[0]), message.content.length);
     msg = msg.split('').map(c => {
       if (c === ' ')
@@ -65,23 +61,13 @@ module.exports = {
       .setDescription(msg)
       .setFooter(user.username, user.displayAvatarURL({dynamic: true}))
       .setTimestamp()
-<<<<<<< HEAD
       .setColor(message.guild?.me.displayHexColor ?? color.discord);
-=======
-      .setColor(message.channel.type === 'DM' ? color.discord : message.guild.me.displayHexColor
-      );
->>>>>>> 9197496 (Inital commit)
 
     message.reply({embeds: [emojiembed]});
   },
   async executeSlash(interaction) {
-<<<<<<< HEAD
     const user = interaction.user;
     let msg = interaction.options.getString('message', true);
-=======
-    const user = interaction.user
-    let msg = interaction.options.getString('message', true)
->>>>>>> 9197496 (Inital commit)
     msg = msg.split('').map(c => {
       if (c === ' ')
         return c;
