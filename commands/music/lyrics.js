@@ -27,7 +27,7 @@ module.exports = {
       lyrics = `No lyrics found for ${queue.songs[0].title}.`;
     }
     let lyricsEmbed = new MessageEmbed()
-      .setAuthor(`${queue.songs[0].title} — Lyrics`, "https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif", queue.songs[0].url)
+      .setAuthor(`${queue.songs[0].title} — Lyrics`, "https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif", queue.songs[0].url)
       .setThumbnail(queue.songs[0].img)
       .setColor(message.guild?.me.displayHexColor ?? color.bot_theme)
       .setDescription(lyrics)
@@ -57,7 +57,7 @@ module.exports = {
       lyrics = `No lyrics found for ${queue.songs[0].title}.`;
     }
     let lyricsEmbed = new MessageEmbed()
-      .setAuthor(`${queue.songs[0].title} — Lyrics`, "https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif", queue.songs[0].url)
+      .setAuthor(`${queue.songs[0].title} — Lyrics`, "https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif", queue.songs[0].url)
       .setThumbnail(queue.songs[0].img)
       .setColor(interaction.channel.type === "DM" ? color.bot_theme : interaction.guild.me.displayHexColor)
       .setDescription(lyrics)
