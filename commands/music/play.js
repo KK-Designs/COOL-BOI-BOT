@@ -1,5 +1,5 @@
 const {Util} = require('discord.js');
-const {joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, VoiceConnection, createAudioResource} = require("@discordjs/voice");
+const {joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, VoiceConnection, createAudioResource, getVoiceConnection} = require("@discordjs/voice");
 const ytdl = require('ytdl-core');
 const yts = require("yt-search");
 module.exports = {
@@ -121,6 +121,14 @@ module.exports = {
     });
     message.client.queue.set(message.guild.id, queueConstruct);
     queueConstruct.songs.push(songReq);
+    if (message.guild.me.voice.channelId) {
+      const connection = getVoiceConnection(message.guild.id);
+
+      connection.subscribe(player);
+      queueConstruct.connection = connection;
+      queueConstruct.playNext();
+      return;
+    }
     try {
       const connection = joinVoiceChannel({
         channelId: channel.id,
