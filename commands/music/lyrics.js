@@ -81,7 +81,6 @@ async function getLyrics(title) {
     throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
   }
   const json = await res.json();
-  console.log(json)
 
   return json.lyrics;
 }

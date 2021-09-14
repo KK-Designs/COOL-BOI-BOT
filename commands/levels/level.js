@@ -64,7 +64,6 @@ function applyText(canvas, text, maxWidth = canvas.width - 300) {
     // Assign the font to the context and decrement it so it can be measured again
     ctx.font = `${fontSize -= 2}px sans-serif`;
     // Compare pixel width of the text to the canvas minus the approximate avatar size
-    console.log(ctx.measureText(text).width, maxWidth);
   } while (ctx.measureText(text).width > maxWidth);
 
   // Return the result to use in the actual canvas

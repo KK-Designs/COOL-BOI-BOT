@@ -23,7 +23,7 @@ module.exports = {
     }
     const result = await client.define(args[0]).catch(() => null);
 
-    if (!result) {
+    if (!result?.definitions) {
       return message.reply({content: `Could not find definitions for "${args[0]}". Try using the \`${guildPrefix}urban\` command for slangs.`});
     }
     const embed = new MessageEmbed()
@@ -43,7 +43,7 @@ module.exports = {
     const word = interaction.options.getString("word", true);
     const result = await client.define(word).catch(() => null);
 
-    if (!result) {
+    if (!result?.definitions) {
       return interaction.reply({
         content: `Could not find definitions for "${word}". Try using the \`${guildPrefix}urban\` command for slangs.`
       });
