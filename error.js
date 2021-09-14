@@ -7,8 +7,5 @@ module.exports = async (text, channel) => {
     .setDescription(text)
     .setFooter(channel.client.user.username, channel.client.user.displayAvatarURL({dynamic: true}));
 
-  await channel.send({embeds: [embed]}).then(m => {
-    message = m;
-  });
-  console.log(message);
+  await channel.send({embeds: [embed]});
 };
