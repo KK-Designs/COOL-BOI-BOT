@@ -11,10 +11,10 @@ module.exports = {
     const user = message.mentions.users.first();
 
     if (!user)
-      return message.channel.send({content: 'You need to mention someone to kiss them unless your already engaged', reply: {messageReference: message.id}});
+      return await message.reply({content: 'You need to mention someone to kiss them unless your already engaged'});
 
     if (user.id === message.author.id)
-      return message.channel.send({content: 'You can\'t kiss yourself you idiot. Wait a minute... 🤔', reply: {messageReference: message.id}});
+      return await message.reply({content: 'You can\'t kiss yourself you idiot. Wait a minute... 🤔'});
 
     const img = await new DIG.Kiss().getImage(message.author.displayAvatarURL({format: 'png'}), user.displayAvatarURL({format: 'png'}));
     const attach = new Discord.MessageAttachment(img, 'kiss.png');

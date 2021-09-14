@@ -11,10 +11,10 @@ module.exports = {
     const user = message.mentions.users.first();
 
     if (!user)
-      return message.channel.send({content: 'You need to mention someone to, uh, "bed" them unless your too nice', reply: {messageReference: message.id}});
+      return await message.reply({content: 'You need to mention someone to, uh, "bed" them unless your too nice'});
 
     if (user.id === message.author.id)
-      return message.channel.send({content: 'You can\'t bed yourself you idiot.', reply: {messageReference: message.id}});
+      return await message.reply({content: 'You can\'t bed yourself you idiot.'});
 
     const img = await new DIG.Bed().getImage(message.author.displayAvatarURL({format: 'png'}), user.displayAvatarURL({format: 'png'}));
     const attach = new Discord.MessageAttachment(img, 'bed.png');

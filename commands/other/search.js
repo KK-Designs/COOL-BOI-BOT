@@ -28,13 +28,13 @@ module.exports = {
       .setTitle('<a:loading:808390866367545384> Searching...')
       .setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 
-    message.channel.send({embeds: [embed], reply: {messageReference: message.id}}).then(async (msg) => {
+    await message.reply({embeds: [embed]}).then(async (msg) => {
       const response = await google.search(query, options);
 
       if (response.results.length === 0) {
         msg.delete();
 
-        return message.channel.send({content: `I found nothing matching "${query}"!`, reply: {messageReference: message.id}});
+        return await message.reply({content: `I found nothing matching "${query}"!`});
       }
       const googleEmbed = new MessageEmbed()
         .setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700')
@@ -48,7 +48,7 @@ module.exports = {
         .setFooter('Powered by Google®', 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png');
 
       setTimeout(() => {
-        msg.edit({embeds: [googleEmbed], reply: {messageReference: message.id}});
+        msg.edit({embeds: [googleEmbed]});
       }, 2000);
     });
   }
