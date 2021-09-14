@@ -30,13 +30,13 @@ module.exports = {
     }
   },
   async execute(message, args) {
-    const month = parseInt(args[0]);
+    const month = parseInt(args[0]) - 1;
     const day = parseInt(args[1]);
 
     if (!month) {
       return sendError('Please enter a valid number for month.', message.channel);
     }
-    if (month < 1 || month > 12) {
+    if (month < 0 || month > 11) {
       return sendError('Please enter a valid month [1, 12].', message.channel);
     }
     if (!day) {
