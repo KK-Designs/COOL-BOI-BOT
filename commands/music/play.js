@@ -40,7 +40,6 @@ module.exports = {
     if (args[0].match(regex)) {
       const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
 
-      console.log(songInfo);
       songReq = {
         id: songInfo.videoDetails.videoId,
         title: Util.escapeMarkdown(songInfo.videoDetails.title),

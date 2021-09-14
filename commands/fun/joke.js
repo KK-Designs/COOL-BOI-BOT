@@ -59,8 +59,6 @@ async function getJoke(path) {
   if (!res.ok)
     throw new Error(`HTTP Error ${res.status}: ${res.statusText}`);
 
-  console.log(`${url}`);
-  console.log(res.url);
   const obj = await res.json();
 
   if (obj.error) {

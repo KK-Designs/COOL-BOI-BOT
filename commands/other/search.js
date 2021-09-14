@@ -31,7 +31,6 @@ module.exports = {
     message.channel.send({embeds: [embed], reply: {messageReference: message.id}}).then(async (msg) => {
       const response = await google.search(query, options);
 
-      console.log(response);
       if (response.results.length === 0) {
         msg.delete();
 
