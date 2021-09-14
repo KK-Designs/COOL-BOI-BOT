@@ -4,7 +4,7 @@ module.exports = {
   guildOnly: true,
   cooldown: 7.5,
   category: 'other',
-  async	execute(message, args) {
+  async execute(message, args) {
     const invite = await message.channel.createInvite({
       maxAge: 0, // 0 = infinite expiration
       maxUses: 0 // 0 = infinite uses

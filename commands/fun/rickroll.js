@@ -19,7 +19,7 @@ module.exports = {
   category: 'fun',
   clientpermissions: ['SPEAK', 'CONNECT'],
   options: {},
-  async	execute(message, args) {
+  async execute(message, args) {
     if (!message.member?.voice.channelId) {
       return await message.reply({content: 'You need to join a voice channel to use this command.'});
     }
@@ -40,7 +40,7 @@ module.exports = {
     await entersState(player, AudioPlayerStatus.Playing, 20_000);
     await message.reply("Success");
   },
-  async	executeSlash(interaction) {
+  async executeSlash(interaction) {
     // Only try to join the sender's voice channel if they are in one themselves
     //if (!interaction.client.options.intents.has("GUILD_VOICE_STATES"))
     // return await interaction.reply("I'm missing the Guild Voice States intent");

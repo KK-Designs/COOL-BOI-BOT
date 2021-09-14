@@ -2,8 +2,8 @@ module.exports = {
   name: 'emojis',
   description: 'List the server\'s emojis!',
   aliases: ['listemoji'],
-  	cooldown: 3,
-  	category: 'info',
+  cooldown: 3,
+  category: 'info',
   execute(message, args, client) {
     const {MessageEmbed} = require('discord.js');
     const {bold, inlineCode} = require('@discordjs/builders');

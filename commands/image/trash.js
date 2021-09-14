@@ -13,8 +13,8 @@ module.exports = {
     const attach = new Discord.MessageAttachment(img, 'trash.png');
     const {MessageAttachment, MessageEmbed} = require('discord.js');
     const imageEmbed = new MessageEmbed()
-	      .setTitle('Trash')
-	      .setImage('attachment://trash.png')
+      .setTitle('Trash')
+      .setImage('attachment://trash.png')
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700')
       .setTimestamp()
       .setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({dynamic: true})}`);

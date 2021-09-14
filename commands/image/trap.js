@@ -3,8 +3,8 @@ module.exports = {
   description: 'Jail your friends!',
   aliases: ['trap'],
   usage: '(user)',
-  	cooldown: 3,
-  	category: 'image',
+  cooldown: 3,
+  category: 'image',
   clientPermissons: ['EMBED_LINKS', 'ATTACH_FILES'],
   async execute(message, args) {
     const Discord = require('discord.js');
@@ -14,8 +14,8 @@ module.exports = {
     const attach = new Discord.MessageAttachment(img, 'jail.png');
     const {MessageAttachment, MessageEmbed} = require('discord.js');
     const imageEmbed = new MessageEmbed()
-	    .setTitle('Jail')
-	    .setImage('attachment://jail.png')
+      .setTitle('Jail')
+      .setImage('attachment://jail.png')
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700')
       .setTimestamp()
       .setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({dynamic: true})}`);

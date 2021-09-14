@@ -1,4 +1,4 @@
-const	figlet = require('figlet');
+const figlet = require('figlet');
 module.exports = {
   name: 'ascii',
   description: 'Generate some ascii text',

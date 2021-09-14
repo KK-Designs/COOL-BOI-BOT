@@ -3,8 +3,8 @@ module.exports = {
   description: 'Jail your friends!',
   aliases: ['trap'],
   usage: '(user)',
-  	cooldown: 3,
-  	category: 'image',
+  cooldown: 3,
+  category: 'image',
   clientPermissons: ['EMBED_LINKS', 'ATTACH_FILES'],
   async execute(message, args) {
     const Discord = require('discord.js');

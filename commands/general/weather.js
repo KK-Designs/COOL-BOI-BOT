@@ -16,7 +16,7 @@ module.exports = {
       description: "The name of the city"
     }
   },
-  async	execute(message, args) {
+  async execute(message, args) {
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${args}&units=imperial&appid=c1ba87d2a335656425a17e4395303046`

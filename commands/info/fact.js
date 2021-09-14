@@ -1,8 +1,8 @@
 module.exports = {
   name: 'fact',
   description: '<:check:807305471282249738> Gives a random fact!',
-  	cooldown: 1.5,
-  	category: 'info',
+   cooldown: 1.5,
+   category: 'info',
   execute(message, args) {
     const fetch = require('node-fetch');
 

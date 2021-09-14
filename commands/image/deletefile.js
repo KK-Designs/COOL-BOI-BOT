@@ -14,8 +14,8 @@ module.exports = {
     const attach = new Discord.MessageAttachment(img, 'delete.png');
     const {MessageAttachment, MessageEmbed} = require('discord.js');
     const imageEmbed = new MessageEmbed()
-	    .setTitle('Delete ' + user.tag)
-	    .setImage('attachment://delete.png')
+      .setTitle('Delete ' + user.tag)
+      .setImage('attachment://delete.png')
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700')
       .setTimestamp()
       .setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({dynamic: true})}`);

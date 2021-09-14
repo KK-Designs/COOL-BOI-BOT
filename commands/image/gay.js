@@ -13,8 +13,8 @@ module.exports = {
     const attach = new Discord.MessageAttachment(img, 'gay.png');
     const {MessageAttachment, MessageEmbed} = require('discord.js');
     const imageEmbed = new MessageEmbed()
-	    .setTitle(user.id === message.author.id ? 'Ur gay 🏳️‍🌈' : 'Gay 🏳️‍🌈')
-	    .setImage('attachment://gay.png')
+      .setTitle(user.id === message.author.id ? 'Ur gay 🏳️‍🌈' : 'Gay 🏳️‍🌈')
+      .setImage('attachment://gay.png')
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700')
       .setTimestamp()
       .setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({dynamic: true})}`);

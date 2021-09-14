@@ -13,8 +13,8 @@ module.exports = {
     const attach = new Discord.MessageAttachment(img, 'invert.png');
     const {MessageAttachment, MessageEmbed} = require('discord.js');
     const imageEmbed = new MessageEmbed()
-	    .setTitle('Inverted color')
-	    .setImage('attachment://invert.png')
+      .setTitle('Inverted color')
+      .setImage('attachment://invert.png')
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700')
       .setTimestamp()
       .setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({dynamic: true})}`);
