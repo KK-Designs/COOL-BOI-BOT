@@ -17,10 +17,9 @@ module.exports = {
       return message.reply({content: "There is nothing playing."});
 
     let lyrics;
-    let msg;
+    let msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
     try {
       //lyrics = await lyricsFinder(queue.songs[0].title, "");
-      msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
       lyrics = await getLyrics(queue.songs[0].title);
       if (!lyrics)
         lyrics = `No lyrics found for ${queue.songs[0].title}.`;
@@ -37,8 +36,7 @@ module.exports = {
     if (lyricsEmbed.description.length >= 2048) {
       lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
     } else {
-      message.reply({embeds: [lyricsEmbed]}).catch(console.error);
-      msg.delete();
+      await msg.edit({embeds: [lyricsEmbed]});
     }
 
   },
