@@ -19,7 +19,7 @@ module.exports = {
           .setFooter(user.username, user.displayAvatarURL({dynamic: true}))
           .setTimestamp();
 
-        message.channel.send({embeds: [embed], reply: {messageReference: message.id}});
+        await message.reply({embeds: [embed]});
       });
     });
   }

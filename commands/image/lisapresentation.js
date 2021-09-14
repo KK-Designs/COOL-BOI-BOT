@@ -12,10 +12,10 @@ module.exports = {
     const text = args.join(' ');
 
     if (!text)
-      return message.channel.send({content: 'Please provide text for me to make a lisa presentation', reply: {messageReference: message.id}});
+      return await message.reply({content: 'Please provide text for me to make a lisa presentation'});
 
     if (text.length > 300)
-      return message.channel.send({content: 'I can only make a lisa presentation out of 300 characters', reply: {messageReference: message.id}});
+      return await message.reply({content: 'I can only make a lisa presentation out of 300 characters'});
 
     const img = await new DIG.LisaPresentation().getImage(text);
     const attach = new Discord.MessageAttachment(img, 'LisaPresentation.png');

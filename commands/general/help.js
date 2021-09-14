@@ -101,7 +101,7 @@ module.exports = {
         .setTimestamp()
         .setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-      return message.channel.send({embeds: [categoryEmbed], components: [categoryMenu], reply: {messageReference: message.id}}).then(m => {
+      return await message.reply({embeds: [categoryEmbed], components: [categoryMenu]}).then(m => {
         const collector = m.createMessageComponentCollector({componentType: 'SELECT_MENU', time: 60000});
 
         collector.on('collect', i => {
@@ -205,7 +205,7 @@ module.exports = {
         .setTimestamp()
         .setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-      return await message.channel.send({embeds: [embed1], reply: {messageReference: message.id}});
+      return await message.reply({embeds: [embed1]});
     }
     if (!command && !categorynames.includes(name)) {
       const thing = commands.map(cmd => cmd.name);
@@ -215,7 +215,7 @@ module.exports = {
         error = 'that\'s not a valid command!';
       }
 
-      return message.channel.send({content: `${error}`, reply: {messageReference: message.id}});
+      return await message.reply({content: `${error}`});
     }
     if (command.usage == undefined) {command.usage = ' ';}
 

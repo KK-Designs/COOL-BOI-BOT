@@ -27,7 +27,7 @@ module.exports = {
               .setStyle('DANGER')
           );
 
-        message.channel.send({embeds: [embed], components: [deletemsg], reply: {messageReference: message.id}}).then(m => {
+        await message.reply({embeds: [embed], components: [deletemsg]}).then(m => {
           const filter = i => i.customId === 'danger';// && i.user.id === message.author.id;
           const collector = message.channel.createMessageComponentCollector({filter, time: 15000});
 
