@@ -1,6 +1,7 @@
 const fs = require("fs");
 const {MessageEmbed, MessageActionRow, MessageSelectMenu} = require('discord.js');
 const {suggest} = require('@laboralphy/did-you-mean');
+const path = require("path")
 const prefix = require('discord-prefix');
 const config = require("../../config.json");
 const categorynames = fs.readdirSync("./commands");
@@ -13,7 +14,7 @@ module.exports = {
   category: 'general',
   clientPermissons: 'EMBED_LINKS',
   // eslint-disable-next-line complexity
-  execute(message, args) {
+  async execute(message, args) {
     const user = message.author;
     const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
     const data = [];
@@ -204,7 +205,7 @@ module.exports = {
         .setTimestamp()
         .setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-      message.channel.send({embeds: [embed1], reply: {messageReference: message.id}});
+      return await message.channel.send({embeds: [embed1], reply: {messageReference: message.id}});
     }
     if (!command && !categorynames.includes(name)) {
       const thing = commands.map(cmd => cmd.name);
@@ -242,6 +243,8 @@ module.exports = {
     } else {
       data1.push('This command can be used in servers and dms');
     }
+    const cmdPath = path.join(__dirname, "../", command.category, `${command.name.toLowerCase()}.js`);
+    const cmdFileStat = fs.statSync(cmdPath);
     const embed = new MessageEmbed()
       .setTitle(`Command Name: ${command.name}`)
       .addFields(
@@ -252,7 +255,7 @@ module.exports = {
         {name: `${aliasename}`, value: `${aliasesinfo}`, inline: true},
         {name: '**Permissions**', value: `${perms}`, inline: true},
         {name: '**Bot Permissions**', value: `\`${command.clientPermissons == undefined ? 'VIEW_CHANNEL' : command.clientPermissons}\`, \`SEND_MESSAGES\` `, inline: true},
-        {name: '**Last updated**', value: `${new Date(fs.statSync(`/root/COOL-BOI-BOT/commands/${command.category}/${command.name.toLowerCase()}.js`).mtime).toLocaleString('en-US', {timeZone: 'America/los_angeles'}) || 'No date avavible'}`, inline: true}
+        {name: '**Last updated**', value: `${new Date(cmdFileStat.mtime).toLocaleString('en-US', {timeZone: 'America/los_angeles'}) || 'No date available'}`, inline: true}
       )
       .addField(data1.toString(), '** **')
       .setDescription('[] arguments mean required, and () arguments mean optional. If theres none it means the there are no arguments nedded to run the command')
@@ -260,6 +263,6 @@ module.exports = {
       .setTimestamp()
       .setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-    message.reply({embeds: [embed]});
+    return await message.reply({embeds: [embed]});
   }
 };
