@@ -15,7 +15,7 @@ module.exports = {
       description: "The thing to search for"
     }
   },
-  async	execute(message, args, client) {
+  async execute(message, args, client) {
     if (!args.length) {
       return sendError('You need to supply a search term!', message.channel);
     }
@@ -47,7 +47,7 @@ module.exports = {
 
     await message.reply({embeds: [embed]});
   },
-  async	executeSlash(interaction) {
+  async executeSlash(interaction) {
     const query = interaction.options.getString("query", true);
     const url = new URL("/v0/define", "https://api.urbandictionary.com/");
 

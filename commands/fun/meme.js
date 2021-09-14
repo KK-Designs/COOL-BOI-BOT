@@ -8,7 +8,7 @@ module.exports = {
   category: 'fun',
   clientPermissons: 'EMBED_LINKS',
   options: {},
-  async	execute(message, args) {
+  async execute(message, args) {
     
     const res = await fetch('https://meme-api.herokuapp.com/gimme').then(r => r.json());
 
@@ -25,7 +25,7 @@ module.exports = {
 
     await message.reply({embeds: [embed]});
   },
-  async	executeSlash(interaction) {
+  async executeSlash(interaction) {
     const url = new URL("/gimme", "https://meme-api.herokuapp.com");
     const res = await fetch(url);
 

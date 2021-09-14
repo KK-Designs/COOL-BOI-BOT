@@ -33,6 +33,6 @@ module.exports = {
         .setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '<@811024409863258172> prefix'*`)
     ]});
     setTimeout(() => { prefix.setPrefix(args[0], guild.id); }, 700);
-		
+  
   }
 };

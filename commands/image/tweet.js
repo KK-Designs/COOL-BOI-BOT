@@ -16,7 +16,7 @@ module.exports = {
       description: "The message to tweet"
     }
   },
-  async	execute(message, args) {
+  async execute(message, args) {
     const user = message.author;
   
     // Get message
@@ -38,7 +38,7 @@ module.exports = {
 
     message.channel.send({embeds: [embed]});
   },
-  async	executeSlash(interaction) {
+  async executeSlash(interaction) {
     const user = interaction.user;
     // Get message
     let tweet = interaction.options.getString("message", true);

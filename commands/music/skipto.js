@@ -21,7 +21,7 @@ module.exports = {
     if (args[0] > queue.songs.length)
       return message.channel.send({content: `The queue has only ${queue.songs.length} songs long!`}).catch(console.error);
 
-		    queue.playing = true;
+    queue.playing = true;
     if (queue.loop) {
       for (let i = 0; i < args[0] - 2; i++) {
         queue.songs.push(queue.songs.shift());

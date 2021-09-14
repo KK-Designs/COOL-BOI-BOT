@@ -2,8 +2,8 @@ module.exports = {
   name: 'guessthepokemon',
   description: 'Play a game of guess the pokemon!',
   aliases: ['gtp', 'gp'],
-  	cooldown: 5,
-  	category: 'games',
+  cooldown: 5,
+  category: 'games',
   execute(message, args) {
     const color = require('../../color.json');
     const {GuessThePokemon} = require('discord-gamecord');

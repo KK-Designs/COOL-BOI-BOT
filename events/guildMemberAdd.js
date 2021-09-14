@@ -80,4 +80,4 @@ function applyText(canvas, text) {
 
   // Return the result to use in the actual canvas
   return ctx.font;
-};
+}

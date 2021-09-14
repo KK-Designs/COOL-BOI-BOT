@@ -1,8 +1,8 @@
 module.exports = {
   name: 'connect4',
   description: 'Play a game of connect four!',
-  	cooldown: 5,
-  	category: 'games',
+  cooldown: 5,
+  category: 'games',
   execute(message, args) {
     const color = require('../../color.json');
     const {Connect4} = require('discord-gamecord');

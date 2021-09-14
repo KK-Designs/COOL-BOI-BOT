@@ -1,7 +1,7 @@
 const fs = require("fs");
 const {MessageEmbed, MessageActionRow, MessageSelectMenu} = require('discord.js');
 const {suggest} = require('@laboralphy/did-you-mean');
-const path = require("path")
+const path = require("path");
 const prefix = require('discord-prefix');
 const config = require("../../config.json");
 const categorynames = fs.readdirSync("./commands");

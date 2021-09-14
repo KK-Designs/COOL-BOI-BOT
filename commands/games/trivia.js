@@ -2,8 +2,8 @@ module.exports = {
   name: 'trivia',
   description: 'Play a game of trivia! ❔',
   usage: '[difficulty]',
-  	cooldown: 5,
-  	category: 'games',
+  cooldown: 5,
+  category: 'games',
   execute(message, args) {
     const {Trivia} = require('discord-gamecord');
     const color = require('../../color.json');

@@ -16,7 +16,7 @@ module.exports = {
     }
   },
   execute(message, args) {
-		 if (!args[0]) {
+    if (!args[0]) {
       return sendError('Please enter a valid number', message.channel);
     }
     const numamount = parseInt(args[0]) + 1;

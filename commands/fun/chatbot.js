@@ -2,8 +2,8 @@ module.exports = {
   name: 'chatbot',
   description: 'Talk a AI controlled bot! 🤖',
   aliases: ['bot', 'ai'],
-  	cooldown: 3,
-  	category: 'fun',
+  cooldown: 3,
+  category: 'fun',
   execute(message, args, client) {
     const {MessageEmbed} = require('discord.js');
     const fetch = require('node-fetch');
