@@ -1,11 +1,10 @@
 module.exports = async emoji => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
-	var modLogChannel = db.get('loggingchannel_' + emoji.guild.id);
-	var modLogChannel = emoji.guild.channels.cache.get(modLogChannel);
 
-	if (!modLogChannel) return;
+	if (!getLogChannel(emoji.guild, db)) return;
 
 	const embed = new MessageEmbed()
 		.setTitle('⛔ Emoji Delete')
@@ -15,7 +14,7 @@ module.exports = async emoji => {
 		.setFooter('COOL BOI BOT SERVER LOGGING')
 		.setTimestamp();
 		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(emoji.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

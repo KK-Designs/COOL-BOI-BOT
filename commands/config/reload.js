@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Reloads a command',
 	cooldown: 5,
 	usage: '[command]',
-	category: 'util',
+	category: 'config',
 	execute(message, args) {
 		const fs = require('fs');
 		const { suggest } = require('@laboralphy/did-you-mean');

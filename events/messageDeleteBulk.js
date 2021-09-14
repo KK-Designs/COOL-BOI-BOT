@@ -1,16 +1,13 @@
 module.exports = async message => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	if (message.partial) return;
 	if (message.first().channel.name == 'server-logs') return;
 	const messageChannel = message.first().channel.name;
-	const db = require('quick.db');
-	var modLogChannel = db.get('loggingchannel_' + message.first().guild.id);
-	var modLogChannel = message.first().guild.channels.cache.get(modLogChannel);
+	const db = require('quick.db');	
 
-	const channel = message.first().channel;
-
-	if (modLogChannel) {
+	if (getLogChannel(message.first().guild, db)) {
 		const messageArray = [...message.values()];
 		messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
 		let stringedArray = messageArray.join('\n'); // We join the array using \n to separate the lines
@@ -26,7 +23,7 @@ module.exports = async message => {
 			.setFooter('COOL BOI BOT MESSAGE LOGGING')
 			.setTimestamp();
 				//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(message.first().guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

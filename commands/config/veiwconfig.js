@@ -1,10 +1,10 @@
 module.exports = {
-	name: 'config',
-	description: 'Veiw the bots configuration',
+	name: 'viewconfig',
+	description: 'View the bots configuration',
 	cooldown: 2,
 	guildOnly: true,
-	category: 'util',
-	aliases: ['configuration', 'veiwconfig'],
+	category: 'config',
+	aliases: ['configuration'],
 	execute(message, args, client) {
 		const db = require('quick.db');
 		const prefix = require('discord-prefix');

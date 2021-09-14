@@ -1,14 +1,13 @@
 module.exports = async member => {
 	const Discord = require('discord.js');
+	const { getWelcomeChannel } = require('../utils.js');
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const Canvas = require('canvas');
 	const db = require('quick.db');
 	const { registerFont } = require('canvas');
 	const { Client, MessageAttachment } = require('discord.js');
-	var welcomeChannel = db.get('welcomechannel_' + member.guild.id);
-	var welcomeChannel = member.guild.channels.cache.get(welcomeChannel);
-	// registerFont('./OpenSans-Regular.ttf', { family: 'sans-serif' });
 	registerFont('./BalooTammudu2-Regular.ttf', { family: 'sans-serif' });
 	const applyText = (canvas, text) => {
 		const ctx = canvas.getContext('2d');
@@ -28,17 +27,7 @@ module.exports = async member => {
 
 	const guild = member.guild;
 
-	var modLogChannel = db.get('loggingchannel_' + guild.id);
-	var modLogChannel = guild.channels.cache.get(modLogChannel);
-	// Send the message to a designated channel on a server:
-	/* const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome-and-goodbye');
-  // Do nothing if the channel wasn't found on this server
-  if (!channel) return;
-  // Send the message, mentioning the member
-  channel.send(`Hey ${member}, welcome to **${guild.name}!**`);*/
-	// member.send(`Have a good time here in **${guild.name}**! Please make sure to read the rules before sending in #rules. If you have a problem with this server, Dm @ModMail#5460 for help. `);
-
-	if (!welcomeChannel) return;
+	if (!getWelcomeChannel(member.guild, db)) return;
 
 	const canvas = Canvas.createCanvas(700, 250);
 	const ctx = canvas.getContext('2d');
@@ -71,11 +60,11 @@ module.exports = async member => {
 	const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
 	ctx.drawImage(avatar, 25, 25, 200, 200);
 
-	const welattachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+	const welattachment = new MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-	welcomeChannel.send({ content: `Hey ${member}, welcome to **${guild.name}!**`, files: [welattachment] });
+	getWelcomeChannel(member.guild, db).send({ content: `Hey ${member}, welcome to **${guild.name}!**`, files: [welattachment] });
 
-	if (!modLogChannel) return;
+	if (!getLogChannel(member.guild, db)) return;
 	const embed = new MessageEmbed()
 		.setAuthor('Member joined', 'https://cdn.discordapp.com/emojis/812013459298058260.png')
 		.setColor(color.bot_theme)
@@ -84,7 +73,7 @@ module.exports = async member => {
 		.setFooter('COOL BOI BOT MEMBER LOGGING')
 		.setTimestamp();
 		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

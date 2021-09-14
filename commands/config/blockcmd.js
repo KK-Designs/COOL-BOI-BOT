@@ -5,7 +5,7 @@ module.exports = {
 	guildOnly: true,
 	permissions: 'ADMINISTRATOR',
 	usage: '[command name or none to clear all blocked commands]',
-	category: 'util',
+	category: 'config',
 	async execute(message, args, client) {
 	 const db = require('quick.db');
 	 const { MessageEmbed } = require('discord.js');

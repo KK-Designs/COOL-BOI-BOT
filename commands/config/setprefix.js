@@ -5,13 +5,13 @@ module.exports = {
 	permissions: 'ADMINISTRATOR',
 	usage: '[prefix]',
 	guildOnly: true,
-	category: 'util',
+	category: 'config',
 	execute(message, args) {
 		const { MessageEmbed } = require('discord.js');
 		const prefix = require('discord-prefix');
 		const color = require('../../color.json');
 		const guild = message.guild;
-		if (!args.length) {
+		if (!args.length  || args[0].toLowerCase() === 'disable' || args[0].toLowerCase() === 'none') {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
 			return message.reply({ embeds: [
 				new MessageEmbed()

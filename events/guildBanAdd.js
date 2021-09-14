@@ -1,11 +1,10 @@
 module.exports = async (ban) => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
-	var modLogChannel = db.get('loggingchannel_' + ban.guild.id);
-	var modLogChannel = ban.guild.channels.cache.get(modLogChannel);
 
-	if (!modLogChannel) return;
+	if (!getLogChannel(ban.guild, db)) return;
 
 	const embed = new MessageEmbed()
 		.setTitle('🔒 Member ban')
@@ -13,7 +12,7 @@ module.exports = async (ban) => {
 		.setDescription(`Name: ${ban.user.username}\n \nID: ${ban.user.id}`)
 		.setFooter('COOL BOI BOT MEMBER LOGGING');
 		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

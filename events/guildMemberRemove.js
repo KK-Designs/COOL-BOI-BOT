@@ -1,21 +1,17 @@
 module.exports = async member => {
+	const { getLogChannel } = require('../utils.js');
+	const { getWelcomeChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
 	const guild = member.guild;
-	var modLogChannel = db.get('loggingchannel_' + guild.id);
-	var modLogChannel = guild.channels.cache.get(modLogChannel);
-	// member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
-	// Send the message to a designated channel on a server:
-	var welcomeChannel = db.get('welcomechannel_' + member.guild.id);
-	var welcomeChannel = member.guild.channels.cache.get(welcomeChannel);
 
 	// Do nothing if the channel wasn't found on this server
-	if (!welcomeChannel) return;
+	if (!getWelcomeChannel(member.guild, db)) return;
 	// Send the message, mentioning the member
-	welcomeChannel.send({ content: `${member} just left the server  :c` });
+	getWelcomeChannel(member.guild, db).send({ content: `${member} just left the server  :c` });
 
-	if (!modLogChannel) return;
+	if (!getLogChannel(member.guild, db)) return;
 	if (member.bot) return;
 	const embed = new MessageEmbed()
 		.setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
@@ -26,7 +22,7 @@ module.exports = async member => {
 		.setFooter('COOL BOI BOT MEMBER LOGGING')
 		.setTimestamp();
 		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

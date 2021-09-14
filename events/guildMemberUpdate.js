@@ -1,13 +1,12 @@
 module.exports = async (oldMember, newMember) => {
+	const { getLogChannel } = require('../utils.js');
+	
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
 	if (oldMember == newMember) return;
 
-	var modLogChannel = db.get('loggingchannel_' + oldMember.guild.id);
-	var modLogChannel = oldMember.guild.channels.cache.get(modLogChannel);
-
-	if (!modLogChannel) return;
+	if (!getLogChannel(oldMember.guild, db)) return;
 	if (oldMember.nickname !== newMember.nickname) {
 		const embed = new MessageEmbed()
 			.setAuthor('👤 Nickname changed')
@@ -19,7 +18,7 @@ module.exports = async (oldMember, newMember) => {
 			.setTimestamp();
 
 			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		
@@ -43,10 +42,7 @@ module.exports = async (oldMember, newMember) => {
 
 		if (output == outputNew) return;
 
-		var modLogChannel = db.get('loggingchannel_' + oldMember.guild.id);
-		var modLogChannel = oldMember.guild.channels.cache.get(modLogChannel);
-
-		if (!modLogChannel) return;
+		if (!getLogChannel(oldMember.guild, db)) return;
 
 		const embed = new MessageEmbed()
 			.setAuthor('👤 Member roles updated')
@@ -59,7 +55,7 @@ module.exports = async (oldMember, newMember) => {
 			.setTimestamp();
 
 			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		
@@ -70,10 +66,8 @@ module.exports = async (oldMember, newMember) => {
 	}
 
 	if (oldMember.avatar !== newMember.avatar) {
-		var modLogChannel = db.get('loggingchannel_' + oldMember.guild.id);
-		var modLogChannel = oldMember.guild.channels.cache.get(modLogChannel);
 
-		if (!modLogChannel) return;
+		if (!getLogChannel(oldMember.guild, db)) return;
 
 		const embed = new MessageEmbed()
 			.setAuthor('👤 Member avatar updated')
@@ -85,7 +79,7 @@ module.exports = async (oldMember, newMember) => {
 			.setTimestamp();
 
 			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

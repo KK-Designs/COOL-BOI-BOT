@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Get the bots prefix! ***This command prefix is always \`!\` ***',
 	cooldown: 2,
 	guildOnly: true,
-	category: 'util',
+	category: 'config',
 	clientPermissons: 'EMBED_LINKS',
 	permissons: 'ADMINISTRATOR',
 	execute(message, args) {

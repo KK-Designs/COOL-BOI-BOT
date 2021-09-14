@@ -1,15 +1,14 @@
 module.exports = async (oldchannel, newchannel) => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
 	if (oldchannel.type == 'DM' || oldchannel.name === newchannel.name) return;
-	var modLogChannel = db.get('loggingchannel_' + oldchannel.guild.id);
-	var modLogChannel = oldchannel.guild.channels.cache.get(modLogChannel);
 
-	if (modLogChannel) {
+	if (getLogChannel(oldchannel.guild, db)) {
 
-		if (!modLogChannel.permissionsFor(newchannel.guild.me).has('VIEW_CHANNEL')) return;
-		if (!modLogChannel.permissionsFor(newchannel.guild.me).has('SEND_MESSAGES')) return;
+		if (!getLogChannel(oldchannel.guild, db).permissionsFor(newchannel.guild.me).has('VIEW_CHANNEL')) return;
+		if (!getLogChannel(oldchannel.guild, db).permissionsFor(newchannel.guild.me).has('SEND_MESSAGES')) return;
 		const embed = new MessageEmbed()
 			.setAuthor('📝 Channel updated')
 			.setColor(color.bot_theme)
@@ -20,7 +19,7 @@ module.exports = async (oldchannel, newchannel) => {
 			.setTimestamp();
 
 			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(oldchannel.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

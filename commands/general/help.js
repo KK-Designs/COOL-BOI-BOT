@@ -44,7 +44,7 @@ module.exports = {
 			'moderation',
 			'music',
 			'other',
-			'util',
+			'config',
 		];
 
 		if (name === 'category' || name === 'categories') {
@@ -100,9 +100,9 @@ module.exports = {
 								value: 'other',
 							},
 							{
-								label: 'Utils',
-								description: 'All of the commands in the "utils" category',
-								value: 'util',
+								label: 'Config',
+								description: 'All of the commands in the "Config" category',
+								value: 'config',
 							},
 						]),
 				);
@@ -190,9 +190,9 @@ module.exports = {
 										value: 'other',
 									},
 									{
-										label: 'Utils',
-										description: 'All of the commands in the "utils" category',
-										value: 'util',
+										label: 'Config',
+										description: 'All of the commands in the "Config" category',
+										value: 'config',
 									},
 								])
 								.setDisabled(true),

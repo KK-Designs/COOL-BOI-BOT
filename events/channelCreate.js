@@ -1,16 +1,14 @@
 module.exports = async channel => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
 	if (channel.type == 'DM') return;
 
-	var modLogChannel = db.get('loggingchannel_' + channel.guild.id);
-	var modLogChannel = channel.guild.channels.cache.get(modLogChannel);
+	if (getLogChannel(channel.guild, db)) {
 
-	if (modLogChannel) {
-
-		if (!modLogChannel.permissionsFor(channel.guild.me).has('VIEW_CHANNEL')) return;
-		if (!modLogChannel.permissionsFor(channel.guild.me).has('SEND_MESSAGES')) return;
+		if (!getLogChannel(channel.guild, db).permissionsFor(channel.guild.me).has('VIEW_CHANNEL')) return;
+		if (!getLogChannel(channel.guild, db).permissionsFor(channel.guild.me).has('SEND_MESSAGES')) return;
 		const embed = new MessageEmbed()
 			.setAuthor('🔨 Channel created')
 			.setColor(color.success)
@@ -19,7 +17,7 @@ module.exports = async channel => {
 			.setTimestamp();
 
 			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(channel.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

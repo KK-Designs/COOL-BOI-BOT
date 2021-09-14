@@ -1,11 +1,10 @@
 module.exports = async (oldemoji, newemoji) => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
-	var modLogChannel = db.get('loggingchannel_' + newemoji.guild.id);
-	var modLogChannel = newemoji.guild.channels.cache.get(modLogChannel);
 
-	if (!modLogChannel) return;
+	if (!getLogChannel(newemoji.guild, db)) return;
 
 	const embed = new MessageEmbed() // Create embed
 		.setTitle('📝 Emoji Update') // Set embed title
@@ -17,7 +16,7 @@ module.exports = async (oldemoji, newemoji) => {
 		.setTimestamp();
 
 		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await modLogChannel.fetchWebhooks();
+	const webhooks = await getLogChannel(newemoji.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({		

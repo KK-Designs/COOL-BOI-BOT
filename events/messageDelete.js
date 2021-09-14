@@ -1,4 +1,5 @@
 module.exports = async message => {
+	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	if (message.partial) return;
@@ -7,9 +8,8 @@ module.exports = async message => {
 	if (message.content === '') return;
 	const messageChannel = message.channel.name;
 	const db = require('quick.db');
-	var modLogChannel = db.get('loggingchannel_' + message.guild.id);
-	var modLogChannel = message.guild.channels.cache.get(modLogChannel);
-	if (!modLogChannel) return;
+
+	if (!getLogChannel(message.guild, db)) return;
 	// ignore direct messages
 	if (!message.guild) return;
 	const fetchedLogs = await message.guild.fetchAuditLogs({
@@ -47,7 +47,7 @@ module.exports = async message => {
 	// We will also run a check to make sure the log we got was for the same author's message
 	if (target.id === message.author.id) {
 		//modLogChannel.send({ embeds: [ delembed ] });
-		const webhooks = await modLogChannel.fetchWebhooks();
+		const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
 		const webhook = webhooks.first();
 
 		await webhook.send({		
@@ -58,7 +58,7 @@ module.exports = async message => {
 	}
 	else {
 		//modLogChannel.send({ embeds: [ delembed1 ] });
-		const webhooks = await modLogChannel.fetchWebhooks();
+		const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
 		const webhook = webhooks.first();
 
 		await webhook.send({		
