@@ -154,23 +154,16 @@ function addUserToCooldown(user, command) {
   timestamps.set(user.id, Date.now());
 }
 /**
-   * @param {import("discord.js").User} user
-   */
+ * @param {import("discord.js").User} user
+ */
 function userIsBlocked(user) {
-  const {client} = user;
-  const blockedUsers = db.get('blockedusers_' + client.user.id);
-  
-  return blockedUsers?.includes(user.id);
-  
+  return db.get('blockedusers_' + user.id) === true;
 }
 /**
    * @param {import("discord.js").Guild} guild
    */
 function setGuildDefaults(guild) {
   const {client} = guild;
-
-  if (!db.has(`blockedusers_${client.user.id}`))
-    db.set(`blockedusers_${client.user.id}`, '0');
   
   if (!db.has('loggingchannel_' + guild.id)) {
     db.set(`loggingchannel_${guild.id}`, '0');
