@@ -1,4 +1,5 @@
 const simplydjs = require('simply-djs');
+const sendError =require("../../error.js")
 const color = require('../../color.json');
 module.exports = {
   name: 'calc',
@@ -8,11 +9,6 @@ module.exports = {
   category: 'other',
   options: {},
   async execute(message, args, client) {
-    let input = args.join(' ');
-    let output;
-    if (!input)
-      return sendError('Please provide a equation for me to solve', message.channel);
-
     await simplydjs.calculator(message, {
       embedColor: color.bot_theme, // default: #075FFF
       credit: false
