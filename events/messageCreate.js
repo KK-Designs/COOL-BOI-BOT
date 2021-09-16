@@ -188,7 +188,14 @@ async function runDetector(message, videoUrl = message.content) {
   if (!isURI(videoUrl))
     return;
 
-  const analysis = await Detector.AnalyzeVideo(videoUrl, true);
+  const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(e => {
+    if (e !== "Invalid FileType. File must be a video file")
+      console.error(e);
+
+    return {
+      crasher: false
+    };
+  });
 
   return analysis.crasher ?? false;
 }
