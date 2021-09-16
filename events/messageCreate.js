@@ -18,7 +18,11 @@ module.exports = async (message) => {
   if (SpamDetected)
     return;
 
-  runDetector(message);
+  if (await runDetector(message)) {
+    await message.delete();
+    
+    return await message.channel.send(`${message.author} Please don't send malicious files`);
+  }
   if (message.author.bot)
     return;
 
@@ -188,7 +192,8 @@ async function runDetector(message, videoUrl = message.content) {
   if (!isURI(videoUrl))
     return;
 
-  const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(e => {
+  console.log("Analyzing file %s", videoUrl);
+  const analysis = await Detector.AnalyzeVideo(videoUrl).catch(e => {
     if (e !== "Invalid FileType. File must be a video file")
       console.error(e);
 
@@ -196,6 +201,8 @@ async function runDetector(message, videoUrl = message.content) {
       crasher: false
     };
   });
+
+  console.log("Analysis: %s", analysis.crasher);
 
   return analysis.crasher ?? false;
 }
