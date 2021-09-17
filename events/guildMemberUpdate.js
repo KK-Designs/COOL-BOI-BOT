@@ -2,8 +2,11 @@ const {getLogChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
 const color = require('../color.json');
 const db = require('quick.db');
+/** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
-  if (!getLogChannel(oldMember.guild, db))
+  const logChannel = getLogChannel(oldMember.guild, db);
+
+  if (!logChannel)
     return;
 
   if (oldMember.nickname !== newMember.nickname) {
@@ -11,12 +14,12 @@ module.exports = async (oldMember, newMember) => {
       .setAuthor('👤 Nickname changed')
       .setColor(color.bot_theme)
       .setDescription(`<@${newMember.id}> changed their nickname`)
-      .addField('Old nickname:', `${oldMember.nickname !== null ? `${oldMember.nickname}` : oldMember.user.username}`, true)
-      .addField('New nickname:', `${newMember.nickname !== null ? `${newMember.nickname}` : oldMember.user.username}`, true)
+      .addField('Old nickname:', `${oldMember.displayName}`, true)
+      .addField('New nickname:', `${newMember.displayName}`, true)
       .setFooter('COOL BOI BOT MEMBER LOGGING')
       .setTimestamp();
     //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-    const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+    const webhooks = await logChannel.fetchWebhooks();
     const webhook = webhooks.first();
 
     await webhook.send({
@@ -50,7 +53,7 @@ module.exports = async (oldMember, newMember) => {
       .setFooter('COOL BOI BOT MEMBER LOGGING')
       .setTimestamp();
     //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-    const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+    const webhooks = await logChannel.fetchWebhooks();
     const webhook = webhooks.first();
 
     await webhook.send({
@@ -59,11 +62,7 @@ module.exports = async (oldMember, newMember) => {
       embeds: [embed]
     });
   }
-  if (oldMember.avatar !== newMember.avatar) {
-
-    if (!getLogChannel(oldMember.guild, db))
-      return;
-
+  if (oldMember.user.avatar !== newMember.user.avatar) {
     const embed = new MessageEmbed()
       .setAuthor('👤 Member avatar updated')
       .setColor(color.bot_theme)
@@ -73,7 +72,7 @@ module.exports = async (oldMember, newMember) => {
       .setFooter('COOL BOI BOT MEMBER LOGGING')
       .setTimestamp();
     //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-    const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+    const webhooks = await logChannel.fetchWebhooks();
     const webhook = webhooks.first();
 
     await webhook.send({

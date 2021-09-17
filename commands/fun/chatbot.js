@@ -1,3 +1,7 @@
+const {MessageEmbed} = require('discord.js');
+const smartestchatbot = require('smartestchatbot');
+const chatbot = new smartestchatbot.Client();
+const sendError = require('../../error.js');
 module.exports = {
   name: 'chatbot',
   description: 'Talk a AI controlled bot! 🤖',
@@ -5,11 +9,7 @@ module.exports = {
   cooldown: 3,
   category: 'fun',
   execute(message, args, client) {
-    const {MessageEmbed} = require('discord.js');
-    const fetch = require('node-fetch');
-    const smartestchatbot = require('smartestchatbot');
-    const chatbot = new smartestchatbot.Client();
-    const sendError = require('../../error.js');
+    
     const query = args.join(' ');
 
     if (!args.length)

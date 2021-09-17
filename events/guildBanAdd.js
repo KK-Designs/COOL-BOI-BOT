@@ -7,14 +7,13 @@ module.exports = async (ban) => {
   if (!getLogChannel(ban.guild, db))
     return;
 
+  const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
+  const webhook = webhooks.first();
   const embed = new MessageEmbed()
     .setTitle('🔒 Member ban')
     .setColor(color.bot_theme)
     .setDescription(`Name: ${ban.user.username}\n \nID: ${ban.user.id}`)
     .setFooter('COOL BOI BOT MEMBER LOGGING');
-  //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-  const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
-  const webhook = webhooks.first();
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',

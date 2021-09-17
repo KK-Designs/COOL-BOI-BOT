@@ -9,8 +9,10 @@ module.exports = async member => {
     return;
 
   // Send the message, mentioning the member
-  getWelcomeChannel(member.guild, db).send({content: `${member} just left the server  :c`});
-  if (!getLogChannel(member.guild, db))
+  getWelcomeChannel(member.guild, db).send({content: `${member.user.tag} just left the server  :c`});
+  const logChannel = getLogChannel(member.guild, db);
+
+  if (!logChannel)
     return;
 
   if (member.bot)
@@ -19,13 +21,12 @@ module.exports = async member => {
   const embed = new MessageEmbed()
     .setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
     .setColor(color.bot_theme)
-    .setDescription(`${member} left ${member.guild.name}`)
+    .setDescription(`${member.user.tag} left ${member.guild.name}`)
     .addField('Joined:', `${member.joinedAt.toDateString()}`, true)
     .addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
     .setFooter('COOL BOI BOT MEMBER LOGGING')
     .setTimestamp();
-  //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-  const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
+  const webhooks = await logChannel.fetchWebhooks();
   const webhook = webhooks.first();
 
   await webhook.send({
@@ -34,5 +35,4 @@ module.exports = async member => {
     embeds: [embed]
   });
   // we'll send to the welcome channel.
-
 };
