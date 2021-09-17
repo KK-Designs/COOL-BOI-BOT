@@ -35,14 +35,9 @@ module.exports = {
       .setColor('#ffd45c')
       .setTitle(`You were banned <:BAN:752937190786465894>`)
       .setAuthor(message.author.username, message.author.displayAvatarURL({dynamic: true}))
-    /*.addFields(
-                      { name: 'Banned by: ', value: `<@${message.author.id.toString()}>`, inline: true },
-                      { name: 'Reason: ', value: `${reason.toString()}`, inline: true },
-                      { name: 'Server: ', value: `**${guild.name.toString()}**`, inline: true },
-                    )*/
-      .addField('Banned by: ', `<@${message.author.id.toString()}>`, true)
-      .addField('Reason: ', `${reason.toString()}`, true)
-      .addField('Server: ', `**${guild.name.toString()}**`, true)
+      .addField('Banned by: ', `${message.author.tag}`, true)
+      .addField('Reason: ', `${reason}`, true)
+      .addField('Server: ', `**${guild.name}**`, true)
       .setTimestamp()
       .setFooter('Banned at:');
     const member = await message.guild.members.fetch(user).catch(() => null);
@@ -50,7 +45,6 @@ module.exports = {
     if (!member)
       return message.reply({content: "That user isn't in this guild!"});
 
-    
     if (!member.bannable)
       return message.reply(
         'I was unable to ban that user. Check if I have the permision `BAN_MEMBERS`. If not that make sure my role is higher than the member you are tying to ban <:BAN:752937190786465894>.'
@@ -73,7 +67,7 @@ module.exports = {
       .setColor('#940000')
       .setTitle('Member Banned <:BAN:752937190786465894>')
       .setAuthor(message.author.username, message.author.displayAvatarURL({dynamic: true}))
-      .addField('User banned: ', `${user}`)
+      .addField('User banned: ', `${user.tag}`)
       .addField('Banned by: ', `${message.author}`)
       .addField('Reason: ', `${reason}`)
       .setTimestamp()
@@ -100,18 +94,13 @@ module.exports = {
         .setColor('#ffd45c')
         .setTitle(`You were banned <:BAN:752937190786465894>`)
         .setAuthor(interaction.user.username, interaction.user.displayAvatarURL({dynamic: true}))
-      /*.addFields(
-                      { name: 'Banned by: ', value: `<@${message.author.id.toString()}>`, inline: true },
-                      { name: 'Reason: ', value: `${reason.toString()}`, inline: true },
-                      { name: 'Server: ', value: `**${guild.name.toString()}**`, inline: true },
-                    )*/
         .addField('Banned by: ', `${interaction.user}`, true)
         .addField('Reason: ', `${reason}`, true)
         .addField('Server: ', `**${guild.name}**`, true)
         .setTimestamp()
         .setFooter('Banned at:');
 
-      await member.send({embeds: [banembeddm]}).catch(() => console.warn(`${member} has dms disabled`));
+      await member.send({embeds: [banembeddm]}).catch(() => console.warn(`${member.user.tag} has dms disabled`));
     }
     /**
        * Ban the member
@@ -125,7 +114,7 @@ module.exports = {
       .setColor('#940000')
       .setTitle('Member Banned <:BAN:752937190786465894>')
       .setAuthor(interaction.user.username, interaction.user.displayAvatarURL({dynamic: true}))
-      .addField('User banned: ', `${member}`)
+      .addField('User banned: ', `${member.user.tag}`)
       .addField('Banned by: ', `${interaction.user}`)
       .addField('Reason: ', `${reason}`)
       .setTimestamp()

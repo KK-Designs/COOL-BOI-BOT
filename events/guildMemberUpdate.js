@@ -3,14 +3,9 @@ const color = require("../color.json");
 const db = require('quick.db');
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
-  
-  // Always true
-  //if (oldMember == newMember)
-  //  return;
+  const logChannel = getLogChannel(oldMember.guild, db);
 
-  const modLogChannelID = db.get('loggingchannel_' + oldMember.guild.id);
-  const modLogChannel = oldMember.guild.channels.cache.get(modLogChannelID);
-  if (!modLogChannel)
+  if (!logChannel)
     return;
 
   if (oldMember.nickname !== newMember.nickname) {
@@ -18,11 +13,13 @@ module.exports = async (oldMember, newMember) => {
       .setAuthor('👤 Nickname changed')
       .setColor(color.bot_theme)
       .setDescription(`<@${newMember.id}> changed their nickname`)
-      .addField('Old nickname:', `${oldMember.nickname !== null ? `${oldMember.nickname}` : oldMember.user.username}`, true)
-      .addField('New nickname:', `${newMember.nickname !== null ? `${newMember.nickname}` : oldMember.user.username}`, true)
-      //.setThumbnail(`${oldMember.user.displayAvatarURL}`)
-      .setFooter(`COOL BOI BOT MEMBER LOGGING`)
+      .addField('Old nickname:', `${oldMember.displayName}`, true)
+      .addField('New nickname:', `${newMember.displayName}`, true)
+      .setFooter('COOL BOI BOT MEMBER LOGGING')
       .setTimestamp();
+    //modLogChannel.send({ embeds: [embed] }).catch(console.error);
+    const webhooks = await logChannel.fetchWebhooks();
+    const webhook = webhooks.first();
 
     await modLogChannel.send(embed);
   }
@@ -42,8 +39,28 @@ module.exports = async (oldMember, newMember) => {
       .setThumbnail(`${oldMember.user.displayAvatarURL({dynamic: true})}`)
       .setFooter(`COOL BOI BOT MEMBER LOGGING`)
       .setTimestamp();
-    await modLogChannel.send({embeds: [embed]});
+    //modLogChannel.send({ embeds: [embed] }).catch(console.error);
+    const webhooks = await logChannel.fetchWebhooks();
+    const webhook = webhooks.first();
+
+    await webhook.send({
+      username: 'COOL BOI BOT Logging',
+      avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+      embeds: [embed]
+    });
   }
+  if (oldMember.user.avatar !== newMember.user.avatar) {
+    const embed = new MessageEmbed()
+      .setAuthor('👤 Member avatar updated')
+      .setColor(color.bot_theme)
+      .setDescription(`Avatar updated for <@${newMember.id}>`)
+      .addField('Old avatar:', `${oldMember.user.displayAvatarURL({dynamic: true})}`, true)
+      .addField('New avatar:', `឵${newMember.user.displayAvatarURL({dynamic: true})}`, true)
+      .setFooter('COOL BOI BOT MEMBER LOGGING')
+      .setTimestamp();
+    //modLogChannel.send({ embeds: [embed] }).catch(console.error);
+    const webhooks = await logChannel.fetchWebhooks();
+    const webhook = webhooks.first();
 
 
 };

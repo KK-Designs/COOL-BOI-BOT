@@ -34,14 +34,14 @@ module.exports = async member => {
   ctx.strokeStyle = '#74037b';
   ctx.strokeRect(0, 0, canvas.width, canvas.height);
   // Slightly smaller text placed above the member's display name
-  ctx.font = '32px sans-serif';
+  ctx.font = applyText(canvas, member, 32);
   ctx.fillStyle = '#ffffff';
   ctx.fillText(`Hey ${member.user.username},`, canvas.width / 2.5, canvas.height / 3.5);
   ctx.font = '34px sans-serif';
   ctx.fillStyle = '#ffffff';
   ctx.fillText(`welcome to the`, canvas.width / 2.5, canvas.height / 2.2);
   // Add an exclamation point here and below
-  ctx.font = '48px sans-serif';
+  ctx.font = applyText(canvas, guild.name, 48);
   ctx.fillStyle = '#ffffff';
   ctx.fillText(`${guild.name}!`, canvas.width / 2.5, canvas.height / 1.3);
   ctx.beginPath();
@@ -53,14 +53,14 @@ module.exports = async member => {
   ctx.drawImage(avatar, 25, 25, 200, 200);
   const welattachment = new MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-  await welcomeChannel.send({content: `Hey ${member}, welcome to **${guild.name}!**`, files: [welattachment]});
-  if (!modLogChannel)
+  getWelcomeChannel(member.guild, db)?.send({content: `Hey ${member.user.tag}, welcome to **${guild.name}!**`, files: [welattachment]});
+  if (!getLogChannel(member.guild, db))
     return;
 
   const embed = new MessageEmbed()
     .setAuthor('Member joined', 'https://cdn.discordapp.com/emojis/812013459298058260.png')
     .setColor(color.bot_theme)
-    .setDescription(`${member} joined ${member.guild.name}`)
+    .setDescription(`${member.user.tag} joined ${member.guild.name}`)
     .addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
     .setFooter(`COOL BOI BOT MEMBER LOGGING`)
     .setTimestamp();
@@ -68,16 +68,15 @@ module.exports = async member => {
   await modLogChannel.send({embeds: [embed]});
 
 };
-function applyText(canvas, text) {
+function applyText(canvas, text, fontSize = 70) {
   const ctx = canvas.getContext('2d');
-  // Declare a base size of the font
-  let fontSize = 70;
-  do {
+
+  ctx.font = `${fontSize -= 10}px sans-serif`;
+  // Compare pixel width of the text to the canvas minus the approximate text size
+  while (ctx.measureText(text).width > canvas.width - 300) {
     // Assign the font to the context and decrement it so it can be measured again
     ctx.font = `${fontSize -= 10}px sans-serif`;
-    // Compare pixel width of the text to the canvas minus the approximate avatar size
-  } while (ctx.measureText(text).width > canvas.width - 300);
+  }
 
-  // Return the result to use in the actual canvas
   return ctx.font;
 }
