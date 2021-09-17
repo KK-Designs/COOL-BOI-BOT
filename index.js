@@ -14,6 +14,7 @@ const startup = require('./startup.js');
 const color = require('./color.json');
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
+const { getLogChannel } = require('./utils.js');
 
 updateNotifier({ pkg }).notify();
 
@@ -276,7 +277,6 @@ if (args[0].value === "644054016476577812") {
 		console.log(`warn: ${info}`);
 	});
 
-	// client.destroy();
 	client.on('messageCreate', async message => {
 		const SpamDetected = await DiscordStopSpam.checkMessageInterval(message);
 		if (SpamDetected) {
@@ -339,23 +339,23 @@ if (args[0].value === "644054016476577812") {
 			}
 		}
 		const blockedUsers = await db.get('blockedusers_' + client.user.id);
-   
+
 		const guild = message.guild;
 
 		if (!message.guild) {
 			prefix.setPrefix('!', message.author.id);
 		}
 
-    const args1 = message.content.slice(1).trim().split(/ +/);    
-    const command1 = client.commands.get("prefix");
+		const args1 = message.content.slice(1).trim().split(/ +/);
+		const command1 = client.commands.get('prefix');
 
-    prefixViewCommand(args1, command1);
+		prefixViewCommand(args1, command1);
 
-    function prefixViewCommand(args, command) {            
-      if (message.content.toLowerCase() === "!prefix") {               
-        return command.execute(message, args, client);          
-      }              
-    }    
+		function prefixViewCommand(args, command) {
+			if (message.content.toLowerCase() === '!prefix') {
+				return command.execute(message, args, client);
+			}
+		}
 
 		const defaultPrefix = '!';
 		let guildPrefix = prefix.getPrefix(message.channel.type === 'GUILD_TEXT' ? message.guild.id : message.author.id);
@@ -370,8 +370,8 @@ if (args[0].value === "644054016476577812") {
 		const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
 
-		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));    
-    
+		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
 		if (command && blockedUsers.includes(message.author.id)) {
 			return message.reply({ embeds: [
 				new MessageEmbed()
@@ -392,7 +392,7 @@ if (args[0].value === "644054016476577812") {
 			}
 		}
 
-		if (!command) return;               
+		if (!command) return;
 
 		if (commands) {
 
@@ -421,10 +421,10 @@ if (args[0].value === "644054016476577812") {
 				}
 			}
 		}
-		
+
 		if (message.guild) {
 			if (db.get('blockcmds_' + message.guild.id) === '0') {
-       
+
 			}
 			else if (db.get('blockcmds_' + message.guild.id) && db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {
 				return message.reply({ embeds: [
@@ -442,12 +442,9 @@ if (args[0].value === "644054016476577812") {
 			}
 		}
 
-    if (command.permissions == undefined) {
-      command.permissions = 'EMBED_LINKS';
-    }
-    if (command.clientPermissons == undefined) {
-      command.permissions = 'EMBED_LINKS';
-    }
+		if (command.clientPermissons == undefined) {
+			command.clientPermissons = 'EMBED_LINKS';
+		}
 
 		if (command.permissions && message.channel.type === 'GUILD_TEXT') {
 			const authorPerms = message.channel.permissionsFor(message.author);
@@ -466,7 +463,7 @@ if (args[0].value === "644054016476577812") {
 				return message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.'),
+						.setDescription(`<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later. I need the following permissions: ${command.clientPermissons}`),
 				] });
 			}
 		}
@@ -477,22 +474,23 @@ if (args[0].value === "644054016476577812") {
 					.setColor('RED')
 					.setDescription('That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.'),
 			] });
-		}            
+		}
 
-    prefixViewCommand1(args, command);
+		prefixViewCommand1(args, command);
 
-    function prefixViewCommand1(args, command) {                    
-      if (commandName === `prefix`) {               
-        command.execute(message, args, client);
-        return true;          
-      } else {
-        return false;
-      }      
-    }
+		function prefixViewCommand1(args, command) {
+			if (commandName === 'prefix') {
+				command.execute(message, args, client);
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 
-    if (!prefixViewCommand1()) {
+		if (!prefixViewCommand1()) {
 		  command.execute(message, args, client);
-    }
+		}
 
 		// the user can type the command ... your command code goes here :)
 
@@ -532,16 +530,16 @@ if (args[0].value === "644054016476577812") {
 
 	client.on('guildMemberRemove', reqEvent('guildMemberRemove'));
 
-  process.on('unhandledRejection', async error => { 
-    let user = await client.users.fetch('776848090564657153');
-    user.send({ embeds: [new MessageEmbed()
-      .setColor(color.fail)
+	process.on('unhandledRejection', async error => {
+		const user = await client.users.fetch('776848090564657153');
+		user.send({ embeds: [new MessageEmbed()
+			.setColor(color.fail)
 			.setDescription(`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``),
-    ]});
-  });
+		] });
+	});
 
-	  client.login(process.env.BOT_TOKEN);    
+	  client.login(process.env.BOT_TOKEN);
 }
-catch (err) {	
+catch (err) {
 	return console.error(err);
 }

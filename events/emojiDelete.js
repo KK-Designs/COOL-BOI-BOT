@@ -13,15 +13,15 @@ module.exports = async emoji => {
 		.addField('Emoji URL', emoji.url)
 		.setFooter('COOL BOI BOT SERVER LOGGING')
 		.setTimestamp();
-		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
+
 	const webhooks = await getLogChannel(emoji.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
-	await webhook.send({		
+	await webhook.send({
 		username: 'COOL BOI BOT Logging',
 		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
 		embeds: [embed],
 	});
-;
+
 
 };

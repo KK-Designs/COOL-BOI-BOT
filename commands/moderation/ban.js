@@ -7,7 +7,7 @@ module.exports = {
 	category: 'moderation',
 	permissions: 'BAN_MEMBERS',
 	clientPermissons: ['EMBED_LINKS', 'BAN_MEMBERS'],
-	execute(message, args) {
+	async execute(message, args) {
 		const sendError = require('../../error.js');
 		const user = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
 		const guild = message.guild;
@@ -31,7 +31,7 @@ module.exports = {
                       { name: 'Reason: ', value: `${reason.toString()}`, inline: true },
                       { name: 'Server: ', value: `**${guild.name.toString()}**`, inline: true },
                     )*/
-			.addField('Banned by: ', `<@${message.author.id.toString()}>`, true)
+			.addField('Banned by: ', `${message.author.tag}`, true)
 			.addField('Reason: ', `${reason.toString()}`, true)
 			.addField('Server: ', `**${guild.name.toString()}**`, true)
 			.setTimestamp()
@@ -39,7 +39,7 @@ module.exports = {
 		if (!user.bot) {
 			user.send({ embeds: [banembeddm] });
 		}
-		setTimeout(() => {
+		setTimeout(async() => {
 			// Assuming we mention someone in the message, this will return the user
 			// Read more about mentions over at https://discord.js.org/#/docs/main/master/class/MessageMentions
 			const user = message.mentions.users.first();
@@ -47,7 +47,7 @@ module.exports = {
 			// If we have a user mentioned
 			if (user) {
 				// Now we get the member from the user
-				const member = message.guild.members.fetch(user);
+				const member = await message.guild.members.fetch(user);
 				// If the member is in the guild
 				if (member) {
 					/**
@@ -67,7 +67,7 @@ module.exports = {
 								.setColor('#940000')
 								.setTitle('Member Banned <:BAN:752937190786465894>')
 								.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-								.addField('User banned: ', '<@' + message.mentions.users.first().id.toString() + '>')
+								.addField('User banned: ', 	`${user.tag}`)
 								.addField('Banned by: ', `<@${message.author.id.toString()}>`)
 								.addField('Reason: ', `${reason.toString()}`)
 								.setTimestamp()

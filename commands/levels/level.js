@@ -34,7 +34,7 @@ module.exports = {
 		}
 		else if (member.presence.status === 'idle') {
 			status = '#ff9d00';
-		}		
+		}
 
 		const Canvas = require('canvas');
 		const { registerFont } = require('canvas');

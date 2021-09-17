@@ -5,7 +5,7 @@ module.exports = async message => {
 	if (message.partial) return;
 	if (message.first().channel.name == 'server-logs') return;
 	const messageChannel = message.first().channel.name;
-	const db = require('quick.db');	
+	const db = require('quick.db');
 
 	if (getLogChannel(message.first().guild, db)) {
 		const messageArray = [...message.values()];
@@ -22,15 +22,15 @@ module.exports = async message => {
 			.setDescription(`${stringedArray}`)
 			.setFooter('COOL BOI BOT MESSAGE LOGGING')
 			.setTimestamp();
-				//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await getLogChannel(message.first().guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
 
-	await webhook.send({		
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-		embeds: [embed],
-	});
+		const webhooks = await getLogChannel(message.first().guild, db).fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [embed],
+		});
 	}
 
 };

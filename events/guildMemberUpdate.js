@@ -1,6 +1,6 @@
 module.exports = async (oldMember, newMember) => {
 	const { getLogChannel } = require('../utils.js');
-	
+
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
 	const db = require('quick.db');
@@ -17,15 +17,15 @@ module.exports = async (oldMember, newMember) => {
 			.setFooter('COOL BOI BOT MEMBER LOGGING')
 			.setTimestamp();
 
-			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
 
-	await webhook.send({		
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-		embeds: [embed],
-	});
+		const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [embed],
+		});
 	}
 
 	if (oldMember.roles !== newMember.roles) {
@@ -54,15 +54,15 @@ module.exports = async (oldMember, newMember) => {
 			.setFooter('COOL BOI BOT MEMBER LOGGING')
 			.setTimestamp();
 
-			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
 
-	await webhook.send({		
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-		embeds: [embed],
-	});
+		const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [embed],
+		});
 	}
 
 	if (oldMember.avatar !== newMember.avatar) {
@@ -78,15 +78,15 @@ module.exports = async (oldMember, newMember) => {
 			.setFooter('COOL BOI BOT MEMBER LOGGING')
 			.setTimestamp();
 
-			//modLogChannel.send({ embeds: [embed] }).catch(console.error);
-	const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
 
-	await webhook.send({		
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-		embeds: [embed],
-	});
+		const webhooks = await getLogChannel(oldMember.guild, db).fetchWebhooks();
+		const webhook = webhooks.first();
+
+		await webhook.send({
+			username: 'COOL BOI BOT Logging',
+			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			embeds: [embed],
+		});
 	}
 
 };

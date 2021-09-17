@@ -6,7 +6,7 @@ module.exports = {
 	cooldown: 1.5,
 	execute(message, args) {
 		const prefix = require('discord-prefix');
-		let guildPrefix = prefix.getPrefix(message.channel.type === 'GUILD_TEXT' ? message.guild.id : message.author.id);
+		const guildPrefix = prefix.getPrefix(message.channel.type === 'GUILD_TEXT' ? message.guild.id : message.author.id);
 		const tipslist = [
 			'<:tips:800843897248546826> **TIP:** Our commands are not case sensitive, for exaple `!Duck` or `!dUck` would work',
 			'<:tips:800843897248546826> **TIP:** \`NotBacon#4259\` is the creater of this bot',

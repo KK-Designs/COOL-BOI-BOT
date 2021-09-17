@@ -7,7 +7,7 @@ module.exports = {
 	category: 'moderation',
 	permissions: 'KICK_MEMBERS',
 	clientPermissons: ['EMBED_LINKS', 'KICK_MEMBERS'],
-	execute(message, args) {
+	async execute(message, args) {
 		const guild = message.guild;
 		const user = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
 		const { MessageEmbed } = require('discord.js');
@@ -28,7 +28,7 @@ module.exports = {
 				.setColor('#ffd45c')
 				.setTitle('You were kicked')
 				.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-				.addField('Kicked by: ', '<@' + message.author.id.toString() + '>')
+				.addField('Kicked by: ', `${message.author.tag}`)
 				.addField('Reason: ', `${reason.toString()}`)
 				.addField('Server: ', `**${guild.name.toString()}**`)
 				.setTimestamp()
@@ -37,7 +37,7 @@ module.exports = {
 			user.send({ embeds: [ kickembeddm ] }).catch(console.error);
 		}
 
-		setTimeout(() => {
+		setTimeout(async() => {
 
 			// Assuming we mention someone in the message, this will return the user
 			// Read more about mentions over at https://discord.js.org/#/docs/main/master/class/MessageMentions
@@ -45,7 +45,7 @@ module.exports = {
 			// If we have a user mentioned
 			if (user) {
 				// Now we get the member from the user
-				const member = message.guild.members.fetch(user);
+				const member = await message.guild.members.fetch(user);
 				// If the member is in the guild
 				if (member) {
 					/**
@@ -62,7 +62,7 @@ module.exports = {
 								.setColor('#940000')
 								.setTitle('Member Kicked')
 								.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-								.addField('User kicked: ', '<@' + message.mentions.users.first().id + '>')
+								.addField('User kicked: ', `${user.tag}`)
 								.addField('Kicked by: ', '<@' + message.author.id + '>')
 								.addField('Reason: ', `${reason}`)
 								.setTimestamp()

@@ -9,11 +9,9 @@ module.exports = async member => {
 	const { registerFont } = require('canvas');
 	const { Client, MessageAttachment } = require('discord.js');
 	registerFont('./BalooTammudu2-Regular.ttf', { family: 'sans-serif' });
-	const applyText = (canvas, text) => {
-		const ctx = canvas.getContext('2d');
-
+	const applyText = (ctx, text, fontSizeInt) => {		
 		// Declare a base size of the font
-		let fontSize = 70;
+		let fontSize = fontSizeInt;
 
 		do {
 			// Assign the font to the context and decrement it so it can be measured again
@@ -39,7 +37,8 @@ module.exports = async member => {
 	ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 	// Slightly smaller text placed above the member's display name
-	ctx.font = '32px sans-serif';
+	ctx.font = applyText(ctx, member.user.username , 32);
+	//ctx.font = '32px sans-serif';
 	ctx.fillStyle = '#ffffff';
 	ctx.fillText(`Hey ${member.user.username},`, canvas.width / 2.5, canvas.height / 3.5);
 
@@ -48,7 +47,8 @@ module.exports = async member => {
 	ctx.fillText('welcome to the', canvas.width / 2.5, canvas.height / 2.2);
 
 	// Add an exclamation point here and below
-	ctx.font = '48px sans-serif';
+	//ctx.font = '48px sans-serif';
+	ctx.font = applyText(ctx, `${guild.name}!` , 48);
 	ctx.fillStyle = '#ffffff';
 	ctx.fillText(`${guild.name}!`, canvas.width / 2.5, canvas.height / 1.3);
 
@@ -57,12 +57,12 @@ module.exports = async member => {
 	ctx.closePath();
 	ctx.clip();
 
-	const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
+	const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
 	ctx.drawImage(avatar, 25, 25, 200, 200);
 
 	const welattachment = new MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-	getWelcomeChannel(member.guild, db).send({ content: `Hey ${member}, welcome to **${guild.name}!**`, files: [welattachment] });
+	getWelcomeChannel(member.guild, db).send({ content: `Hey ${member.user.tag}, welcome to **${guild.name}!**`, files: [welattachment] });
 
 	if (!getLogChannel(member.guild, db)) return;
 	const embed = new MessageEmbed()
@@ -72,11 +72,10 @@ module.exports = async member => {
 		.addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
 		.setFooter('COOL BOI BOT MEMBER LOGGING')
 		.setTimestamp();
-		//modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
 	const webhook = webhooks.first();
 
-	await webhook.send({		
+	await webhook.send({
 		username: 'COOL BOI BOT Logging',
 		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
 		embeds: [embed],

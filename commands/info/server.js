@@ -9,7 +9,7 @@ module.exports = {
 		const guild = message.guild;
 		const { MessageEmbed } = require('discord.js');
 		const serverName = guild.name;
-		const serverIcon = guild.iconURL();		
+		const serverIcon = guild.iconURL();
 		guild.fetchOwner().then(owner => {
 			const infoembed = new MessageEmbed()
 				.setColor(guild.me.displayHexColor)

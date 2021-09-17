@@ -20,7 +20,7 @@ module.exports = {
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Unblocked all commands'),
-			]});
+			] });
 			return await db.set(`blockcmds_${message.guild.id}`, '0');
 		}
 
@@ -35,7 +35,7 @@ module.exports = {
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription(`<:X_:807305490160943104> ${error}`),
-			]});
+			] });
 		  }
 
 		if (args[0].toLowerCase() === 'level') {
@@ -44,7 +44,7 @@ module.exports = {
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `),
-			]});
+			] });
 		}
 
 		await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
@@ -52,6 +52,6 @@ module.exports = {
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}`),
-		]});
+		] });
 	},
 };
