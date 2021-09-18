@@ -10,7 +10,7 @@ module.exports = async (message, messageNew) => {
   if (messageNew.partial)
     messageNew = await messageNew.fetch();
 
-  if (message.author.bot)
+  if (messageNew.author.bot)
     return;
 
   const logChannel = getLogChannel(message.guild, db);
@@ -29,7 +29,7 @@ module.exports = async (message, messageNew) => {
   const embed = new MessageEmbed()
     .setAuthor('📝 Message updated')
     .setColor(color.bot_theme)
-    .setDescription(`${message.author} edited a message in ${message.channel}`)
+    .setDescription(`${messageNew.author} edited a message in ${message.channel}`)
     .setFooter('COOL BOI BOT MESSAGE LOGGING')
     .setTimestamp();
 
