@@ -13,5 +13,13 @@ module.exports = {
       embedColor: color.bot_theme, // default: #075FFF
       credit: false
     });
+  },
+  async executeSlash(interaction) {
+    await interaction.deferReply();
+    await simplydjs.calculator(interaction, {
+      slash: true,
+      embedColor: color.bot_theme, // default: #075FFF
+      credit: false
+    });
   }
 };
