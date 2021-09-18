@@ -1,3 +1,4 @@
+require("dotenv").config();
 const assert = require("assert/strict");
 const fs = require("fs");
 const {
@@ -7,7 +8,7 @@ const {Routes} = require('discord-api-types/v9');
 const {REST} = require("@discordjs/rest");
 const config = require("./config.json");
 const rest = new REST({version: "9"})
-  .setToken(config.token);
+  .setToken(process.env.BOT_TOKEN);
 const commands = [];
 
 for (const categoryEnt of fs.readdirSync("./commands", {withFileTypes: true})) {
