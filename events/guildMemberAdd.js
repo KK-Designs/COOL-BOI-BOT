@@ -2,8 +2,7 @@
 const {MessageEmbed, MessageAttachment} = require('discord.js');
 const color = require("../color.json");
 const Canvas = require('canvas');
-const db = require('quick.db');
-const {registerFont} = require('canvas');
+const config = require("../config.json")
 
 registerFont('./BalooTammudu2-Regular.ttf', {family: 'sans-serif'});
 //registerFont('./OpenSans-Regular.ttf', { family: 'sans-serif' });
@@ -65,7 +64,11 @@ module.exports = async member => {
     .setFooter(`COOL BOI BOT MEMBER LOGGING`)
     .setTimestamp();
 
-  await modLogChannel.send({embeds: [embed]});
+  await webhook.send({
+    username: 'COOL BOI BOT Logging',
+    avatarURL: config.webhookAvatarURL,
+    embeds: [embed]
+  });
 
 };
 function applyText(canvas, text, fontSize = 70) {

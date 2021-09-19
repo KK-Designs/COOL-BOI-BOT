@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const color = require("../color.json");
 const db = require('quick.db');
-/** @type {(...args: import("discord.js").ClientEvents["guildMemberRemove"]) => Promise<any>} */
+const config = require("../config.json")
 module.exports = async member => {
  
   const guild = member.guild;
@@ -37,6 +37,10 @@ module.exports = async member => {
   const webhooks = await logChannel.fetchWebhooks();
   const webhook = webhooks.first();
 
-  return await modLogChannel.send({embeds: [embed]});
+  await webhook.send({
+    username: 'COOL BOI BOT Logging',
+    avatarURL: config.webhookAvatarURL,
+    embeds: [embed]
+  });
   // we'll send to the welcome channel.
 };

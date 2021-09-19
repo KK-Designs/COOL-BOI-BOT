@@ -1,6 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const color = require("../color.json");
 const db = require('quick.db');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
   const logChannel = getLogChannel(oldMember.guild, db);
@@ -21,7 +22,11 @@ module.exports = async (oldMember, newMember) => {
     const webhooks = await logChannel.fetchWebhooks();
     const webhook = webhooks.first();
 
-    await modLogChannel.send(embed);
+    await webhook.send({
+      username: 'COOL BOI BOT Logging',
+      avatarURL: config.webhookAvatarURL,
+      embeds: [embed]
+    });
   }
   nick: {
     const output = oldMember.roles.cache.map(role => role.name).join("\n");
@@ -45,7 +50,7 @@ module.exports = async (oldMember, newMember) => {
 
     await webhook.send({
       username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+      avatarURL: config.webhookAvatarURL,
       embeds: [embed]
     });
   }
@@ -62,5 +67,11 @@ module.exports = async (oldMember, newMember) => {
     const webhooks = await logChannel.fetchWebhooks();
     const webhook = webhooks.first();
 
+    await webhook.send({
+      username: 'COOL BOI BOT Logging',
+      avatarURL: config.webhookAvatarURL,
+      embeds: [embed]
+    });
+  }
 
 };

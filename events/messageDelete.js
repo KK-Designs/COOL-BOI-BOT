@@ -1,6 +1,8 @@
 const {MessageEmbed} = require('discord.js');
 const db = require('quick.db');
 const color = require("../color.json");
+const {getLogChannel} = require('../utils.js');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["messageDelete"]) => Promise<any>} */
 module.exports = async message => {
   if (message.partial)
@@ -56,7 +58,7 @@ module.exports = async message => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
 };
