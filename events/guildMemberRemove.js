@@ -3,6 +3,7 @@ const {getWelcomeChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
 const color = require('../color.json');
 const db = require('quick.db');
+const config = require("../config.json")
 module.exports = async member => {
   // Do nothing if the channel wasn't found on this server
   if (!getWelcomeChannel(member.guild, db))
@@ -31,7 +32,7 @@ module.exports = async member => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
   // we'll send to the welcome channel.

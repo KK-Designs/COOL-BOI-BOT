@@ -5,6 +5,7 @@ const {getWelcomeChannel} = require('../utils.js');
 const {getLogChannel} = require('../utils.js');
 const color = require('../color.json');
 const Canvas = require('canvas');
+const config = require("../config.json")
 
 registerFont('./BalooTammudu2-Regular.ttf', {family: 'sans-serif'});
 module.exports = async member => {
@@ -57,7 +58,7 @@ module.exports = async member => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
 
