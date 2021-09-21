@@ -1,35 +1,46 @@
+const {MessageEmbed} = require('discord.js');
+const color = require("../color.json");
+const db = require('quick.db');
+const config = require("../config.json")
 module.exports = async member => {
-	const { getLogChannel } = require('../utils.js');
-	const { getWelcomeChannel } = require('../utils.js');
-	const { MessageEmbed } = require('discord.js');
-	const color = require('../color.json');
-	const db = require('quick.db');
-	const guild = member.guild;
+ 
+  const guild = member.guild;
+  const modLogChannelID = db.get('loggingchannel_' + guild.id);
+  const modLogChannel = guild.channels.cache.get(modLogChannelID);
+  //member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
+  // Send the message to a designated channel on a server:
+  const welcomeChannelID = db.get('welcomechannel_' + member.guild.id);
+  const welcomeChannel = member.guild.channels.cache.get(welcomeChannelID);
 
-	// Do nothing if the channel wasn't found on this server
-	if (!getWelcomeChannel(member.guild, db)) return;
-	// Send the message, mentioning the member
-	getWelcomeChannel(member.guild, db).send({ content: `${member.user.tag} just left the server  :c` });
+  // Do nothing if the channel wasn't found on this server
+  if (!welcomeChannel)
+    return;
 
-	if (!getLogChannel(member.guild, db)) return;
-	if (member.bot) return;
-	const embed = new MessageEmbed()
-		.setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
-		.setColor(color.bot_theme)
-		.setDescription(`${member.user.tag} left ${member.guild.name}`)
-		.addField('Joined:', `${member.joinedAt.toDateString()}`, true)
-		.addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
-		.setFooter('COOL BOI BOT MEMBER LOGGING')
-		.setTimestamp();
+  // Send the message, mentioning the member
+  getWelcomeChannel(member.guild, db).send({content: `${member.user.tag} just left the server  :c`});
+  const logChannel = getLogChannel(member.guild, db);
 
-	const webhooks = await getLogChannel(member.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
+  if (!logChannel)
+    return;
 
-	await webhook.send({
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-		embeds: [embed],
-	});
-	// we'll send to the welcome channel.
+  if (member.user.bot)
+    return;
 
+  const embed = new MessageEmbed()
+    .setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
+    .setColor(color.bot_theme)
+    .setDescription(`${member.user.tag} left ${member.guild.name}`)
+    .addField('Joined:', `${member.joinedAt.toDateString()}`, true)
+    .addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
+    .setFooter(`COOL BOI BOT MEMBER LOGGING`)
+    .setTimestamp();
+  const webhooks = await logChannel.fetchWebhooks();
+  const webhook = webhooks.first();
+
+  await webhook.send({
+    username: 'COOL BOI BOT Logging',
+    avatarURL: config.webhookAvatarURL,
+    embeds: [embed]
+  });
+  // we'll send to the welcome channel.
 };
