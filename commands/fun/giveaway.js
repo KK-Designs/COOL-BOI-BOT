@@ -131,7 +131,7 @@ module.exports = {
       return sendError('Please provide a valid prize like `1 month nitro`', message.channel);
 
     client.giveawaysManager.start(message.channel, {
-      time: ms(args[0]),
+      duration: ms(args[0]),
       prize: args.slice(1).join(' '),
       winnerCount: parseInt(args[2]) || 1,
       embedColorEnd: "RED",

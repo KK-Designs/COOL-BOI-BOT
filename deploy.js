@@ -50,7 +50,7 @@ const main = async () => {
   console.log(commands.map(c => c.name).sort());
   await rest.put(
   //  Routes.applicationCommands(app.id),
-    Routes.applicationGuildCommands(app.id, "790947539054624799"),
+    Routes.applicationGuildCommands(app.id, "800597178602225725"),
     {body: commands}
   );
   console.log("Successfully deployed commands");

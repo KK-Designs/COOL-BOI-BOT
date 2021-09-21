@@ -38,7 +38,7 @@ module.exports = {
     }
     await db.set(`loggingchannel_${message.guild.id}`, x.id);
     const webhook = await getLogChannel(message.guild, db).createWebhook('COOL BOI BOT Logging', {
-      avatar: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png'
+      avatar: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png'
     });
 
     console.log(`Created webhook ${webhook}`);

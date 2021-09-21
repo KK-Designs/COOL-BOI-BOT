@@ -1,39 +1,22 @@
 require("dotenv").config();
 const Discord = require('discord.js');
 const color = require("./color.json");
-const config = require("./config.json");
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
-const client = new Discord.Client({
-  //intents: 24287,
-  intents: [
-    "GUILDS",
-    "GUILD_MEMBERS",
-    "GUILD_MESSAGES",
-    "GUILD_BANS",
-    "GUILD_EMOJIS_AND_STICKERS",
-    "GUILD_VOICE_STATES",
-    "GUILD_PRESENCES",
-    "DIRECT_MESSAGES",
-    "GUILD_MESSAGE_REACTIONS"
-  ],
+const client = new Discord.Client({  
+  intents: 32767,
   partials: [
     'MESSAGE',
     'CHANNEL',
     'REACTION',
     'GUILD_MEMBER',
     'USER'
-  ],
-  ws: {properties: {$browser: "Discord iOS"}}
-});
-const errorWebhook = new Discord.WebhookClient({
-  url: config.webhookURL
+  ]
 });
 
 updateNotifier({pkg}).notify();
 client.commands = new Discord.Collection();
-const reqEvent = (event) => {
-  // eslint-disable-next-line global-require
+const reqEvent = (event) => {  
   const run = require(`./events/${event}`);
 
   return async (...args) => {
@@ -103,10 +86,16 @@ process.on("SIGINT", () => {
   process.exit();
 });
 process.on('unhandledRejection', async error => {
+  const {MessageEmbed} = require('discord.js');
   console.error("Unhandled Rejection: ", error);
-  const embed = new Discord.MessageEmbed()
-    .setColor(color.fail)
-    .setDescription(`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``);
-
-  await errorWebhook.send({embeds: [embed]});
+  const user = await client.users.fetch('776848090564657153');
+		user.send({
+			embeds: [
+				new MessageEmbed()
+					.setColor(color.fail)
+					.setDescription(
+						`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
+					),
+			],
+		});
 });

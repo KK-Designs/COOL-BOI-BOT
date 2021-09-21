@@ -1,6 +1,6 @@
 {
   "name": "cool-boi-bot",
-  "version": "1.0.0",
+  "version": "13.1.0",
   "description": "The official COOL-BOI-BOT",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,8 @@
     "start": "pm2 start index.js",
     "stop": "pm2 stop index.js",
     "restart": "pm2 restart index.js",
+    "deploy": "node deploy.js",
+    "deployandrun": "node deploy.js -f && pm2 start index.js",
     "monit": "pm2 monit",
     "lint": "eslint .",
     "fix": "npm run lint -- --fix"
@@ -51,6 +53,7 @@
     "node-fetch": "^2.6.1",
     "node-superfetch": "^0.1.11",
     "owlbot-js": "^2.0.2",
+    "pm2": "^5.1.1",
     "printscreen": "^1.2.1",
     "qs": "^6.10.1",
     "querystring": "^0.2.1",
