@@ -1,23 +1,21 @@
 const {MessageEmbed} = require('discord.js');
+const {getLogChannel, getWelcomeChannel} = require("../utils");
 const color = require("../color.json");
 const db = require('quick.db');
-const config = require("../config.json")
+const config = require("../config.json");
 module.exports = async member => {
  
   const guild = member.guild;
-  const modLogChannelID = db.get('loggingchannel_' + guild.id);
-  const modLogChannel = guild.channels.cache.get(modLogChannelID);
   //member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
   // Send the message to a designated channel on a server:
-  const welcomeChannelID = db.get('welcomechannel_' + member.guild.id);
-  const welcomeChannel = member.guild.channels.cache.get(welcomeChannelID);
+  const welcomeChannel = getWelcomeChannel(guild, db);
 
   // Do nothing if the channel wasn't found on this server
   if (!welcomeChannel)
     return;
 
   // Send the message, mentioning the member
-  getWelcomeChannel(member.guild, db).send({content: `${member.user.tag} just left the server  :c`});
+  welcomeChannel.send({content: `${member.user.tag} just left the server  :c`});
   const logChannel = getLogChannel(member.guild, db);
 
   if (!logChannel)

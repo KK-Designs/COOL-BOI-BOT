@@ -38,7 +38,7 @@ module.exports = async channel => {
     .setDescription(`Created channel ${channel}`)
     .setFooter('COOL BOI BOT SERVER LOGGING')
     .setTimestamp();
-  const webhooks = logChannel.fetchWebhooks();
+  const webhooks = await logChannel.fetchWebhooks();
   const webhook = webhooks.first();
 
   await webhook.send({

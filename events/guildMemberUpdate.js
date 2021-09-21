@@ -1,7 +1,8 @@
 const {MessageEmbed} = require('discord.js');
+const {getLogChannel} = require('../utils.js');
 const color = require("../color.json");
 const db = require('quick.db');
-const config = require("../config.json")
+const config = require("../config.json");
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
   const logChannel = getLogChannel(oldMember.guild, db);
@@ -31,6 +32,7 @@ module.exports = async (oldMember, newMember) => {
   nick: {
     const output = oldMember.roles.cache.map(role => role.name).join("\n");
     const outputNew = newMember.roles.cache.map(role => role.name).join("\n");
+
     if (output == outputNew)
       break nick;
 
