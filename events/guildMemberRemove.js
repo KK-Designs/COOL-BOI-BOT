@@ -1,11 +1,19 @@
-const {getLogChannel} = require('../utils.js');
-const {getWelcomeChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
-const color = require('../color.json');
+const color = require("../color.json");
 const db = require('quick.db');
+const config = require("../config.json")
 module.exports = async member => {
+ 
+  const guild = member.guild;
+  const modLogChannelID = db.get('loggingchannel_' + guild.id);
+  const modLogChannel = guild.channels.cache.get(modLogChannelID);
+  //member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
+  // Send the message to a designated channel on a server:
+  const welcomeChannelID = db.get('welcomechannel_' + member.guild.id);
+  const welcomeChannel = member.guild.channels.cache.get(welcomeChannelID);
+
   // Do nothing if the channel wasn't found on this server
-  if (!getWelcomeChannel(member.guild, db))
+  if (!welcomeChannel)
     return;
 
   // Send the message, mentioning the member
@@ -15,7 +23,7 @@ module.exports = async member => {
   if (!logChannel)
     return;
 
-  if (member.bot)
+  if (member.user.bot)
     return;
 
   const embed = new MessageEmbed()
@@ -24,14 +32,14 @@ module.exports = async member => {
     .setDescription(`${member.user.tag} left ${member.guild.name}`)
     .addField('Joined:', `${member.joinedAt.toDateString()}`, true)
     .addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
-    .setFooter('COOL BOI BOT MEMBER LOGGING')
+    .setFooter(`COOL BOI BOT MEMBER LOGGING`)
     .setTimestamp();
   const webhooks = await logChannel.fetchWebhooks();
   const webhook = webhooks.first();
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
   // we'll send to the welcome channel.

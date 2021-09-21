@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const db = require('quick.db');
 const color = require("../color.json");
 const {getLogChannel} = require('../utils.js');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["messageDelete"]) => Promise<any>} */
 module.exports = async message => {
   if (message.partial)
@@ -13,7 +14,7 @@ module.exports = async message => {
   if (message.author.bot)
     return;
 
-  if (message.content === '')
+  if (!message.content)
     return;
 
   const messageChannel = message.channel.name;
@@ -40,7 +41,7 @@ module.exports = async message => {
     .setColor(color.bot_theme)
     .setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}`)
     .setDescription(message.content)
-    .setFooter('COOL BOI BOT MESSAGE LOGGING')
+    .setFooter(`COOL BOI BOT MESSAGE LOGGING`)
     .setTimestamp();
 
   
@@ -57,7 +58,7 @@ module.exports = async message => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
 };

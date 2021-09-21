@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
-const db = require('quick.db');
 const color = require("../color.json");
 const {getLogChannel} = require('../utils.js');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["emojiUpdate"]) => Promise<any>} */
 module.exports = async (oldemoji, newemoji) => {
   const logChannel = getLogChannel(newemoji.guild, db);
@@ -9,8 +9,8 @@ module.exports = async (oldemoji, newemoji) => {
   if (!logChannel)
     return;
 
-  const embed = new MessageEmbed() // Create embed
-    .setTitle('📝 Emoji Update') // Set embed title
+  let embed = new MessageEmbed() // Create embed
+    .setTitle("📝 Emoji Update") // Set embed title
     .setColor(color.bot_theme) // Set color in HEX
     .setDescription(`New Name: ${newemoji} ${newemoji.name}\n \nOld Name: ${oldemoji.name}\n \nID: ${newemoji.id}`)
     .addField('New Emoji URL', newemoji.url)
@@ -23,7 +23,7 @@ module.exports = async (oldemoji, newemoji) => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
 };

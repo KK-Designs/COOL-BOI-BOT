@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
-const db = require('quick.db');
 const color = require("../color.json");
 const {getLogChannel} = require('../utils.js');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["emojiCreate"]) => Promise<any>} */
 module.exports = async emoji => {
   const logChannel = getLogChannel(emoji.guild, db);
@@ -22,7 +22,7 @@ module.exports = async emoji => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed]
   });
 };

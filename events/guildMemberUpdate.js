@@ -1,7 +1,7 @@
-const {getLogChannel} = require('../utils.js');
 const {MessageEmbed} = require('discord.js');
-const color = require('../color.json');
+const color = require("../color.json");
 const db = require('quick.db');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
   const logChannel = getLogChannel(oldMember.guild, db);
@@ -24,33 +24,25 @@ module.exports = async (oldMember, newMember) => {
 
     await webhook.send({
       username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+      avatarURL: config.webhookAvatarURL,
       embeds: [embed]
     });
   }
-  if (oldMember.roles !== newMember.roles) {
-    let output = '';
-    let outputNew = '';
-    oldMember.roles.cache.forEach(role => {
-      output += '\n' + role.name;
-    });
-    newMember.roles.cache.forEach(role => {
-      outputNew += '\n' + role.name;
-    });
-    if (output === outputNew)
-      return;
+  nick: {
+    const output = oldMember.roles.cache.map(role => role.name).join("\n");
+    const outputNew = newMember.roles.cache.map(role => role.name).join("\n");
+    if (output == outputNew)
+      break nick;
 
-    if (!getLogChannel(oldMember.guild, db))
-      return;
 
-    const embed = new MessageEmbed()
+    let embed = new MessageEmbed()
       .setAuthor('👤 Member roles updated')
       .setColor(color.bot_theme)
       .setDescription(`Roles updated for <@${newMember.id}>`)
       .addField('Old roles:', `${output}`, true)
       .addField('New roles:', `឵${outputNew}`, true)
       .setThumbnail(`${oldMember.user.displayAvatarURL({dynamic: true})}`)
-      .setFooter('COOL BOI BOT MEMBER LOGGING')
+      .setFooter(`COOL BOI BOT MEMBER LOGGING`)
       .setTimestamp();
     //modLogChannel.send({ embeds: [embed] }).catch(console.error);
     const webhooks = await logChannel.fetchWebhooks();
@@ -58,7 +50,7 @@ module.exports = async (oldMember, newMember) => {
 
     await webhook.send({
       username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+      avatarURL: config.webhookAvatarURL,
       embeds: [embed]
     });
   }
@@ -77,7 +69,7 @@ module.exports = async (oldMember, newMember) => {
 
     await webhook.send({
       username: 'COOL BOI BOT Logging',
-      avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+      avatarURL: config.webhookAvatarURL,
       embeds: [embed]
     });
   }

@@ -74,7 +74,7 @@ const pbInfo = {
   y: 192,
   width: 400,
   height: 25
-};
+}
 /**
  * @param {import("discord.js").GuildMember} member
  */

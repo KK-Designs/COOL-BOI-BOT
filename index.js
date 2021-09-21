@@ -88,8 +88,18 @@ process.on("SIGINT", () => {
 process.on('unhandledRejection', async error => {
   const {MessageEmbed} = require('discord.js');
   console.error("Unhandled Rejection: ", error);
-  const user = await client.users.fetch('776848090564657153');
-		user.send({
+  const NotBacon = await client.users.fetch('776848090564657153');
+		NotBacon.send({
+			embeds: [
+				new MessageEmbed()
+					.setColor(color.fail)
+					.setDescription(
+						`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
+					),
+			],
+		});
+    const Kinect3000 = await client.users.fetch('382630964024705035');
+    Kinect3000.send({
 			embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)

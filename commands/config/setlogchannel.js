@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const db = require('quick.db');
 const color = require('../../color.json');
 const {getLogChannel} = require('../../utils.js');
+const config = require("../../config.json")
 module.exports = {
   name: 'setlogchannel',
   description: 'Set the bots audit logging channel. Do `setlogChannel none` to reset this config',
@@ -38,7 +39,7 @@ module.exports = {
     }
     await db.set(`loggingchannel_${message.guild.id}`, x.id);
     const webhook = await getLogChannel(message.guild, db).createWebhook('COOL BOI BOT Logging', {
-      avatar: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png'
+      avatar: config.webhookAvatarURL
     });
 
     console.log(`Created webhook ${webhook}`);

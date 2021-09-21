@@ -1,5 +1,5 @@
-const {GuildMember} = require('discord.js');
-const {CommandInteraction} = require('discord.js');
+const { GuildMember } = require('discord.js');
+const { CommandInteraction } = require('discord.js');
 const {MessageEmbed} = require('discord.js');
 const statuses = {
   online: '<:online:806215585415168040> Online',

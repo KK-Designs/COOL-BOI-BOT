@@ -2,9 +2,10 @@ const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
 const db = require('quick.db');
 const {getLogChannel} = require('../utils.js');
 const color = require("../color.json");
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["channelUpdate"]) => Promise<any>} */
 module.exports = async (oldchannel, newchannel) => {
-  if (oldchannel.type === 'DM' || oldchannel.name === newchannel.name)
+  if (oldchannel.type === "DM" || oldchannel.name === newchannel.name)
     return;
 
   const logChannel = getLogChannel(oldchannel.guild, db);
@@ -44,7 +45,7 @@ module.exports = async (oldchannel, newchannel) => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed],
     components: [jumpToChannel]
   });

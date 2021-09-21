@@ -1,7 +1,8 @@
 const {getLogChannel} = require('../utils.js');
 const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
-const color = require('../color.json');
 const db = require('quick.db');
+const color = require('../color.json');
+const config = require("../config.json")
 /** @type {(...args: import("discord.js").ClientEvents["messageUpdate"]) => Promise<any>} */
 module.exports = async (message, messageNew) => {
   if (!message.partial && message.content === messageNew.content)
@@ -44,7 +45,7 @@ module.exports = async (message, messageNew) => {
 
   await webhook.send({
     username: 'COOL BOI BOT Logging',
-    avatarURL: 'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
+    avatarURL: config.webhookAvatarURL,
     embeds: [embed],
     components: [jumpToMsg]
   });
