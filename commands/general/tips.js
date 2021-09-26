@@ -21,10 +21,8 @@ module.exports = {
 	},
 	async executeSlash(interaction) {
 		const index = Math.floor(Math.random() * tipslist.length);
-
 		await interaction.reply({
 			content: tipslist[index],
-			ephemeral: true,
 		});
 	},
 };

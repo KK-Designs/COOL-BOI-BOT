@@ -60,9 +60,8 @@ module.exports = {
 		const index = Math.floor(Math.random() * eightball.length);
 		await interaction.deferReply();
 		await wait(750);
-		await interaction.reply({
+		await interaction.editReply({
 			content: `${eightball[index]}`,
-			ephemeral: true,
 		});
 	},
 };

@@ -44,10 +44,11 @@ module.exports = {
 			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
-
-		await interaction.reply({
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait(750);
+		await interaction.editReply({
 			embeds: [embed],
-			ephemeral: true,
 		});
 	},
 };

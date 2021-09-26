@@ -2,6 +2,7 @@ const db = require('quick.db');
 const { Collection, MessageEmbed } = require('discord.js');
 const Detector = require('discord-crasher-detector');
 const DiscordStopSpam = require('discord-stop-spam-package');
+const { weirdToNormalChars } = require('weird-to-normal-chars');
 const isURI = require('@stdlib/assert-is-uri');
 const prefix = require('discord-prefix');
 const sendError = require('../error');
@@ -13,6 +14,7 @@ const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 module.exports = async (message) => {
 	const { client } = message;
 	const { commands } = client;
+	message.content = await weirdToNormalChars(message.content);
 	const SpamDetected = await DiscordStopSpam.checkMessageInterval(message);
 
 	if (SpamDetected) {return;}
@@ -159,8 +161,6 @@ function userIsBlocked(user) {
    * @param {import("discord.js").Guild} guild
    */
 function setGuildDefaults(guild) {
-	const { client } = guild;
-
 	if (!db.has('loggingchannel_' + guild.id)) {
 		db.set(`loggingchannel_${guild.id}`, '0');
 	}

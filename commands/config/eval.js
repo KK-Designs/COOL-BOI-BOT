@@ -42,8 +42,8 @@ module.exports = {
 			const wait = require('util').promisify(setTimeout);
 			if (typeof evaled !== 'string') {evaled = require('util').inspect(evaled);}
 			await interaction.deferReply();
-			await wait(750);
-			await interaction.reply({ content: code(evaled.slice(0, 1990), 'js') });
+			await wait(1000);
+			await interaction.editReply({ content: code(evaled.slice(0, 1990), 'js') });
 		}
 		catch (err) {
 			console.log(err);

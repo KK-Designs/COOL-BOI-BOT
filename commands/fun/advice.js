@@ -36,9 +36,11 @@ module.exports = {
 
 		const advice = JSON.parse(res.body.toString());
 
-		return await interaction.reply({
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait(750);
+		await interaction.editReply({
 			content: `📜  "${advice.slip.advice}"`,
-			ephemeral: true,
 		});
 	},
 };

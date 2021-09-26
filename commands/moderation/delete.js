@@ -1,4 +1,3 @@
-const { TextChannel, CommandInteraction } = require('discord.js');
 module.exports = {
 	name: 'delete',
 	description: 'Purges the spcified amount! If none spcified deletes the first 100 messages',
@@ -29,7 +28,7 @@ module.exports = {
 			await message.channel.bulkDelete(amount, true);
 		}
 		catch (err) {
-			await message.reply({ content: `I can\'t delete messages older than 2 weeks. Make sure the messages you are deleting are earlier that 2 weeks.\n \nSpecific error: ${err}` });
+			await message.reply({ content: `I can't delete messages older than 2 weeks. Make sure the messages you are deleting are earlier that 2 weeks.\n \nSpecific error: ${err}` });
 		}
 		await message.channel.send({ content: `${amount - 1} messages deleted` }).then(msg => msg.delete({ timeout: 3000 }));
 	},
@@ -40,7 +39,7 @@ module.exports = {
 		if (amount <= 1 || amount > 100) {
 			return await interaction.reply({ content: 'you need to input a number between 1 and 99.' });
 		}
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply();
 		await interaction.channel.bulkDelete(amount, true);
 		await interaction.editReply({ content: `${amount - 1} messages deleted` });
 	},

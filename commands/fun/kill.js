@@ -38,9 +38,11 @@ module.exports = {
 			.replaceAll('{{user}}', `${user}`)
 			.replaceAll('{{author}}', `${interaction.user}`);
 
-		return await interaction.reply({
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait(750);
+		await interaction.editReply({
 			content: `${user} ${note}`,
-			ephemeral: true,
 		});
 	},
 };
