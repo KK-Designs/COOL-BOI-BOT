@@ -106,7 +106,6 @@ async function makeCard(member) {
 	// ctx.font = '48px sans-serif';
 	ctx.textAlign = 'center';
 	ctx.font = applyText(canvas, member.user.username);
-	console.log(ctx.font);
 	ctx.fillStyle = '#000133';
 	ctx.fillText(`${member.user.username}`, pbInfo.x + pbInfo.width / 2, canvas.height / 1.9);
 	// Write the discriminator

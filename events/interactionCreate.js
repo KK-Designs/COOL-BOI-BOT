@@ -13,8 +13,8 @@ module.exports = async (interaction) => {
 	}
 	catch (e) {
 		console.error(e);
-		const method = command.replied || command.deferred ? 'followUp' : 'reply';
+		const method = interaction.replied || interaction.deferred ? 'followUp' : 'reply';
 
-		await interaction[method](`An error has occurred: ${e.message}`);
+		await interaction[method](`An error has occurred: ${e.message ?? e}`);
 	}
 };

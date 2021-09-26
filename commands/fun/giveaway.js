@@ -71,6 +71,10 @@ module.exports = {
 			},
 		},
 	},
+	/**
+   * @param {import("discord.js").Message & {client: {giveawaysManager: import("discord-giveaways").GiveawaysManager}}} message
+   * @param {string[]} args
+   */
 	async execute(message, args) {
 		const { client } = message;
 
@@ -125,7 +129,7 @@ module.exports = {
 		if (!args[1]) {return sendError('Please provide a valid prize like `1 month nitro`', message.channel);}
 
 		client.giveawaysManager.start(message.channel, {
-			time: ms(args[0]),
+			duration: ms(args[0]),
 			prize: args.slice(1).join(' '),
 			winnerCount: parseInt(args[2]) || 1,
 			embedColorEnd: 'RED',
@@ -149,10 +153,11 @@ module.exports = {
 					pluralS: false, // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
 				},
 			},
-		}).then((gData) => {
-			console.log(gData); // {...} (messageid, end date and more)
 		});
 	},
+	/**
+   * @param {import("discord.js").CommandInteraction & {client: {giveawaysManager: import("discord-giveaways").GiveawaysManager}} } interaction
+   */
 	async executeSlash(interaction) {
 		const { client } = interaction;
 		const subCmd = interaction.options.getSubcommand(true);
@@ -160,12 +165,15 @@ module.exports = {
 		switch (subCmd) {
 		case 'create': {
 			const time = ms(interaction.options.getString('time', true));
+
+			if (!Number.isInteger(time) || time <= 0) {return interaction.reply({ content: 'Invalid time provided', ephemeral: true });}
+
 			const prize = interaction.options.getString('prize', true);
 			const winnerCount = interaction.options.getInteger('winnercount') ?? 1;
 
 			await interaction.deferReply();
 			await client.giveawaysManager.start(interaction.channel, {
-				time,
+				duration: time,
 				prize,
 				winnerCount,
 				embedColorEnd: 'RED',

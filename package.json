@@ -41,6 +41,7 @@
     "discord-stop-spam-package": "^1.0.1",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.4.0",

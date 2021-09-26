@@ -14,11 +14,16 @@ const client = new Discord.Client({
 		'GUILD_MEMBER',
 		'USER',
 	],
+	ws: { properties: { $browser: 'Discord iOS' } },
+});
+const errorWebhook = new Discord.WebhookClient({
+	url: config.webhookURL,
 });
 
 updateNotifier({ pkg }).notify();
 client.commands = new Discord.Collection();
 const reqEvent = (event) => {
+	// eslint-disable-next-line global-require
 	const run = require(`./events/${event}`);
 
 	return async (...args) => {
@@ -35,14 +40,12 @@ const startup = require('./startup.js');
 startup(client);
 
 client.once('ready', reqEvent('ready').bind(null, client));
-
 client.on('disconnect', (event) => {
 	console.log(`The WebSocket has closed and will no longer attempt to reconnect - ${event}`);
 });
 client.on('warn', (info) => {
 	console.log(`warn: ${info}`);
 });
-
 try {
 	client.on('guildCreate', reqEvent('guildCreate'));
 	client.on('guildBanRemove', reqEvent('guildBanRemove'));
