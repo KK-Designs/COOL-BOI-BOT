@@ -16,9 +16,6 @@ const client = new Discord.Client({
 	],
 	ws: { properties: { $browser: 'Discord iOS' } },
 });
-const errorWebhook = new Discord.WebhookClient({
-	url: config.webhookURL,
-});
 
 updateNotifier({ pkg }).notify();
 client.commands = new Discord.Collection();
