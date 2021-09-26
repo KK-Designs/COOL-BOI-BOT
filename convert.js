@@ -1,21 +1,21 @@
-const qdb = require("quick.db");
-const giveaways = new qdb.table("giveaways");
+const qdb = require('quick.db');
+const giveaways = new qdb.table('giveaways');
 /** @type {oldGiveawayObject[]} */
-const arr = JSON.parse(qdb.get("giveaways"));
+const arr = JSON.parse(qdb.get('giveaways'));
 
-console.log("Migrating giveaways, found %d", arr.length);
-for (const {messageID, guildID, channelID, ...giveaway} of arr) {
-  /** @type {newGiveawayObject} */
-  const reformatted = {
-    messageId: messageID,
-    guildId: guildID,
-    channelId: channelID,
-    ...giveaway
-  };
+console.log('Migrating giveaways, found %d', arr.length);
+for (const { messageID, guildID, channelID, ...giveaway } of arr) {
+	/** @type {newGiveawayObject} */
+	const reformatted = {
+		messageId: messageID,
+		guildId: guildID,
+		channelId: channelID,
+		...giveaway,
+	};
 
-  giveaways.set(messageID, reformatted);
+	giveaways.set(messageID, reformatted);
 }
-qdb.delete("giveaways");
+qdb.delete('giveaways');
 /**
  * @typedef {Object} baseGiveawayObject
  * @prop {number} startAt
