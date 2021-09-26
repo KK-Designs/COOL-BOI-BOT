@@ -1,11 +1,11 @@
-const {MessageEmbed} = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const trim = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
 module.exports = async (text, channel) => {
-  let message;
-  const embed = new MessageEmbed()
-    .setColor('RED')
-    .setTitle('<:error_x:815780013256343582> Error: ')
-    .setDescription(text)
-    .setFooter(channel.client.user.username, channel.client.user.displayAvatarURL({dynamic: true}));
+	const embed = new MessageEmbed()
+		.setColor('RED')
+		.setTitle('<:error_x:815780013256343582> Error: ')
+		.setDescription(trim(text, 4096))
+		.setFooter(channel.client.user.username, channel.client.user.displayAvatarURL({ dynamic: true }));
 
-  await channel.send({embeds: [embed]});
+	await channel.send({ embeds: [embed] });
 };

@@ -1,29 +1,28 @@
-const {MessageEmbed} = require('discord.js');
-const color = require("../color.json");
-const {getLogChannel} = require('../utils.js');
-const config = require("../config.json")
+const { MessageEmbed } = require('discord.js');
+const color = require('../color.json');
+const { getLogChannel } = require('../utils.js');
+const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["emojiUpdate"]) => Promise<any>} */
 module.exports = async (oldemoji, newemoji) => {
-  const logChannel = getLogChannel(newemoji.guild, db);
+	const logChannel = getLogChannel(newemoji.guild, db);
 
-  if (!logChannel)
-    return;
+	if (!logChannel) {return;}
 
-  let embed = new MessageEmbed() // Create embed
-    .setTitle("📝 Emoji Update") // Set embed title
-    .setColor(color.bot_theme) // Set color in HEX
-    .setDescription(`New Name: ${newemoji} ${newemoji.name}\n \nOld Name: ${oldemoji.name}\n \nID: ${newemoji.id}`)
-    .addField('New Emoji URL', newemoji.url)
-    .addField('Old Emoji URL', oldemoji.url)
-    .setFooter('COOL BOI BOT SERVER LOGGING')
-    .setTimestamp();
-  //modLogChannel.send({ embeds: [embed] }).catch(console.error);
-  const webhooks = await logChannel.fetchWebhooks();
-  const webhook = webhooks.first();
+	const embed = new MessageEmbed() // Create embed
+		.setTitle('📝 Emoji Update') // Set embed title
+		.setColor(color.bot_theme) // Set color in HEX
+		.setDescription(`New Name: ${newemoji} ${newemoji.name}\n \nOld Name: ${oldemoji.name}\n \nID: ${newemoji.id}`)
+		.addField('New Emoji URL', newemoji.url)
+		.addField('Old Emoji URL', oldemoji.url)
+		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setTimestamp();
+	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.first();
 
-  await webhook.send({
-    username: 'COOL BOI BOT Logging',
-    avatarURL: config.webhookAvatarURL,
-    embeds: [embed]
-  });
+	await webhook.send({
+		username: 'COOL BOI BOT Logging',
+		avatarURL: config.webhookAvatarURL,
+		embeds: [embed],
+	});
 };
