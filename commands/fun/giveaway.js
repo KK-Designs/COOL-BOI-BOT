@@ -1,5 +1,23 @@
 const ms = require('ms');
 const sendError = require('../../error.js');
+const gStartOptions = {
+	/** @type {import("discord.js").ColorResolvable} */
+	embedColorEnd: 'RED',
+	/** @type {import("discord.js").ColorResolvable} */
+	embedColor: 'GREEN',
+	messages: {
+		giveaway: '🎉 **GIVEAWAY** 🎉',
+		giveawayEnded: '🎉 **GIVEAWAY ENDED** 🎉',
+		timeRemaining: 'Time remaining: **{duration}**',
+		inviteToParticipate: 'React with 🎉 to join!',
+		winMessage: 'Congratulations, {winners}! You won **{this.prize}**!',
+		embedFooter: 'Giveaways',
+		noWinner: 'Giveaway cancelled, no valid participations.',
+		hostedBy: 'Hosted by: {this.hostedBy}',
+		winners: 'winner(s)',
+		endedAt: 'Ended at',
+	},
+};
 module.exports = {
 	name: 'giveaway',
 	description: 'Manage giveaways for your server!',
@@ -90,7 +108,8 @@ module.exports = {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			}
 
-			return message.delete();// message.channel.send('<:check:807305471282249738> Success! Giveaway rerolled!');
+			return message.delete();
+			// message.channel.send('<:check:807305471282249738> Success! Giveaway rerolled!');
 		}
 		if (args[0]?.toLowerCase() === 'edit') {
 			const messageID = args[1];
@@ -103,11 +122,9 @@ module.exports = {
 			return client.giveawaysManager.edit(messageID, {
 				newWinnerCount: 1,
 				newPrize: args.slice(3).join(' '),
-				addTime: ms(args[2]),
+				setEndTimestamp: message.createdTimestamp + ms(args[2]),
 			}).then(() => {
 				// here, we can calculate the time after which we are sure that the lib will update the giveaway
-				const numberOfSecondsMax = client.giveawaysManager.options.updateCountdownEvery / 1000;
-
 				message.channel.send({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.' });
 			}).catch((err) => {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
@@ -128,31 +145,13 @@ module.exports = {
 
 		if (!args[1]) {return sendError('Please provide a valid prize like `1 month nitro`', message.channel);}
 
-		client.giveawaysManager.start(message.channel, {
+		/** @type {import("discord.js").TextChannel) */
+		const channel = (message.channel);
+		client.giveawaysManager.start(channel, {
+			...gStartOptions,
 			duration: ms(args[0]),
 			prize: args.slice(1).join(' '),
 			winnerCount: parseInt(args[2]) || 1,
-			embedColorEnd: 'RED',
-			embedColor: 'GREEN',
-			messages: {
-				giveaway: '🎉 **GIVEAWAY** 🎉',
-				giveawayEnded: '🎉 **GIVEAWAY ENDED** 🎉',
-				timeRemaining: 'Time remaining: **{duration}**',
-				inviteToParticipate: 'React with 🎉 to join!',
-				winMessage: 'Congratulations, {winners}! You won **{prize}**!',
-				embedFooter: 'Giveaways',
-				noWinner: 'Giveaway cancelled, no valid participations.',
-				hostedBy: 'Hosted by: {user}',
-				winners: 'winner(s)',
-				endedAt: 'Ended at',
-				units: {
-					seconds: 'seconds',
-					minutes: 'minutes',
-					hours: 'hours',
-					days: 'days',
-					pluralS: false, // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
-				},
-			},
 		});
 	},
 	/**
@@ -166,37 +165,21 @@ module.exports = {
 		case 'create': {
 			const time = ms(interaction.options.getString('time', true));
 
-			if (!Number.isInteger(time) || time <= 0) {return interaction.reply({ content: 'Invalid time provided', ephemeral: true });}
+			if (!Number.isInteger(time) || time <= 0) {
+				return await interaction.reply({ content: 'Invalid time provided', ephemeral: true });
+			}
 
 			const prize = interaction.options.getString('prize', true);
 			const winnerCount = interaction.options.getInteger('winnercount') ?? 1;
 
 			await interaction.deferReply();
-			await client.giveawaysManager.start(interaction.channel, {
+			/** @type {import("discord.js").TextChannel) */
+			const channel = (interaction.channel);
+			await client.giveawaysManager.start(channel, {
+				...gStartOptions,
 				duration: time,
 				prize,
 				winnerCount,
-				embedColorEnd: 'RED',
-				embedColor: 'GREEN',
-				messages: {
-					giveaway: '🎉 **GIVEAWAY** 🎉',
-					giveawayEnded: '🎉 **GIVEAWAY ENDED** 🎉',
-					timeRemaining: 'Time remaining: **{duration}**',
-					inviteToParticipate: 'React with 🎉 to join!',
-					winMessage: 'Congratulations, {winners}! You won **{prize}**!',
-					embedFooter: 'Giveaways',
-					noWinner: 'Giveaway cancelled, no valid participations.',
-					hostedBy: 'Hosted by: {user}',
-					winners: 'winner(s)',
-					endedAt: 'Ended at',
-					units: {
-						seconds: 'seconds',
-						minutes: 'minutes',
-						hours: 'hours',
-						days: 'days',
-						pluralS: false, // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
-					},
-				},
 			});
 			await interaction.editReply('<:check:807305471282249738> Success! Giveaway created!');
 		} break;
@@ -211,7 +194,7 @@ module.exports = {
 				await client.giveawaysManager.edit(messageID, {
 					newWinnerCount: winnerCount,
 					newPrize: prize,
-					addTime: ms(time),
+					setEndTimestamp: interaction.createdTimestamp + ms(time),
 				});
 			}
 			catch (e) {
