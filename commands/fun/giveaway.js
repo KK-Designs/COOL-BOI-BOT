@@ -90,7 +90,7 @@ module.exports = {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			}
 
-			return message.delete();// message.channel.send('<:check:807305471282249738> Success! Giveaway rerolled!');
+			return message.delete();
 		}
 		if (args[0]?.toLowerCase() === 'edit') {
 			const messageID = args[1];
@@ -106,10 +106,9 @@ module.exports = {
 				addTime: ms(args[2]),
 			}).then(() => {
 				// here, we can calculate the time after which we are sure that the lib will update the giveaway
-				const numberOfSecondsMax = client.giveawaysManager.options.updateCountdownEvery / 1000;
 
 				message.channel.send({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.' });
-			}).catch((err) => {
+			}).catch(() => {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			});
 		}
@@ -120,7 +119,7 @@ module.exports = {
 			return client.giveawaysManager.delete(messageID).then(() => {
 				message.channel.send({ content: '<:check:807305471282249738> Success! Giveaway deleted!' });
 			})
-				.catch((err) => {
+				.catch(() => {
 					message.channel.send({ content: 'No giveaway found for ' + messageID + ', please check and try again' });
 				});
 		}
@@ -150,7 +149,7 @@ module.exports = {
 					minutes: 'minutes',
 					hours: 'hours',
 					days: 'days',
-					pluralS: false, // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
+					pluralS: false,
 				},
 			},
 		});
@@ -194,7 +193,7 @@ module.exports = {
 						minutes: 'minutes',
 						hours: 'hours',
 						days: 'days',
-						pluralS: false, // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
+						pluralS: false,
 					},
 				},
 			});

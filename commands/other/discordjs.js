@@ -1,4 +1,3 @@
-const { MessageEmbed } = require('discord.js');
 const { MessageActionRow, MessageButton } = require('discord.js');
 const fetch = require('node-fetch').default;
 module.exports = {
@@ -13,7 +12,6 @@ module.exports = {
 
 		if (!args.length) {return sendError('You need to supply search term like `${prefix}discordjs member`', message.channel);}
 
-		const user = message.author;
 		const search = args.join(' ');
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(search)}`);
 		const embed = await res.json();
@@ -27,7 +25,7 @@ module.exports = {
 			);
 
 		await message.reply({ embeds: [embed], components: [deletemsg] }).then(m => {
-			const filter = i => i.customId === 'danger';// && i.user.id === message.author.id;
+			const filter = i => i.customId === 'danger';
 			const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
 
 			collector.on('collect', async i => {
@@ -41,7 +39,7 @@ module.exports = {
 					await i.reply({ content: '<:X_:807305490160943104> These aren\'t your buttons to play around with', ephemeral: true });
 				}
 			});
-			collector.on('end', collected => {
+			collector.on('end', () => {
 				const deletemsg1 = new MessageActionRow()
 					.addComponents(
 						new MessageButton()

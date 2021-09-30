@@ -14,7 +14,7 @@ module.exports = {
 	category: 'general',
 	cooldown: 1.5,
 	options: {},
-	execute(message, args) {
+	execute(message) {
 		const tip = Math.floor(Math.random() * Math.floor(tipslist.length));
 
 		message.channel.send({ content: `${tipslist[tip]}` });

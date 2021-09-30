@@ -7,7 +7,7 @@ module.exports = {
 	category: 'info',
 	clientPermissons: 'EMBED_LINKS',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		const guild = message.guild;
 		const serverName = guild.name;
 		const serverIcon = message.guild.iconURL();
@@ -27,7 +27,7 @@ module.exports = {
 
 		message.reply({ embeds: [infoembed] });
 	},
-	async executeSlash(interaction, args) {
+	async executeSlash(interaction) {
 		const guild = interaction.guild;
 
 		if (!guild) {return await interaction.reply('The command must be ran in a guild');}

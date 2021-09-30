@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const db = require('quick.db');
 const color = require('../color.json');
 const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');

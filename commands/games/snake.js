@@ -4,7 +4,7 @@ module.exports = {
 	aliases: ['snek'],
 	cooldown: 5,
 	category: 'games',
-	execute(message, args) {
+	execute(message) {
 		const { Snake } = require('discord-gamecord');
 		const color = require('../../color.json');
 

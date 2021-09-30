@@ -4,7 +4,7 @@ module.exports = {
 	cooldown: 3,
 	category: 'general',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		const { MessageActionRow, MessageButton } = require('discord.js');
 		const buttonInvite = new MessageActionRow()
 			.addComponents(

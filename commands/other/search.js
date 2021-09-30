@@ -9,11 +9,11 @@ module.exports = {
 	cooldown: 5,
 	clientPermissons: 'EMBED_LINKS',
 	category: 'other',
-	async execute(message, args, client) {
+	async execute(message, args) {
 
 		const options = {
 			page: 0,
-			safe: true, // hide explicit results
+			safe: true,
 			additional_params: {
 				// add additional parameters here, see https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters and https://www.seoquake.com/blog/google-search-param/
 				hl: 'en',

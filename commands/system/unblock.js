@@ -1,5 +1,4 @@
 const db = require('quick.db');
-const table = new db.table('');
 module.exports = {
 	name: 'unblock',
 	description: 'Owner only; Description not avavible.',

@@ -3,7 +3,7 @@ module.exports = {
 	description: '<:check:807305471282249738> Gives a random fact!',
 	cooldown: 1.5,
 	category: 'info',
-	async execute(message, args) {
+	async execute(message) {
 		const fetch = require('node-fetch');
 		const res = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
 		const fact = await res.json();

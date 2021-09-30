@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { MessageAttachment, MessageEmbed } = require('discord.js');
 const printscreen = require('printscreen');
 const sendError = require('../../error.js');
@@ -11,7 +10,7 @@ module.exports = {
 	usage: '[url]',
 	category: 'other',
 	options: {},
-	async execute(message, args, client) {
+	async execute(message, args) {
 		const user = message.author;
 
 		if (!args.length) {return sendError('Put a url for me to get a screenshot', message.channel);}

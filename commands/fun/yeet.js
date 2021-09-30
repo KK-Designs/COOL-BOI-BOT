@@ -4,7 +4,7 @@ module.exports = {
 	cooldown: 1.5,
 	category: 'fun',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		await message.reply({ content: 'https://tenor.com/view/yeet-lion-king-simba-rafiki-throw-gif-16194362' });
 	},
 	async executeSlash(interaction) {

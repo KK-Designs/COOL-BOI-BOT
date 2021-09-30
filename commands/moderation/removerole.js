@@ -19,7 +19,7 @@ module.exports = {
 			required: false,
 		},
 	},
-	async execute(message, args, client) {
+	async execute(message, args) {
 
 		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 		const member = message.mentions.members.last() || message.guild.members.cache.get(args[0]) || message.member;
@@ -30,7 +30,7 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> ${member} doesn\'t have the role ${role}`),
+						.setDescription(`<:X_:807305490160943104> ${member} doesn't have the role ${role}`),
 				],
 			});
 		}
@@ -54,7 +54,7 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> ${member} doesn\'t have the role ${role}`),
+						.setDescription(`<:X_:807305490160943104> ${member} doesn't have the role ${role}`),
 				],
 			});
 		}

@@ -19,7 +19,7 @@ module.exports = {
 			required: false,
 		},
 	},
-	async execute(message, args, client) {
+	async execute(message, args) {
 
 		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 		const member = message.mentions.members.first() || message.guild.members.cache.get(args[1]) || message.member;

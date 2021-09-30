@@ -5,7 +5,7 @@ module.exports = {
 	cooldown: 1,
 	category: 'fun',
 	options: {},
-	execute(message, args) {
+	execute(message) {
 		message.channel.sendTyping();
 		request
 			.get('http://api.adviceslip.com/advice')

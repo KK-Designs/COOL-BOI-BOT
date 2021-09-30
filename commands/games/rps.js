@@ -12,9 +12,9 @@ module.exports = {
 			description: 'The user to compete with in tic-tac-toe',
 		},
 	},
-	async execute(message, args) {
+	async execute(message) {
 		await simplydjs.rps(message, {
-			embedColor: color.bot_theme, // default: #075FFF
+			embedColor: color.bot_theme,
 			embedFooter: 'Powered by COOL BOI BOT Games',
 			credit: false,
 		});
@@ -23,7 +23,7 @@ module.exports = {
 		await interaction.deferReply();
 		await simplydjs.rps(interaction, {
 			slash: true,
-			embedColor: color.bot_theme, // default: #075FFF
+			embedColor: color.bot_theme,
 			embedFooter: 'Powered by COOL BOI BOT Games',
 			credit: false,
 		});

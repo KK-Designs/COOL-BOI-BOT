@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js');
 const color = require('../../color.json');
-const solenolyrics = require('solenolyrics');
 const fetch = require('node-fetch').default;
 module.exports = {
 	name: 'lyrics',
@@ -9,7 +8,7 @@ module.exports = {
 	cooldown: 3,
 	category: 'music',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 
 		const queue = message.client.queue.get(message.guild.id);
 

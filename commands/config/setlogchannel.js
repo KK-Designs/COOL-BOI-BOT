@@ -11,7 +11,18 @@ module.exports = {
 	permissions: 'ADMINISTRATOR',
 	usage: '[channel name] or (`none` to clear)',
 	category: 'config',
-	async execute(message, args, client) {
+	options: {
+		channel: {
+			type: 'Channel',
+			description: 'The channel to send logs to',
+		},
+		reset: {
+			type: 'Boolean',
+			description: 'If I should reset the logging channel',
+			required: false,
+		},
+	},
+	async execute(message, args) {
 		const x = message.mentions.channels.first() || message.guild.channels.cache.find(channel => channel.name === args[0]) || message.guild.channels.cache.get(args[0]);
 
 		if (!args[0] && !x) {
@@ -44,6 +55,38 @@ module.exports = {
 
 		console.log(`Created webhook ${webhook}`);
 		message.reply({ embeds: [
+			new MessageEmbed()
+				.setColor(color.success)
+				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),
+		] });
+	},
+	async executeSlash(interaction) {
+		const x = interaction.options.getChannel('channel');
+		const reset = interaction.options.getBoolean('reset');
+
+		if (reset) {
+			interaction.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(color.success)
+					.setDescription('<:check:807305471282249738> Stopped logging events'),
+			] });
+
+			return await db.set(`loggingchannel_${interaction.guild.id}`, '0');
+		}
+		if (!x) {
+			return interaction.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(color.fail)
+					.setDescription('<:X_:807305490160943104> Please specify a valid channel.'),
+			] });
+		}
+		await db.set(`loggingchannel_${interaction.guild.id}`, x.id);
+		const webhook = await getLogChannel(interaction.guild, db).createWebhook('COOL BOI BOT Logging', {
+			avatar: config.webhookAvatarURL,
+		});
+
+		console.log(`Created webhook ${webhook}`);
+		interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),

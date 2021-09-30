@@ -1,3 +1,4 @@
+/* eslint-disable no-inline-comments */
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
 const color = require('../color.json');

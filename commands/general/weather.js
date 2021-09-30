@@ -36,7 +36,7 @@ module.exports = {
 				const pressure = apiData.data.main.pressure;
 				const cloudness = apiData.data.weather[0].description;
 				message.reply({ embeds: [exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country, message)] });
-			}).catch(err => {
+			}).catch(() => {
 				sendError('Enter a vailid city name', message.channel);
 			});
 	},

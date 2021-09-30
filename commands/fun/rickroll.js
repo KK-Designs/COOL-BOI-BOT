@@ -4,7 +4,7 @@ const {
 	entersState,
 	getVoiceConnection,
 	joinVoiceChannel,
-	AudioPlayer,
+
 	AudioPlayerStatus,
 	NoSubscriberBehavior,
 	VoiceConnectionStatus,
@@ -19,7 +19,7 @@ module.exports = {
 	category: 'fun',
 	clientpermissions: ['SPEAK', 'CONNECT'],
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		if (!message.member?.voice.channelId) {
 			return await message.reply({ content: 'You need to join a voice channel to use this command.' });
 		}

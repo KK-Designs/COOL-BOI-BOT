@@ -4,10 +4,12 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 7.5,
 	category: 'other',
-	async execute(message, args) {
+	async execute(message) {
 		const invite = await message.channel.createInvite({
-			maxAge: 0, // 0 = infinite expiration
-			maxUses: 0, // 0 = infinite uses
+			maxAge: 0,
+			// 0 = infinite expiration
+			maxUses: 0,
+			// 0 = infinite uses
 		});
 
 		await message.reply({ content: `Here is the server invite link (permanent): ${invite}` });

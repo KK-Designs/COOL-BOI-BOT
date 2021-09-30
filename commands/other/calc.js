@@ -1,5 +1,4 @@
 const simplydjs = require('simply-djs');
-const sendError = require('../../error.js');
 const color = require('../../color.json');
 module.exports = {
 	name: 'calc',
@@ -8,9 +7,9 @@ module.exports = {
 	cooldown: 3,
 	category: 'other',
 	options: {},
-	async execute(message, args, client) {
+	async execute(message) {
 		await simplydjs.calculator(message, {
-			embedColor: color.bot_theme, // default: #075FFF
+			embedColor: color.bot_theme,
 			credit: false,
 		});
 	},
@@ -18,7 +17,7 @@ module.exports = {
 		await interaction.deferReply();
 		await simplydjs.calculator(interaction, {
 			slash: true,
-			embedColor: color.bot_theme, // default: #075FFF
+			embedColor: color.bot_theme,
 			credit: false,
 		});
 	},

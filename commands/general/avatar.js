@@ -1,5 +1,6 @@
+const { MessageActionRow, MessageButton } = require('discord.js');
 const { MessageEmbed } = require('discord.js');
-// const getColors = require('get-image-colors');
+const getColors = require('get-image-colors');
 module.exports = {
 	name: 'avatar',
 	aliases: ['icon', 'pfp', 'av'],
@@ -16,26 +17,51 @@ module.exports = {
 		},
 	},
 	async execute(message) {
-
 		const user = message.mentions.users.first() || message.author;
-		const avatarEmbed = new MessageEmbed()
-			.setColor(await user.banner.color)
-			.setTitle(`${user.username}'s avatar:`)
-			.setImage(`${user.displayAvatarURL({ dynamic: true })}`)
-			.setTimestamp()
-			.setFooter('Powered by the COOL BOI BOT');
+		let color;
+		getColors(user.displayAvatarURL({ format: 'png' })).then(colors => {
+			const downloadAvatar = new MessageActionRow()
+			        .addComponents(
+				        new MessageButton()
+					      .setLabel('Download avatar')
+						  .setEmoji('<:download:885276338347454494>')
+						  .setURL(user.displayAvatarURL({ dynamic: true, format: 'png' }))
+					      .setStyle('LINK'),
+			        );
+			// eslint-disable-next-line no-shadow
+			color = colors.map(color => color.hex())[0].toString();
+			const avatarEmbed = new MessageEmbed()
+				.setColor(color)
+				.setTitle(`${user.username}'s avatar:`)
+				.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
+				.setTimestamp()
+				.setFooter('Powered by the COOL BOI BOT');
 
-		message.channel.send({ embeds: [avatarEmbed] });
+			message.channel.send({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
+		});
 	},
 	async executeSlash(interaction) {
 		const user = interaction.options.getUser('user') ?? interaction.user;
-		const avatarEmbed = new MessageEmbed()
-			.setColor(user.banner.color)
-			.setTitle(`${user.username}'s avatar:`)
-			.setImage(`${user.displayAvatarURL({ dynamic: true })}`)
-			.setTimestamp()
-			.setFooter('Powered by the COOL BOI BOT');
+		let color;
+		getColors(user.displayAvatarURL({ format: 'png' })).then(async colors => {
+			const downloadAvatar = new MessageActionRow()
+			        .addComponents(
+				        new MessageButton()
+					      .setLabel('Download avatar')
+						  .setEmoji('<:download:885276338347454494>')
+						  .setURL(user.displayAvatarURL({ dynamic: true, format: 'png' }))
+					      .setStyle('LINK'),
+			        );
+			// eslint-disable-next-line no-shadow
+			color = colors.map(color => color.hex())[0].toString();
+			const avatarEmbed = new MessageEmbed()
+				.setColor(color)
+				.setTitle(`${user.username}'s avatar:`)
+				.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
+				.setTimestamp()
+				.setFooter('Powered by the COOL BOI BOT');
 
-		await interaction.reply({ embeds: [avatarEmbed] });
+			await interaction.reply({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
+		});
 	},
 };

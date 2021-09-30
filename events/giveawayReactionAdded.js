@@ -1,4 +1,4 @@
-module.exports = (giveaway, member, reaction) => {
+module.exports = (giveaway, member) => {
 	member.send({
 		embeds: [{
 			color: 'GREEN',

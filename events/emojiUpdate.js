@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const db = require('quick.db');
 const color = require('../color.json');
 const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');
@@ -8,9 +9,9 @@ module.exports = async (oldemoji, newemoji) => {
 
 	if (!logChannel) {return;}
 
-	const embed = new MessageEmbed() // Create embed
-		.setTitle('📝 Emoji Update') // Set embed title
-		.setColor(color.bot_theme) // Set color in HEX
+	const embed = new MessageEmbed()
+		.setTitle('📝 Emoji Update')
+		.setColor(color.bot_theme)
 		.setDescription(`New Name: ${newemoji} ${newemoji.name}\n \nOld Name: ${oldemoji.name}\n \nID: ${newemoji.id}`)
 		.addField('New Emoji URL', newemoji.url)
 		.addField('Old Emoji URL', oldemoji.url)

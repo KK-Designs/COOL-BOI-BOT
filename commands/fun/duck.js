@@ -8,7 +8,7 @@ module.exports = {
 	clientPermissons: 'EMBED_LINKS',
 	category: 'fun',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		const user = message.author;
 		const res = await fetch('https://random-d.uk/api/v2/random');
 		const img = (await res.json()).url;

@@ -7,7 +7,7 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 3,
 	category: 'other',
-	async execute(message, args) {
+	async execute(message) {
 
 		const connection = getVoiceConnection(message.guild.id);
 

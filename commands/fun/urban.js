@@ -1,7 +1,6 @@
 const fetch = require('node-fetch').default;
 const sendError = require('../../error.js');
 const color = require('../../color.json');
-const querystring = require('querystring');
 const { MessageEmbed } = require('discord.js');
 const trim = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
 module.exports = {
@@ -15,7 +14,7 @@ module.exports = {
 			description: 'The thing to search for',
 		},
 	},
-	async execute(message, args, client) {
+	async execute(message, args) {
 		if (!args.length) {
 			return sendError('You need to supply a search term!', message.channel);
 		}

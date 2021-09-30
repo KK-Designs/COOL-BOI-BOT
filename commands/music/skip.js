@@ -6,7 +6,6 @@ module.exports = {
 	category: 'music',
 	options: {},
 	async execute(message) {
-		const { MessageEmbed } = require('discord.js');
 		const { channel } = message.member.voice;
 
 		if (!channel) {return message.reply({ content: 'I\'m sorry but you need to be in a voice channel to play music!' });}

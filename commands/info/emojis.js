@@ -35,8 +35,8 @@ module.exports = {
 			return message.reply({ embeds: [embed] });
 		}
 		const embed = new MessageEmbed()
-			.setTitle(`${guild.name}'s emoji\'s:\n`)
-			.setDescription(`${guild.emojis.cache.map(emoji => emoji.toString()).join(` ${bold('|')} `)}`)
+			.setTitle(`${guild.name}'s emoji's:\n`)
+			.setDescription(`${guild.emojis.cache.map(emojis => emojis.toString()).join(` ${bold('|')} `)}`)
 			.setFooter(guild.name, guild.iconURL({ dymamic: true }))
 			.setTimestamp()
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');

@@ -17,7 +17,7 @@ module.exports = {
 		const currentSong = serverQueue.songs[0];
 		const currentDuration = Math.round(serverQueue.player.state.resource.playbackDuration / 1000);
 		const totalDuration = currentSong.duration;
-		const [bar, percent] = Bar.splitBar(totalDuration, currentDuration, 25);
+		const [bar] = Bar.splitBar(totalDuration, currentDuration, 25);
 		const embed = new MessageEmbed()
 			.setColor(message.guild.me.displayHexColor)
 			.setTitle('Current Song playing')
@@ -41,7 +41,7 @@ module.exports = {
 		const currentSong = serverQueue.songs[0];
 		const currentDuration = Math.round(serverQueue.player.state.resource.playbackDuration / 1000);
 		const totalDuration = currentSong.duration;
-		const [bar, percent] = Bar.splitBar(totalDuration, currentDuration, 25);
+		const [bar] = Bar.splitBar(totalDuration, currentDuration, 25);
 		const embed = new MessageEmbed()
 			.setColor(interaction.guild.me.displayHexColor)
 			.setTitle('Current Song playing')
@@ -50,7 +50,6 @@ module.exports = {
 				`${currentSong.title} • ${currentSong.author}`,
 				true,
 			)
-		// .addField(`Duration:`, serverQueue.songs.map(song => `${humanizeDuration(song.duration * 1000)}`), true)
 			.addField('Duration:', `${humanizeDuration(totalDuration * 1000)}`, true)
 			.addField('\u200b', bar)
 			.setTimestamp()

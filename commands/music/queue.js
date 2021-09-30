@@ -8,6 +8,7 @@ module.exports = {
 	options: {},
 	async execute(message, args) {
 		const { MessageEmbed } = require('discord.js');
+		const { codeBlock } = require('@discordjs/builders');
 		const humanizeDuration = require('humanize-duration');
 		const serverQueue = message.client.queue.get(message.guild.id);
 
@@ -21,7 +22,7 @@ module.exports = {
 					embeds: [
 						new MessageEmbed()
 							.setColor('ORANGE')
-							.setDescription(`\`\`\`\ ${JSON.stringify(serverQueue)} \`\`\``),
+							.setDescription(`${codeBlock('json', JSON.stringify(serverQueue))}`),
 					],
 				});
 			}

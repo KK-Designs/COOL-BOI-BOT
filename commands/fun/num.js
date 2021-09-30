@@ -1,7 +1,6 @@
 const fs = require('fs');
 const { MessageAttachment } = require('discord.js');
 const sendError = require('../../error.js');
-const { executeSlash } = require('./meme.js');
 module.exports = {
 	name: 'num',
 	description: 'Gives you a count of the specified number!',

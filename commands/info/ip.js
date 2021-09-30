@@ -13,7 +13,7 @@ module.exports = {
 			description: 'The ipv4 address to lookup',
 		},
 	},
-	async execute(message, args, client) {
+	async execute(message, args) {
 		if (!args.length) {return message.reply({ content: 'I need your IPv4 to get your info' });}
 
 		if (message.guild) {

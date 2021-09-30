@@ -5,7 +5,7 @@ module.exports = {
 	cooldown: 3,
 	category: 'music',
 	options: {},
-	async execute(message, args) {
+	async execute(message) {
 		const queue = message.client.queue.get(message.guild.id);
 
 		if (!queue) {return message.reply({ content: 'There is nothing playing.' });}
