@@ -16,7 +16,7 @@ let background;
 /** @type {Canvas.Image} */
 let gradient;
 module.exports = {
-	name: 'level2',
+	name: 'level',
 	description: 'Gets your server rank card',
 	cooldown: 3,
 	category: 'levels',
