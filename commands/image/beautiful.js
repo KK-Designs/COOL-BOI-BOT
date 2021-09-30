@@ -29,9 +29,12 @@ module.exports = {
 		message.channel.send({ embeds: [imageEmbed], files: [attach] });
 	},
 	async executeSlash(interaction) {
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait('1000');
 		const Discord = require('discord.js');
 		const DIG = require('discord-image-generation');
-		const user = interaction.options.getString('user') || interaction.member.user;
+		const user = interaction.options.getUser('user') || interaction.member.user;
 		const img = await new DIG.Beautiful().getImage(user.displayAvatarURL({ format: 'png' }));
 		const attach = new Discord.MessageAttachment(img, 'beautiful.png');
 		const { MessageEmbed } = require('discord.js');
@@ -42,6 +45,6 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('COOL BOI BOT Images', `${interaction.client.user.displayAvatarURL({ dynamic: true })}`);
 
-		interaction.channel.send({ embeds: [imageEmbed], files: [attach] });
+		interaction.editReply({ embeds: [imageEmbed], files: [attach] });
 	},
 };
