@@ -5,8 +5,17 @@ const color = require('./color.json');
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
 const client = new Discord.Client({
-	// eslint-disable-next-line no-inline-comments
-	intents: 32767, // i need all of these now
+	// No you don't
+	intents: [
+		'GUILDS',
+		'GUILD_EMOJIS_AND_STICKERS',
+		'GUILD_MEMBERS',
+		'GUILD_PRESENCES',
+		'GUILD_MESSAGES',
+		'GUILD_MESSAGE_REACTIONS',
+		'DIRECT_MESSAGES',
+		'GUILD_BANS',
+	],
 	partials: [
 		'MESSAGE',
 		'CHANNEL',
