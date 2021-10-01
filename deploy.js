@@ -3,15 +3,14 @@
 require('dotenv').config();
 const assert = require('assert/strict');
 const fs = require('fs');
-const {
-	SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder,
-} = require('@discordjs/builders');
+const db = require('quick.db');
+const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } = require('@discordjs/builders');
 const { Routes } = require('discord-api-types/v9');
 const { REST } = require('@discordjs/rest');
 const rest = new REST({ version: '9' })
 	.setToken(process.env.BOT_TOKEN);
 const commands = [];
-
+const startSlashCommandsMS = new Date().getTime();
 for (const categoryEnt of fs.readdirSync('./commands', { withFileTypes: true })) {
 	if (!categoryEnt.isDirectory()) {continue;}
 
@@ -39,6 +38,13 @@ for (const categoryEnt of fs.readdirSync('./commands', { withFileTypes: true }))
 		console.log(len);
 	}
 }
+const endSlashCommandsMS = new Date().getTime();
+const timeSlashCommandsMS = endSlashCommandsMS - startSlashCommandsMS;
+async function saveDeployMS() {
+	// We use this when client is undefined
+	await db.set('_slashCommandsMS', timeSlashCommandsMS);
+}
+saveDeployMS();
 const main = async () => {
 	console.log('Retriving client id...');
 	/** @type {import("discord-api-types").APIApplication} */
