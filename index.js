@@ -1,8 +1,10 @@
 require('dotenv').config();
 require('discord-banner')(process.env.BOT_TOKEN);
 const Discord = require('discord.js');
-const color = require('./color.json');
 const updateNotifier = require('update-notifier');
+const startup = require('./startup.js');
+const color = require('./color.json');
+const config = require('./config.json');
 const pkg = require('./package.json');
 const client = new Discord.Client({
 	// No you don't
@@ -41,7 +43,6 @@ const reqEvent = (event) => {
 		}
 	};
 };
-const startup = require('./startup.js');
 
 startup(client);
 
@@ -95,18 +96,32 @@ process.on('SIGINT', () => {
 	console.log('Success. Closing process');
 	process.exit();
 });
+const webhook = new Discord.WebhookClient({ url: config.webhookURL });
 process.on('unhandledRejection', async error => {
-	const { MessageEmbed } = require('discord.js');
 	console.error('Unhandled Rejection: ', error);
-	const NotBacon = await client.users.fetch('776848090564657153');
-	if (!NotBacon) return;
-	NotBacon.send({
-		embeds: [
-			new MessageEmbed()
-				.setColor(color.fail)
-				.setDescription(
-					`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
-				),
-		],
-	});
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Unhandled Rejection')
+		.setColor(color.fail)
+		.setDescription(
+			`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
+		);
+
+	await webhook.send({ embeds: [embed] }).catch(console.error);
+});
+process.on('uncaughtException', async error => {
+	console.error('Unhandled Exception: ', error);
+	try {
+		const embed = new Discord.MessageEmbed()
+			.setColor(color.fail)
+			.setTitle('Uncaught Exception')
+			.setDescription(
+				`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
+			);
+
+		await webhook.send({ embeds: [embed] });
+	} catch (e) {
+		console.error(e);
+	} finally {
+		process.exit();
+	}
 });
