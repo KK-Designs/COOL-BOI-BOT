@@ -10,6 +10,7 @@ module.exports = async messages => {
 	if (messages.first().channel.name === 'server-logs') {return;}
 
 	const messageChannel = messages.first().channel.name;
+	const { client } = messages.first();
 	const logChannel = getLogChannel(messages.first().guild, db);
 
 	if (!logChannel) {return;}
@@ -24,14 +25,14 @@ module.exports = async messages => {
 		.setAuthor(`Messages Purged in #${messageChannel}`)
 		.setTitle(`Message Bulk delete by ${messages.first().author.tag} deleted ${messages.size - 1} messages`)
 		.setDescription(`${stringedArray}`)
-		.setFooter('COOL BOI BOT MESSAGE LOGGING')
+		.setFooter(`${client.user.username} MESSAGE LOGGING`)
 		.setTimestamp();
 	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await logChannel.fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});

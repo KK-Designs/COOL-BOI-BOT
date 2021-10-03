@@ -49,7 +49,7 @@ module.exports = {
 			] });
 		}
 		await db.set(`loggingchannel_${message.guild.id}`, x.id);
-		const webhook = await getLogChannel(message.guild, db).createWebhook('COOL BOI BOT Logging', {
+		const webhook = await getLogChannel(message.guild, db).createWebhook(`${message.client.user.username} Logging`, {
 			avatar: config.webhookAvatarURL,
 		});
 
@@ -81,7 +81,7 @@ module.exports = {
 			] });
 		}
 		await db.set(`loggingchannel_${interaction.guild.id}`, x.id);
-		const webhook = await getLogChannel(interaction.guild, db).createWebhook('COOL BOI BOT Logging', {
+		const webhook = await getLogChannel(interaction.guild, db).createWebhook(`${interaction.client.user.username} Logging`, {
 			avatar: config.webhookAvatarURL,
 		});
 

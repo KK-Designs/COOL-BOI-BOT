@@ -95,5 +95,5 @@ function exampleEmbed(
 		.addField('Pressure:', `${pressure} hpa`, true)
 		.addField('Cloudiness:', `${cloudness}`, true)
 		.setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
-		.setFooter('Powered by the COOL BOI BOT');
+		.setFooter(`Powered by the ${message.client.user.username}`);
 }

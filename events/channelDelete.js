@@ -9,6 +9,8 @@ module.exports = async channel => {
 
 	const logChannel = getLogChannel(channel.guild, db);
 
+	const { client } = channel;
+
 	if (!logChannel) {return;}
 
 	const botPerms = logChannel.permissionsFor(channel.guild.me);
@@ -25,11 +27,11 @@ module.exports = async channel => {
 		.setAuthor('⛔ Channel deleted')
 		.setColor(color.fail)
 		.setDescription(`Deleted channel #${channel.name}`)
-		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setFooter(`${client.user.username} SERVER LOGGING`)
 		.setTimestamp();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});

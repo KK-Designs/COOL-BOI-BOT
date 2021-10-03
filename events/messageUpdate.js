@@ -11,6 +11,7 @@ module.exports = async (message, messageNew) => {
 
 	if (messageNew.author.bot) {return;}
 
+	const { client } = messageNew;
 	const logChannel = getLogChannel(message.guild, db);
 
 	if (!logChannel) {return;}
@@ -27,7 +28,7 @@ module.exports = async (message, messageNew) => {
 		.setAuthor('📝 Message updated')
 		.setColor(color.bot_theme)
 		.setDescription(`${messageNew.author} edited a message in ${message.channel}`)
-		.setFooter('COOL BOI BOT MESSAGE LOGGING')
+		.setFooter(`${client.user.username} MESSAGE LOGGING`)
 		.setTimestamp();
 
 	if (!message.partial && message.content) {embed.addField('Old message:', `${message}`, true);}
@@ -38,7 +39,7 @@ module.exports = async (message, messageNew) => {
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 		components: [jumpToMsg],

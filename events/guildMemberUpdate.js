@@ -6,6 +6,7 @@ const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberUpdate"]) => Promise<any>} */
 module.exports = async (oldMember, newMember) => {
 	const logChannel = getLogChannel(oldMember.guild, db);
+	const { client } = newMember.guild;
 
 	if (!logChannel) {return;}
 
@@ -16,14 +17,14 @@ module.exports = async (oldMember, newMember) => {
 			.setDescription(`<@${newMember.id}> changed their nickname`)
 			.addField('Old nickname:', `${oldMember.displayName}`, true)
 			.addField('New nickname:', `${newMember.displayName}`, true)
-			.setFooter('COOL BOI BOT MEMBER LOGGING')
+			.setFooter(`${client.user.username} MEMBER LOGGING`)
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
 		const webhook = webhooks.first();
 
 		await webhook.send({
-			username: 'COOL BOI BOT Logging',
+			username: `${client.user.username} Logging`,
 			avatarURL: config.webhookAvatarURL,
 			embeds: [embed],
 		});
@@ -42,14 +43,14 @@ module.exports = async (oldMember, newMember) => {
 			.addField('Old roles:', `${output}`, true)
 			.addField('New roles:', `឵${outputNew}`, true)
 			.setThumbnail(`${oldMember.user.displayAvatarURL({ dynamic: true })}`)
-			.setFooter('COOL BOI BOT MEMBER LOGGING')
+			.setFooter(`${client.user.username} MEMBER LOGGING`)
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
 		const webhook = webhooks.first();
 
 		await webhook.send({
-			username: 'COOL BOI BOT Logging',
+			username: `${client.user.username} Logging`,
 			avatarURL: config.webhookAvatarURL,
 			embeds: [embed],
 		});
@@ -61,14 +62,14 @@ module.exports = async (oldMember, newMember) => {
 			.setDescription(`Avatar updated for <@${newMember.id}>`)
 			.addField('Old avatar:', `${oldMember.user.displayAvatarURL({ dynamic: true })}`, true)
 			.addField('New avatar:', `឵${newMember.user.displayAvatarURL({ dynamic: true })}`, true)
-			.setFooter('COOL BOI BOT MEMBER LOGGING')
+			.setFooter(`${client.user.username} MEMBER LOGGING`)
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
 		const webhook = webhooks.first();
 
 		await webhook.send({
-			username: 'COOL BOI BOT Logging',
+			username: `${client.user.username} Logging`,
 			avatarURL: config.webhookAvatarURL,
 			embeds: [embed],
 		});

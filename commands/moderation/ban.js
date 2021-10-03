@@ -26,7 +26,7 @@ module.exports = {
 
 		if (!user) {return sendError('Please provide a valid user for me to ban <:BAN:752937190786465894>', message.channel);}
 
-		if (user.id === '811024409863258172') {
+		if (user.id === message.client.user.id) {
 			return message.reply({ content: 'You can\'t ban me!' });
 		}
 		const reason = args.slice(1).join(' ') ?? 'No reason provided';
@@ -80,7 +80,7 @@ module.exports = {
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
 		const guild = interaction.guild;
 
-		if (member.id === '811024409863258172') {
+		if (member.id === interaction.client.user.id) {
 			return await interaction.reply({ content: 'You can\'t ban me!' });
 		}
 		if (!member.bannable) {
@@ -108,7 +108,7 @@ module.exports = {
        * Read more about what ban options there are over at
        * https://discord.js.org/#/docs/main/master/class/GuildMember?scrollTo=ban
        */
-		await guild.ban(member.id, { reason: reason });
+		await member.ban(member.id, { reason: reason });
 		const banembed = new MessageEmbed()
 			.setColor('#940000')
 			.setTitle('Member Banned <:BAN:752937190786465894>')

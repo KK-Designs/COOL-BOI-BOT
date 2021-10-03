@@ -26,8 +26,8 @@ module.exports = {
 
 		if (!user) {return sendError('Please provide a valid user for me to kick', message.channel);}
 
-		if (user.id === '811024409863258172') {
-			return message.reply({ content: 'You can\'t ban me!' });
+		if (user.id === message.client.user.id) {
+			return message.reply({ content: 'You can\'t kick me!' });
 		}
 		let reason = args.slice(1).join(' ');
 		if (reason === '') {
@@ -94,7 +94,7 @@ module.exports = {
 		const member = interaction.options.getMember('user', true);
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
 
-		if (member.id === '811024409863258172') {
+		if (member.id === interaction.client.user.id) {
 			return interaction.reply({ content: 'You can\'t kick me!' });
 		}
 		if (!member.user.bot) {

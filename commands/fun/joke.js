@@ -26,7 +26,7 @@ module.exports = {
 				.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
 				.setColor(color.bot_theme)
 				.setDescription(`${spoiler(joke.answer)}`)
-				.setFooter(`ID: ${joke.id} | The COOL BOI BOT`)
+				.setFooter(`ID: ${joke.id} | The ${message.client.user.username}`)
 				.setTimestamp();
 
 			return message.reply({ embeds: [embed] });
@@ -51,7 +51,7 @@ module.exports = {
 			.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
 			.setColor(color.bot_theme)
 			.setDescription(`${spoiler(joke.answer)}`)
-			.setFooter(`ID: ${id} | The COOL BOI BOT`)
+			.setFooter(`ID: ${id} | The ${message.client.user.username}`)
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });
@@ -69,7 +69,7 @@ module.exports = {
 				.setAuthor(`${user.username}`, `${user.displayAvatarURL({ dynamic: true })}`)
 				.setColor(color.bot_theme)
 				.setDescription(`${spoiler(joke.answer)}`)
-				.setFooter(`ID: ${joke.id} | The COOL BOI BOT`)
+				.setFooter(`ID: ${joke.id} | The ${interaction.client.user.username}`)
 				.setTimestamp();
 
 			return interaction.editReply({ embeds: [embed] });
@@ -86,7 +86,7 @@ module.exports = {
 			.setAuthor(`${user.username}`, `${user.displayAvatarURL({ dynamic: true })}`)
 			.setColor(color.bot_theme)
 			.setDescription(`${spoiler(joke.answer)}`)
-			.setFooter(`ID: ${id} | The COOL BOI BOT`)
+			.setFooter(`ID: ${id} | The ${interaction.client.user.username}`)
 			.setTimestamp();
 
 		await interaction.editReply({ embeds: [embed] });

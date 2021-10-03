@@ -5,7 +5,7 @@ const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["guildBanAdd"]) => Promise<any>} */
 module.exports = async (ban) => {
-
+	const { client } = ban;
 	const modLogChannelID = db.get('loggingchannel_' + ban.guild.id);
 	const modLogChannel = ban.guild.channels.cache.get(modLogChannelID);
 
@@ -17,14 +17,11 @@ module.exports = async (ban) => {
 		.setTitle('🔒 Member ban')
 		.setColor(color.bot_theme)
 		.setDescription(`Name: ${ban.user.username}\n \nID: ${ban.user.id}`)
-		.setFooter('COOL BOI BOT MEMBER LOGGING');
+		.setFooter(`${client.user.username} MEMBER LOGGING`);
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});
-
-	return await modLogChannel.send({ embeds: [embed] });
-
 };

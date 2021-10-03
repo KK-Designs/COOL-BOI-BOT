@@ -27,7 +27,7 @@ module.exports = {
 			.addField('Role name: ', roleinfo.name, true)
 			.addField('Role ID: ', roleinfo.id)
 			.addField('Role Created: ', roleinfo.createdAt.toDateString(), true)
-			.setFooter('Powered by the COOL BOI BOT', member.displayAvatarURL({ dynamic: true }))
+			.setFooter(`Powered by the ${message.client.user.username}`, member.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		message.reply({ embeds: [embed] });
@@ -42,7 +42,7 @@ module.exports = {
 			.addField('Role name: ', role.name, true)
 			.addField('Role ID: ', role.id)
 			.addField('Role Created: ', role.createdAt.toDateString(), true)
-			.setFooter('Powered by the COOL BOI BOT', user.displayAvatarURL({ dynamic: true }))
+			.setFooter(`Powered by the ${interaction.client.user.username}`, user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [embed] });

@@ -35,7 +35,7 @@ module.exports = {
 				.setTitle(`${user.username}'s avatar:`)
 				.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
 				.setTimestamp()
-				.setFooter('Powered by the COOL BOI BOT');
+				.setFooter(`Powered by the ${message.client.user.username}`);
 
 			message.channel.send({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
 		});
@@ -59,7 +59,7 @@ module.exports = {
 				.setTitle(`${user.username}'s avatar:`)
 				.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
 				.setTimestamp()
-				.setFooter('Powered by the COOL BOI BOT');
+				.setFooter(`Powered by the ${interaction.client.user.username}`);
 
 			await interaction.reply({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
 		});

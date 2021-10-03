@@ -43,7 +43,7 @@ module.exports = {
 		message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
-				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '<@811024409863258172> prefix'*`),
+				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '${message.client.user} prefix'*`),
 		] });
 	},
 	async executeSlash(interaction) {

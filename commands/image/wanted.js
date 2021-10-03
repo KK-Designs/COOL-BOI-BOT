@@ -24,7 +24,7 @@ module.exports = {
 			.setImage('attachment://wanted.png')
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700')
 			.setTimestamp()
-			.setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({ dynamic: true })}`);
+			.setFooter(`${message.client.user.username} Images`, `${message.client.user.displayAvatarURL({ dynamic: true })}`);
 
 		message.channel.send({ embeds: [imageEmbed], files: [attach] });
 	},
@@ -43,7 +43,7 @@ module.exports = {
 			.setImage('attachment://wanted.png')
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700')
 			.setTimestamp()
-			.setFooter('COOL BOI BOT Images', `${interaction.client.user.displayAvatarURL({ dynamic: true })}`);
+			.setFooter(`${interaction.client.user.username} Images`, `${interaction.client.user.displayAvatarURL({ dynamic: true })}`);
 
 		interaction.editReply({ embeds: [imageEmbed], files: [attach] });
 	},

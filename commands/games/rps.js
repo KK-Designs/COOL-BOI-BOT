@@ -15,7 +15,7 @@ module.exports = {
 	async execute(message) {
 		await simplydjs.rps(message, {
 			embedColor: color.bot_theme,
-			embedFooter: 'Powered by COOL BOI BOT Games',
+			embedFooter: `Powered by ${message.client.user.username} Games`,
 			credit: false,
 		});
 	},
@@ -24,7 +24,7 @@ module.exports = {
 		await simplydjs.rps(interaction, {
 			slash: true,
 			embedColor: color.bot_theme,
-			embedFooter: 'Powered by COOL BOI BOT Games',
+			embedFooter: `Powered by ${interaction.client.user.username} Games`,
 			credit: false,
 		});
 	},

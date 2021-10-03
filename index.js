@@ -14,7 +14,6 @@ const client = new Discord.Client({
 		'GUILD_MEMBER',
 		'USER',
 	],
-	ws: { properties: { $browser: 'Discord iOS' } },
 });
 
 updateNotifier({ pkg }).notify();
@@ -45,6 +44,7 @@ client.on('warn', (info) => {
 });
 try {
 	client.on('guildCreate', reqEvent('guildCreate'));
+	client.on('guildDelete', reqEvent('guildDelete'));
 	client.on('guildBanRemove', reqEvent('guildBanRemove'));
 	client.on('guildBanAdd', reqEvent('guildBanAdd'));
 	client.on('guildMemberUpdate', reqEvent('guildMemberUpdate'));

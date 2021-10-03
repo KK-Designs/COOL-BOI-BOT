@@ -7,12 +7,11 @@ module.exports = {
 	execute(message) {
 		const color = require('../../color.json');
 		const { GuessThePokemon } = require('discord-gamecord');
-
 		new GuessThePokemon({
 			message: message,
 			embed: {
 				title: 'Who\'s This Pokemon?',
-				footer: 'COOL BOI BOT Games',
+				footer: `${message.client.user.username} Games`,
 				color: color.bot_theme,
 			},
 			time: 60000,

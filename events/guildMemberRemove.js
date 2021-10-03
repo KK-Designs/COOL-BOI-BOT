@@ -6,8 +6,7 @@ const config = require('../config.json');
 module.exports = async member => {
 
 	const guild = member.guild;
-	// member.send("Were sad you left <:Blob_disappointedface:753456000027197556> . But if you want to join back you can join using this link: https://discord.gg/wdjxthF");
-	// Send the message to a designated channel on a server:
+	const { client } = member.guild;
 	const welcomeChannel = getWelcomeChannel(guild, db);
 
 	// Do nothing if the channel wasn't found on this server
@@ -27,13 +26,13 @@ module.exports = async member => {
 		.setDescription(`${member.user.tag} left ${member.guild.name}`)
 		.addField('Joined:', `${member.joinedAt.toDateString()}`, true)
 		.addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
-		.setFooter('COOL BOI BOT MEMBER LOGGING')
+		.setFooter(`${client.user.username} MEMBER LOGGING`)
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});

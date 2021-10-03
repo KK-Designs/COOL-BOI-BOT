@@ -59,7 +59,7 @@ module.exports = {
 			.addField('Status: ', status, true)
 			.addField('Roles', roles.join(' **|** '), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
-			.setFooter('Powered by the COOL BOI BOT', member.user.displayAvatarURL({ dynamic: true }))
+			.setFooter(`Powered by the ${message.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		return await message.reply({ embeds: [embed] });
@@ -100,7 +100,7 @@ module.exports = {
 			.addField('Status: ', status, true)
 			.addField('Roles', roles.join(' **|** '), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
-			.setFooter('Powered by the COOL BOI BOT', member.user.displayAvatarURL({ dynamic: true }))
+			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		return await interaction.reply({ embeds: [embed] });

@@ -33,9 +33,7 @@ for (const categoryEnt of fs.readdirSync('./commands', { withFileTypes: true }))
 			.setDescription(command.description);
 
 		build(slashCmd, command.options);
-		const len = commands.push(slashCmd);
-
-		console.log(len);
+		commands.push(slashCmd);
 	}
 }
 const endSlashCommandsMS = new Date().getTime();
@@ -45,20 +43,20 @@ async function saveDeployMS() {
 	await db.set('_slashCommandsMS', timeSlashCommandsMS);
 }
 saveDeployMS();
+db.delete('_slashCommandsMS');
 const main = async () => {
 	console.log('Retriving client id...');
 	/** @type {import("discord-api-types").APIApplication} */
 	// eslint-disable-next-line no-extra-parens
 	const app = (await rest.get(Routes.oauth2CurrentApplication()));
 
-	console.log(`Deploying ${commands.length} commands as Application ${app.name} (${app.id}) `);
-	console.log(commands.map(c => c.name).sort());
+	console.log(`Deploying ${commands.length} commands as Application "${app.name}" (${app.id})`);
 	await rest.put(
 		//  Routes.applicationCommands(app.id),
 		Routes.applicationGuildCommands(app.id, '800597178602225725'),
 		{ body: commands },
 	);
-	console.log('Successfully deployed commands');
+	console.log(`Successfully deployed ${commands.length} commands`);
 };
 function build(builder, options) {
 	for (let [name, optionData] of Object.entries(options)) {

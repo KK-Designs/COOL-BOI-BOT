@@ -14,6 +14,7 @@ module.exports = async message => {
 	if (!message.content) {return;}
 
 	const messageChannel = message.channel.name;
+	const { client } = message;
 	const logChannel = getLogChannel(message.guild, db);
 
 	if (!logChannel) {return;}
@@ -35,7 +36,7 @@ module.exports = async message => {
 		.setColor(color.bot_theme)
 		.setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}`)
 		.setDescription(message.content)
-		.setFooter('COOL BOI BOT MESSAGE LOGGING')
+		.setFooter(`${client.user.username} MESSAGE LOGGING`)
 		.setTimestamp();
 
 
@@ -51,7 +52,7 @@ module.exports = async message => {
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});

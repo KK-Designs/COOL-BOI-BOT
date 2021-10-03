@@ -9,6 +9,8 @@ module.exports = async (oldchannel, newchannel) => {
 
 	const logChannel = getLogChannel(oldchannel.guild, db);
 
+	const { client } = newchannel;
+
 	if (!logChannel) {return;}
 
 	const botPerms = logChannel.permissionsFor(newchannel.guild.me);
@@ -33,13 +35,13 @@ module.exports = async (oldchannel, newchannel) => {
 		.setDescription(`Channel Updated ${oldchannel}`)
 		.addField('Old channel:', `${oldchannel.name}`, true)
 		.addField('New channel:', `${newchannel.name}`, true)
-		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setFooter(`${client.user.username} SERVER LOGGING`)
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 		components: [jumpToChannel],

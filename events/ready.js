@@ -3,8 +3,8 @@ module.exports = async (client) => {
 	const trim = (str) => (`${str.slice(0, 34)}**********************************`);
 	const version = Discord.version;
 
-	console.log(`Ready! Logged in as ${client.user.tag} with  token of ${trim(client.token)}`);
-	console.log('© COOL BOI BOT 2021');
+	console.log(`Ready! Logged in as ${client.user.tag} with token of ${trim(client.token)}`);
+	console.log(`© ${client.user.username} ${new Date().getFullYear()}`);
 	console.log(`v${version}`);
 	const status = [
 		'status 1',
@@ -20,6 +20,7 @@ module.exports = async (client) => {
 						type: 'LISTENING',
 					},
 				],
+				status: 'dnd',
 			});
 		}
 		else {
@@ -30,6 +31,7 @@ module.exports = async (client) => {
 						type: 'LISTENING',
 					},
 				],
+				status: 'dnd',
 			});
 		}
 	}, 15000);

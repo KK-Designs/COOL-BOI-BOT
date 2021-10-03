@@ -9,6 +9,8 @@ module.exports = async channel => {
 
 	const logChannel = getLogChannel(channel.guild, db);
 
+	const { client } = channel;
+
 	if (!logChannel) {return;}
 
 	const botPerms = logChannel.permissionsFor(channel.guild.me);
@@ -31,13 +33,13 @@ module.exports = async channel => {
 		.setAuthor('🔨 Channel created')
 		.setColor(color.success)
 		.setDescription(`Created channel ${channel}`)
-		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setFooter(`${client.user.username} SERVER LOGGING`)
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();
 	const webhook = webhooks.first();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 		components: [jumpToChannel],

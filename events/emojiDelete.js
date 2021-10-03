@@ -6,7 +6,7 @@ const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["emojiDelete"]) => Promise<any>} */
 module.exports = async emoji => {
 	const logChannel = getLogChannel(emoji.guild, db);
-
+	const { client } = emoji;
 	if (!logChannel) {return;}
 
 	const webhooks = await logChannel.fetchWebhooks();
@@ -16,11 +16,11 @@ module.exports = async emoji => {
 		.setColor(color.bot_theme)
 		.setDescription(`Name: ${emoji.name}\nID: ${emoji.id}`)
 		.addField('Emoji URL', emoji.url)
-		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setFooter(`${client.user.username} SERVER LOGGING`)
 		.setTimestamp();
 
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
+		username: `${client.user.username} Logging`,
 		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});

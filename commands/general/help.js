@@ -26,7 +26,7 @@ module.exports = {
 			const embed = new MessageEmbed()
 				.setTitle('Commands')
 				.setDescription(data.toString())
-				.setFooter('THE COOL BOI BOT', 'https://images-ext-2.discordapp.net/external/PtRqDuS2wA-2WgNWTTLOwbG-B6ioUW6YPiRtxgs4ap4/https/cdn.discordapp.com/avatars/769415264306987068/699aa52d1dd597538fc33ceef502b1e6.webp')
+				.setFooter(`The ${message.client.user.username}`, message.client.user.displayAvatarURL({ dynamic: true }))
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -97,7 +97,7 @@ module.exports = {
 			const categoryEmbed = new MessageEmbed()
 				.setTitle('All categories')
 				.setDescription(`\`${categorynames.join('` | `')}\``)
-				.setFooter('THE COOL BOI BOT', `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -116,7 +116,7 @@ module.exports = {
 							const categoryEmbed1 = new MessageEmbed()
 								.setTitle(`Commands in ${i.values[0]}`)
 								.setDescription(`${cmds}`)
-								.setFooter('THE COOL BOI BOT', `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+								.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
 								.setTimestamp()
 								.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -202,7 +202,7 @@ module.exports = {
 			const embed1 = new MessageEmbed()
 				.setTitle(`Commands in ${name}`)
 				.setDescription(`${cmds}`)
-				.setFooter('THE COOL BOI BOT', `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
