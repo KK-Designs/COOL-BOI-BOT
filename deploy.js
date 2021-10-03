@@ -43,7 +43,6 @@ async function saveDeployMS() {
 	await db.set('_slashCommandsMS', timeSlashCommandsMS);
 }
 saveDeployMS();
-db.delete('_slashCommandsMS');
 const main = async () => {
 	console.log('Retriving client id...');
 	/** @type {import("discord-api-types").APIApplication} */
