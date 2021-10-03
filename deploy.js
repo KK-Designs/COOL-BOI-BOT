@@ -49,7 +49,7 @@ const main = async () => {
 	// eslint-disable-next-line no-extra-parens
 	const app = (await rest.get(Routes.oauth2CurrentApplication()));
 
-	console.log(`Deploying ${commands.length} commands as Application "${app.name}" (${app.id})`);
+	console.log(`Deploying ${commands.length} commands as Application "${app.name}" (${app.id})...`);
 	await rest.put(
 		//  Routes.applicationCommands(app.id),
 		Routes.applicationGuildCommands(app.id, '800597178602225725'),

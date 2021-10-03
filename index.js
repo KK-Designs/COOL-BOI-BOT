@@ -2,12 +2,13 @@ require('dotenv').config();
 require('discord-banner')(process.env.BOT_TOKEN);
 const Discord = require('discord.js');
 const updateNotifier = require('update-notifier');
+const { exec } = require('child_process');
+const chalk = require('chalk');
 const startup = require('./startup.js');
 const color = require('./color.json');
 const config = require('./config.json');
 const pkg = require('./package.json');
 const client = new Discord.Client({
-	// No you don't
 	intents: [
 		'GUILDS',
 		'GUILD_EMOJIS_AND_STICKERS',
@@ -44,13 +45,12 @@ const reqEvent = (event) => {
 };
 
 startup(client);
-
 client.once('ready', reqEvent('ready').bind(null, client));
 client.on('disconnect', (event) => {
-	console.log(`The WebSocket has closed and will no longer attempt to reconnect - ${event}`);
+	console.log('The WebSocket has closed and will no longer attempt to reconnect', event);
 });
 client.on('warn', (info) => {
-	console.log(`warn: ${info}`);
+	console.log(`Warn: ${info}`);
 });
 try {
 	client.on('guildCreate', reqEvent('guildCreate'));
@@ -78,23 +78,38 @@ catch (err) {
 }
 client.login(process.env.BOT_TOKEN);
 const processing = false;
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
 	if (processing) {return console.log('Already shutting down');}
-
-	console.log('Shutting down...');
-	const timer = setTimeout(() => {
-		console.log('Took too long. Forcing a shutdown');
-		process.exit(1);
+	const readline = require('readline').createInterface({
+		input: process.stdin,
+		output: process.stdout,
 	});
 
-	console.log('Destroying queues');
-	for (const queue of client.queue.values()) {queue.destroy();}
+	readline.question('Are you sure you want to shut down? (y/n)', res => {
+		if (res === 'y') {
+			console.log('Shutting down...');
+			const timer = setTimeout(() => {
+				console.log('Took too long. Forcing a shutdown');
+				process.exit(1);
+			});
 
-	console.log('Destroying client');
-	client.destroy();
-	clearTimeout(timer);
-	console.log('Success. Closing process');
-	process.exit();
+			console.log('Destroying queues');
+			for (const queue of client.queue.values()) {queue.destroy();}
+
+			console.log('Destroying client');
+			client.destroy();
+			clearTimeout(timer);
+			console.log('Success. Closing process');
+			process.exit();
+		} else if (res === 'n') {
+			console.log('Rebooting bot...');
+			exec('node .');
+		} else {
+			console.error(`${chalk.red(`Error: Expected "y" or "n" but got "${res}"`)}`);
+			process.exit(1);
+		}
+		readline.close();
+	});
 });
 const webhook = new Discord.WebhookClient({ url: config.webhookURL });
 process.on('unhandledRejection', async error => {
