@@ -1,6 +1,7 @@
 require('dotenv').config();
 require('discord-banner')(process.env.BOT_TOKEN);
 const Discord = require('discord.js');
+const db = require('quick.db');
 const updateNotifier = require('update-notifier');
 const { exec } = require('child_process');
 const chalk = require('chalk');
@@ -43,7 +44,6 @@ const reqEvent = (event) => {
 		}
 	};
 };
-
 startup(client);
 client.once('ready', reqEvent('ready').bind(null, client));
 client.on('disconnect', (event) => {
@@ -52,6 +52,8 @@ client.on('disconnect', (event) => {
 client.on('warn', (info) => {
 	console.log(`Warn: ${info}`);
 });
+// Delete the value "_slashCommandsMS" incase the script wasn't ran
+db.delete('_slashCommandsMS');
 try {
 	client.on('guildCreate', reqEvent('guildCreate'));
 	client.on('guildDelete', reqEvent('guildDelete'));
@@ -71,7 +73,6 @@ try {
 	client.on('guildMemberAdd', reqEvent('guildMemberAdd'));
 	client.on('guildMemberRemove', reqEvent('guildMemberRemove'));
 	client.on('interactionCreate', reqEvent('interactionCreate'));
-
 }
 catch (err) {
 	console.error(err);

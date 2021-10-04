@@ -10,7 +10,7 @@ module.exports = async emoji => {
 	if (!logChannel) {return;}
 
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 	const embed = new MessageEmbed()
 		.setTitle('⛔ Emoji Delete')
 		.setColor(color.bot_theme)

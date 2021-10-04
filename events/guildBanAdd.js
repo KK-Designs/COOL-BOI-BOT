@@ -12,7 +12,7 @@ module.exports = async (ban) => {
 	if (!modLogChannel) {return;}
 
 	const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 	const embed = new MessageEmbed()
 		.setTitle('🔒 Member ban')
 		.setColor(color.bot_theme)

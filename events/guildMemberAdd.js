@@ -59,7 +59,7 @@ module.exports = async member => {
 			.setTimestamp();
 		const logChannel = getLogChannel(member.guild, db);
 		const webhooks = await logChannel.fetchWebhooks();
-		const webhook = webhooks.first();
+		const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 
 		await webhook.send({
 			username: `${client.user.username} Logging`,
@@ -70,7 +70,6 @@ module.exports = async member => {
 };
 
 function shadeColor(color1, percent) {
-
 	let R = parseInt(color1.substring(1, 3), 16);
 	let G = parseInt(color1.substring(3, 5), 16);
 	let B = parseInt(color1.substring(5, 7), 16);

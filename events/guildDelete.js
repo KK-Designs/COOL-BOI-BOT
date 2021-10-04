@@ -5,7 +5,7 @@ module.exports = async (guild) => {
 	const { client } = guild;
 	const prefix = require('discord-prefix');
 	const webhooks = await getLogChannel(guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 	db.delete('blockcmds_' + guild.id);
 	console.log('Deleted blocked commands');
 	db.delete(`loggingchannel_${guild.id}`);

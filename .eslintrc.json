@@ -8,8 +8,7 @@
 	"parserOptions": {
 		"ecmaVersion": 2021
 	},	
-	"rules": {
-		"no-unused-vars": "error",
+	"rules": {		
 		"autofix/no-unused-vars": "error",
 		"arrow-spacing": ["warn", { "before": true, "after": true }],		
 		"comma-dangle": ["error", "always-multiline"],

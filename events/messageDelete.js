@@ -49,7 +49,7 @@ module.exports = async message => {
 	}
 	// modLogChannel.send({ embeds: [ delembed ] });
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

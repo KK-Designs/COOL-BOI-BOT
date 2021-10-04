@@ -36,7 +36,7 @@ module.exports = async (message, messageNew) => {
 	if (messageNew.content) {embed.addField('New message:', `${messageNew}`, true);}
 
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

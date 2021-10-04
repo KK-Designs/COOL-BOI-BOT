@@ -11,7 +11,7 @@ module.exports = async emoji => {
 
 	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.first();
+	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
 	const embed = new MessageEmbed()
 		.setTitle('➕ Emoji Create')
 		.setColor(color.bot_theme)
