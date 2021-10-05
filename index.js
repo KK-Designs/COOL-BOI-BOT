@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('discord-banner')(process.env.BOT_TOKEN);
 const Discord = require('discord.js');
 const db = require('quick.db');
 const updateNotifier = require('update-notifier');

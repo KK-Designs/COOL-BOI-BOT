@@ -27,6 +27,9 @@ module.exports = {
 			required: false,
 		},
 	},
+	/**
+   * @param {import("discord.js").Message} message
+   */
 	async execute(message, args, client) {
 		const member = args[0]
 			? message.mentions.members.first() || message.guild.members.cache.get(args[0])
@@ -65,17 +68,19 @@ module.exports = {
 		return await message.reply({ embeds: [embed] });
 	},
 	/**
-   * @param {CommandInteraction} interaction
+   * @param {import("discord.js").CommandInteraction} interaction
    * @param {import("discord.js").Client} client
    */
 	async executeSlash(interaction, client) {
-		/** @type {GuildMember} */
-		// eslint-disable-next-line no-extra-parens
-		const member = (interaction.options.getMember('user') ?? interaction.member);
-
+		/** @type {import("discord.js").User} */
+		const user = (interaction.options.getUser('user') ?? interaction.user);
+		const member = interaction.guild.members.resolve(user);
 		if (!member) {
 			return interaction.reply('Member not found');
 		}
+		// Force fetch to get banner
+		await user.fetch(true);
+
 		const roles = member.roles.cache.map(role => role.toString());
 		let color = member.displayHexColor;
 		if (color === '#000000') {color = '#C0C0C0';}
@@ -91,7 +96,7 @@ module.exports = {
 			.setTitle(`${member.user.username}`)
 			.setColor(color)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.setImage(await member.user.bannerURL())
+			.setImage(member.user.bannerURL())
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
 			.addField('Account Created', member.user.createdAt.toDateString(), true)
