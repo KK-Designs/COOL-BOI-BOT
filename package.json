@@ -40,7 +40,7 @@
     "discord-prefix": "^3.0.0",
     "discord-stop-spam-package": "^1.0.1",
     "discord-welcome-card": "^4.0.3",
-    "discord.js": "^13.2.0-dev.1633305919.7eec061",
+    "discord.js": "^13.2.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
