@@ -1,5 +1,6 @@
 {
   "defaultPrefix": "!",
+  "guildId": "",
   "webhookURL": "",
   "webhookAvatarURL": ""
 }
