@@ -15,6 +15,7 @@ module.exports = {
 		channel: {
 			type: 'Channel',
 			description: 'The channel to send logs to',
+			channelTypes: ['GuildText'],
 		},
 		reset: {
 			type: 'Boolean',
@@ -39,7 +40,7 @@ module.exports = {
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
 			] });
 
-			return await db.set(`loggingchannel_${message.guild.id}`, '0');
+			return await db.delete(`loggingchannel_${message.guild.id}`);
 		}
 		if (!x) {
 			return message.reply({ embeds: [
@@ -71,7 +72,7 @@ module.exports = {
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
 			] });
 
-			return await db.set(`loggingchannel_${interaction.guild.id}`, '0');
+			return await db.delete(`loggingchannel_${interaction.guild.id}`);
 		}
 		if (!x) {
 			return interaction.reply({ embeds: [

@@ -65,7 +65,6 @@ function build(builder, options) {
 		switch (optionData.type) {
 		// Can't define choices
 		case 'Boolean':
-		case 'Channel':
 		case 'Mentionable':
 		case 'Role':
 		case 'User': {
@@ -76,6 +75,22 @@ function build(builder, options) {
 				.setName(name)
 				.setDescription(optionData.description)
 				.setRequired(required));
+		} break;
+		case 'Channel': {
+			assert(!(builder instanceof SlashCommandSubcommandGroupBuilder));
+			const required = optionData.required ?? true;
+
+			builder.addChannelOption(option => {
+				option
+					.setName(name)
+					.setDescription(optionData.description)
+					.setRequired(required);
+
+				// Waiting for @discordjs/builders PR 41 to merge
+				// optionData.channelTypes?.forEach(type => option.addChannelType(ChannelType[type]));
+
+				return option;
+			});
 		} break;
 			// Can define choices
 		case 'Integer':

@@ -13,6 +13,7 @@ module.exports = {
 		channel: {
 			type: 'Channel',
 			description: 'The channel to send welcome messages to',
+			channelTypes: ['GuildText'],
 		},
 		reset: {
 			type: 'Boolean',
