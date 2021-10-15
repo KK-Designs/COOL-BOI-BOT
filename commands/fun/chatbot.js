@@ -35,12 +35,12 @@ module.exports = {
 		const { client } = interaction;
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait('1500');
-		chatbot.chat({ message: query, name: client.user.username, owner: 'NotBacon#4259', user: interaction.member.user.id, language: 'en' }).then(async reply => {
+		await wait(1);
+		chatbot.chat({ message: query, name: client.user.username, owner: 'NotBacon#4259', user: interaction.user.id, language: 'en' }).then(async reply => {
 			const embed = new MessageEmbed()
 				.setAuthor(client.user.username, client.user.displayAvatarURL({ dymamic: true }))
 				.setDescription(`${reply}`)
-				.setFooter(interaction.member.user.username, interaction.member.user.displayAvatarURL({ dymamic: true }))
+				.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dymamic: true }))
 				.setTimestamp()
 				.setColor(interaction.channel.type === 'GUILD_TEXT' ? interaction.guild.me.displayHexColor : '#FFB700');
 			await interaction.editReply({ embeds: [embed] });

@@ -27,7 +27,7 @@ module.exports = {
 		message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
-		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.member.user.id) ?? config.defaultPrefix;
+		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.user.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
 			.setTitle(`${interaction.guild.name} config`)
 			.setThumbnail(interaction.guild.iconURL())

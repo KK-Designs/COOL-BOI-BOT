@@ -8,7 +8,7 @@ module.exports = async (oldMember, newMember) => {
 	const logChannel = getLogChannel(oldMember.guild, db);
 	const { client } = newMember.guild;
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	if (oldMember.nickname !== newMember.nickname) {
 		const embed = new MessageEmbed()

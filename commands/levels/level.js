@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+// @ts-nocheck
+const { MessageAttachment } = require('discord.js');
 const db = require('quick.db');
 const yuricanvas = require('yuri-canvas');
 const getColors = require('get-image-colors');
@@ -21,6 +22,10 @@ module.exports = {
 			required: false,
 		},
 	},
+	/**
+	 * @param {{ mentions: { members: { first: () => any; }; }; guild: { members: { cache: { get: (arg0: any) => any; }; }; id: any; bannerURL: (arg0: { format: string; }) => any; }; member: any; reply: (arg0: { content?: string; files?: Discord.MessageAttachment[]; }) => any; }} message
+	 * @param {any[]} args
+	 */
 	async execute(message, args) {
 		const member = args[0]
 			? message.mentions.members.first() ?? message.guild.members.cache.get(args[0])
@@ -42,39 +47,47 @@ module.exports = {
 				color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
 				background: message.guild.bannerURL({ format: 'png' }) ?? undefined,
 			});
-			const attachment = new Discord.MessageAttachment(image, 'rank.png');
+			const attachment = new MessageAttachment(image, 'rank.png');
 			await message.reply({ files: [ attachment ] });
 		});
 	},
+	/**
+	 * @param {{ deferReply: () => any; options: { getMember: (arg0: string) => any; }; member: any; reply: (arg0: { content: string; }) => any; guild: { id: any; bannerURL: (arg0: { format: string; }) => any; }; editReply: (arg0: { files: Discord.MessageAttachment[]; }) => any; }} interaction
+	 */
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(5000);
+		await wait(1);
 		const member = interaction.options.getMember('user') ?? interaction.member;
 
-		if (member.user.bot) {return await interaction.reply({ content: 'I don\'t track bots activity' });}
+		if (member.user.bot) {return await interaction.editReply({ content: 'I don\'t track bots activity' });}
 
 		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
 			const levelfetch = await db.fetch(`level_${interaction.guild.id}_${member.user.id}`) ?? 1;
-			const totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
-			const messagefetch = await db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 1;
+			const totalmessages = 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25;
+			const messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
+			console.log(messagesNeeded);
 			const image = await yuricanvas.rank({
 				username: member.user.username,
 				discrim: member.user.discriminator,
 				status: member.presence?.status ?? 'offline',
 				level: levelfetch,
 				neededXP: totalmessages,
-				currentXP: messagefetch,
+				currentXP: messagesNeeded,
 				avatarURL: member.user.displayAvatarURL({ format: 'png' }),
 				color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
 				background: interaction.guild.bannerURL({ format: 'png' }) ?? undefined,
 			});
-			const attachment = new Discord.MessageAttachment(image, 'rank.png');
+			const attachment = new MessageAttachment(image, 'rank.png');
 			await interaction.editReply({ files: [ attachment ] });
 		});
 	},
 };
 
+/**
+ * @param {string} color1
+ * @param {number} percent
+ */
 function shadeColor(color1, percent) {
 	let R = parseInt(color1.substring(1, 3), 16);
 	let G = parseInt(color1.substring(3, 5), 16);

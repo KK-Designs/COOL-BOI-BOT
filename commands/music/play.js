@@ -66,8 +66,6 @@ module.exports = {
 
 		if (serverQueue) {
 			serverQueue.songs.push(songReq);
-			console.log(serverQueue.songs);
-
 			return message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
 		}
 		const player = createAudioPlayer();

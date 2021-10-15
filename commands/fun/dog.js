@@ -65,7 +65,7 @@ module.exports = {
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(1250);
+		await wait(1);
 		const breed = interaction.options.getString('breed');
 		if (!breed) {
 			fetch('https://api.thedogapi.com/v1/images/search').then(res => res.json()).then(res => {

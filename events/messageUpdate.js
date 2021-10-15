@@ -5,16 +5,16 @@ const color = require('../color.json');
 const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["messageUpdate"]) => Promise<any>} */
 module.exports = async (message, messageNew) => {
-	if (!message.partial && message.content === messageNew.content) {return;}
+	if (!message.partial && message.content === messageNew.content) return;
 
-	if (messageNew.partial) {messageNew = await messageNew.fetch();}
+	if (messageNew.partial) messageNew = await messageNew.fetch();
 
-	if (messageNew.author.bot) {return;}
+	if (messageNew.author.bot) return;
 
 	const { client } = messageNew;
 	const logChannel = getLogChannel(message.guild, db);
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const jumpToMsg = new MessageActionRow()
 		.addComponents(

@@ -1,5 +1,6 @@
 const db = require('quick.db');
 const { Collection, MessageEmbed } = require('discord.js');
+const fetch = require('node-fetch');
 const Detector = require('discord-crasher-detector');
 const DiscordStopSpam = require('discord-stop-spam-package');
 const { weirdToNormalChars } = require('weird-to-normal-chars');
@@ -15,16 +16,18 @@ module.exports = async (message) => {
 	const { client } = message;
 	const { commands } = client;
 	message.content = await weirdToNormalChars(message.content);
+	await DiscordStopSpam.logAuthor(message.author.id);
+	await DiscordStopSpam.logMessage(message.author.id, message.content);
 	const SpamDetected = await DiscordStopSpam.checkMessageInterval(message);
 
-	if (SpamDetected) {return;}
+	if (SpamDetected) return console.log('Spam detected; ignoring messages');
 
 	if (await runDetector(message)) {
 		await message.delete();
 
 		return await message.channel.send(`${message.author} Please don't send malicious files`);
 	}
-	if (message.author.bot) {return;}
+	if (message.author.bot) return;
 
 	if (message.channel.type === 'GUILD_TEXT') {
 		await handleLevels(message);
@@ -34,11 +37,11 @@ module.exports = async (message) => {
 	const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(guildPrefix)})\\s*`);
 
-	if (!prefixRegex.test(message.content)) {return;}
+	if (!prefixRegex.test(message.content)) return;
 
 	const [, matchedPrefix] = message.content.match(prefixRegex);
 
-	if (!message.content.startsWith(matchedPrefix)) {return;}
+	if (!message.content.startsWith(matchedPrefix)) return;
 
 	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -46,7 +49,7 @@ module.exports = async (message) => {
 	console.log('Looking for command %s', commandName);
 	const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-	if (!command) {return console.log('command not found');}
+	if (!command) {return console.log('Command not found:', commandName);}
 
 	if (userIsBlocked(message.author)) {return void await message.reply({ content: '<:no:803069123918823454> You are blocked from using commands' });}
 
@@ -77,7 +80,8 @@ module.exports = async (message) => {
 	addUserToCooldown(message.author, command);
 	console.log('Running command...');
 	try {
-		await command.execute(message, args, client);
+		command.execute(message, args, client);
+		console.log(`Executed command: ${command.name}`);
 	}
 	catch (e) {
 		console.error(e);
@@ -92,21 +96,44 @@ module.exports = async (message) => {
 };
 /** @param {import("discord.js").Message} message */
 async function handleLevels(message) {
-	// if (api.hasVoted(message.author.id)) {
-	// db.add(`messages_${message.guild.id}_${message.author.id}`, 3)
-	// } else {
-	await db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
-	// }
+	const { client } = message;
+	const { commands } = client;
+	const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
+	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(guildPrefix)})\\s*`);
+	if (!prefixRegex.test(message.content)) return;
+	const [, matchedPrefix] = message.content.match(prefixRegex);
+	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
+	const commandName = args.shift().toLowerCase();
+	const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	if (command) {
+		return await db.add(`commands_${message.guild.id}_${message.author.id}`, 1);
+	}
+	let res = await fetch(`https://top.gg/api/bots/${message.client.user.id}/check?userId=${message.author.id}`);
+	res = res.json();
+	// Check if the user voted
+	if (res.voted > 0 && !res?.error) {
+		await db.add(`messages_${message.guild.id}_${message.author.id}`, 3);
+		await db.add(`messagesneeded_${message.guild.id}_${message.author.id}`, 3);
+	} else {
+		await db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
+		await db.add(`messagesneeded_${message.guild.id}_${message.author.id}`, 1);
+	}
 	const messagefetch = db.fetch(`messages_${message.guild.id}_${message.author.id}`);
 	const levelfetch = db.fetch(`level_${message.guild.id}_${message.author.id}`);
+	if (levelfetch == 0 || levelfetch == null) {
+		await db.set(`level_${message.guild.id}_${message.author.id}`, 0);
+		await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
+	}
+	console.log(db.fetch(`messagesneeded_${message.guild.id}_${message.author.id}`) ?? 1);
 	let messages;
-	if (messagefetch === 25 + 625 * levelfetch + Math.floor(levelfetch / 3)) {messages = messagefetch;}
+	if (messagefetch === 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25) {messages = messagefetch;}
 
 	if (!isNaN(messages)) {
 		await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
+		await db.set(`messagesneeded_${message.guild.id}_${message.author.id}`, 0);
 		const levelembed = new MessageEmbed()
 			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(`${message.author}, You have leveled up to level ${levelfetch + 1}!`)
+			.setDescription(`${message.author}, You have leveled up to level ${levelfetch}!`)
 			.setTimestamp()
 			.setColor(message.member?.displayHexColor ?? '#FFB700');
 		if (db.get('blockcmds_' + message.guild.id) === 'level') {
@@ -175,12 +202,12 @@ function cmdIsBlocked(guild, command) {
 	return blockedCmd && blockedCmd !== '0' && blockedCmd === command.name;
 }
 function checkPermissions(member, channel, cmdPerms) {
-	if (!cmdPerms) {return true;}
+	if (!cmdPerms) return true;
 
 	return member.permissionsIn(channel).has(cmdPerms);
 }
 async function runDetector(message, videoUrl = message.content) {
-	if (!isURI(videoUrl)) {return;}
+	if (!isURI(videoUrl)) return;
 
 	console.log('Analyzing file %s', videoUrl);
 	const analysis = await Detector.AnalyzeVideo(videoUrl).catch(e => {

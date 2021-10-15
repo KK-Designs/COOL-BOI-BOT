@@ -84,7 +84,7 @@ module.exports = async (client) => {
 	});
 	start_giveaway(client);
 	console.log(chalk.blue('Startup Measurement Results\n-------------------------------'));
-	console.log(timeSlashCommandsMS ? slashCommandsColor('(/) Command deploying time:', timeSlashCommandsMS + 'ms') : chalk.grey('Could not get (/) time.'));
+	console.log(timeSlashCommandsMS ? slashCommandsColor('(/) Command deploying time:', timeSlashCommandsMS + 'ms') : chalk.grey('Could not get (/) command loading time.'));
 	console.log(commandColor('Command loading time:', timeCommandsMS + 'ms'));
 	console.log(eventColor('Event loading time:', timeEventsMS + 'ms'));
 	console.log(totalColor('Total boot time:', (timeCommandsMS + timeEventsMS + timeSlashCommandsMS) + 'ms'));

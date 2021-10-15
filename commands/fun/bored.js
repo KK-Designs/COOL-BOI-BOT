@@ -29,7 +29,7 @@ module.exports = {
 	async executeSlash(interaction) {
 		fetch('http://www.boredapi.com/api/activity/').then(async (res) => {
 			res.json().then(async (activity) => {
-				const user = interaction.member.user;
+				const user = interaction.user;
 				const embed = new MessageEmbed()
 					.setColor(color.bot_theme)
 					.setTitle('Thing to do')

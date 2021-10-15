@@ -1,6 +1,6 @@
 {
 	"extends": ["eslint:recommended", "prettier"],	
-	"plugins": ["autofix"], // https://openbase.com/js/eslint-plugin-autofix/documentation
+	// "plugins": ["autofix"], // https://openbase.com/js/eslint-plugin-autofix/documentation
 	"env": {
 		"node": true,
 		"es6": true
@@ -8,9 +8,10 @@
 	"parserOptions": {
 		"ecmaVersion": 2021
 	},	
-	"rules": {		
-		"autofix/no-unused-vars": "error",
-		"arrow-spacing": ["warn", { "before": true, "after": true }],		
+	"rules": {
+		"no-unused-vars": "error",
+		// "autofix/no-unused-vars": "error",
+		"arrow-spacing": ["warn", { "before": true, "after": true }],
 		"comma-dangle": ["error", "always-multiline"],
 		"comma-spacing": "error",
 		"comma-style": "error",

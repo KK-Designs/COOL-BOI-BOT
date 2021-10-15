@@ -1,6 +1,5 @@
 require('dotenv').config();
-require('discord-banner')(process.env.BOT_TOKEN);
-const Discord = require('discord.js');
+const { Client, WebhookClient, MessageEmbed, Collection, Intents } = require('discord.js');
 const db = require('quick.db');
 const updateNotifier = require('update-notifier');
 const { exec } = require('child_process');
@@ -9,16 +8,16 @@ const startup = require('./startup.js');
 const color = require('./color.json');
 const config = require('./config.json');
 const pkg = require('./package.json');
-const client = new Discord.Client({
+const client = new Client({
 	intents: [
-		'GUILDS',
-		'GUILD_EMOJIS_AND_STICKERS',
-		'GUILD_MEMBERS',
-		'GUILD_PRESENCES',
-		'GUILD_MESSAGES',
-		'GUILD_MESSAGE_REACTIONS',
-		'DIRECT_MESSAGES',
-		'GUILD_BANS',
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+		Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.GUILD_PRESENCES,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.GUILD_BANS,
+		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+		Intents.FLAGS.DIRECT_MESSAGES,
 	],
 	partials: [
 		'MESSAGE',
@@ -30,7 +29,7 @@ const client = new Discord.Client({
 });
 
 updateNotifier({ pkg }).notify();
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 const reqEvent = (event) => {
 	// eslint-disable-next-line global-require
 	const run = require(`./events/${event}`);
@@ -112,10 +111,10 @@ process.on('SIGINT', async () => {
 		readline.close();
 	});
 });
-const webhook = new Discord.WebhookClient({ url: config.webhookURL });
+const webhook = new WebhookClient({ url: config.webhookURL });
 process.on('unhandledRejection', async error => {
 	console.error('Unhandled Rejection: ', error);
-	const embed = new Discord.MessageEmbed()
+	const embed = new MessageEmbed()
 		.setTitle('Unhandled Rejection')
 		.setColor(color.fail)
 		.setDescription(
@@ -127,7 +126,7 @@ process.on('unhandledRejection', async error => {
 process.on('uncaughtException', async error => {
 	console.error('Unhandled Exception: ', error);
 	try {
-		const embed = new Discord.MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor(color.fail)
 			.setTitle('Uncaught Exception')
 			.setDescription(

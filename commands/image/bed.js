@@ -1,3 +1,4 @@
+const { MessageAttachment, MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'bed',
 	description: 'Bed your friend ig',
@@ -12,7 +13,7 @@ module.exports = {
 		},
 	},
 	async execute(message) {
-		const Discord = require('discord.js');
+
 		const DIG = require('discord-image-generation');
 		const user = message.mentions.users.first();
 
@@ -21,8 +22,7 @@ module.exports = {
 		if (user.id === message.author.id) {return await message.reply({ content: 'You can\'t bed yourself you idiot.' });}
 
 		const img = await new DIG.Bed().getImage(message.author.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
-		const attach = new Discord.MessageAttachment(img, 'bed.png');
-		const { MessageEmbed } = require('discord.js');
+		const attach = new MessageAttachment(img, 'bed.png');
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Bed lol')
 			.setImage('attachment://bed.png')
@@ -35,16 +35,15 @@ module.exports = {
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait('1000');
-		const Discord = require('discord.js');
+		await wait(1);
 		const DIG = require('discord-image-generation');
 		const user = interaction.options.getUser('user');
 
-		if (user.id === interaction.member.user.id) {return await interaction.editReply({ content: 'You can\'t bed yourself you idiot.' });}
+		if (user.id === interaction.user.id) {return await interaction.editReply({ content: 'You can\'t bed yourself you idiot.' });}
 
-		const img = await new DIG.Bed().getImage(interaction.member.user.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
-		const attach = new Discord.MessageAttachment(img, 'bed.png');
-		const { MessageEmbed } = require('discord.js');
+		const img = await new DIG.Bed().getImage(interaction.user.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
+		const attach = new MessageAttachment(img, 'bed.png');
+
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Bed lol')
 			.setImage('attachment://bed.png')

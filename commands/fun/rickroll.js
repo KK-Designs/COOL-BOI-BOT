@@ -91,7 +91,7 @@ function makePlayer() {
 	})
 		.on('subscribe', subscription => {
 			subscriptions.add(subscription);
-			if (player.state.status !== AudioPlayerStatus.Idle) {return;}
+			if (player.state.status !== AudioPlayerStatus.Idle) return;
 
 			const resource = createAudioResource(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'));
 

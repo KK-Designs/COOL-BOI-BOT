@@ -5,15 +5,15 @@ const color = require('../color.json');
 const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');
 module.exports = async messages => {
-	if (messages.partial) {return;}
+	if (messages.partial) return;
 
-	if (messages.first().channel.name === 'server-logs') {return;}
+	if (messages.first().channel.name === 'server-logs') return;
 
 	const messageChannel = messages.first().channel.name;
 	const { client } = messages.first();
 	const logChannel = getLogChannel(messages.first().guild, db);
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const messageArray = [...messages.values()];
 	// messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array

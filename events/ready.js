@@ -16,7 +16,7 @@ module.exports = async (client) => {
 			client.user.setPresence({
 				activities: [
 					{
-						name: ' !help | Expirimental COOL BOI BOT',
+						name: ` !help | ${client.user.username}`,
 						type: 'LISTENING',
 					},
 				],

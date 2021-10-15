@@ -1,3 +1,4 @@
+const { MessageEmbed, MessageAttachment } = require('discord.js');
 module.exports = {
 	name: 'lisapresentation',
 	description: 'Create your own lisa presentation',
@@ -13,7 +14,7 @@ module.exports = {
 		},
 	},
 	async execute(message, args) {
-		const Discord = require('discord.js');
+
 		const DIG = require('discord-image-generation');
 		const text = args.join(' ');
 
@@ -22,8 +23,8 @@ module.exports = {
 		if (text.length > 300) {return await message.reply({ content: 'I can only make a lisa presentation out of 300 characters' });}
 
 		const img = await new DIG.LisaPresentation().getImage(text);
-		const attach = new Discord.MessageAttachment(img, 'LisaPresentation.png');
-		const { MessageEmbed } = require('discord.js');
+		const attach = new MessageAttachment(img, 'LisaPresentation.png');
+
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Lisa Presentation')
 			.setImage('attachment://LisaPresentation.png')
@@ -36,8 +37,8 @@ module.exports = {
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait('1000');
-		const Discord = require('discord.js');
+		await wait(1);
+
 		const DIG = require('discord-image-generation');
 		const text = interaction.options.getString('message');
 
@@ -46,8 +47,8 @@ module.exports = {
 		if (text.length > 300) {return await interaction.editReply({ content: 'I can only make a lisa presentation out of 300 characters' });}
 
 		const img = await new DIG.LisaPresentation().getImage(text);
-		const attach = new Discord.MessageAttachment(img, 'LisaPresentation.png');
-		const { MessageEmbed } = require('discord.js');
+		const attach = new MessageAttachment(img, 'LisaPresentation.png');
+
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Lisa Presentation')
 			.setImage('attachment://LisaPresentation.png')

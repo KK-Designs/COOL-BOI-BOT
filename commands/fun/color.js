@@ -38,7 +38,7 @@ module.exports = {
 	async executeSlash(interaction, client) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(750);
+		await wait(1);
 		const args = interaction.options.getString('color');
 		if (args && /^#([0-9A-F]{3}){1,2}$/i.test(args)) {
 			const color = await yuricanvas.color(args);

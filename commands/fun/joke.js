@@ -59,9 +59,9 @@ module.exports = {
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(1000);
+		await wait(1);
 		const id = interaction.options.getInteger('id');
-		const user = interaction.member.user;
+		const user = interaction.user;
 		if (!id) {
 			const joke = await getRandomJoke();
 			const embed = new MessageEmbed()
@@ -104,7 +104,6 @@ async function getJoke(path) {
 	const obj = await res.json();
 
 	if (obj.error) {
-		console.log(obj);
 		throw new Error('The returned object has an error');
 	}
 

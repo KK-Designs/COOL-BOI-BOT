@@ -1,3 +1,4 @@
+const { MessageEmbed, MessageAttachment } = require('discord.js');
 module.exports = {
 	name: 'spank',
 	description: 'Spank your friends!',
@@ -12,7 +13,7 @@ module.exports = {
 		},
 	},
 	async execute(message) {
-		const Discord = require('discord.js');
+
 		const DIG = require('discord-image-generation');
 		const user = message.mentions.users.first();
 
@@ -21,8 +22,8 @@ module.exports = {
 		if (user.id === message.author.id) {return await message.reply({ content: 'You can\'t spank yourself you idiot' });}
 
 		const img = await new DIG.Spank().getImage(message.author.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
-		const attach = new Discord.MessageAttachment(img, 'spank.png');
-		const { MessageEmbed } = require('discord.js');
+		const attach = new MessageAttachment(img, 'spank.png');
+
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Spank')
 			.setImage('attachment://spank.png')
@@ -35,18 +36,18 @@ module.exports = {
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait('1000');
-		const Discord = require('discord.js');
+		await wait(1);
+
 		const DIG = require('discord-image-generation');
 		const user = interaction.options.getUser('user');
 
 		if (!user) {return await interaction.editReply({ content: 'You need to mention someone to spank unless your too nice' });}
 
-		if (user.id === interaction.member.user.id) {return await interaction.editReply({ content: 'You can\'t spank yourself you idiot' });}
+		if (user.id === interaction.user.id) {return await interaction.editReply({ content: 'You can\'t spank yourself you idiot' });}
 
-		const img = await new DIG.Spank().getImage(interaction.member.user.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
-		const attach = new Discord.MessageAttachment(img, 'spank.png');
-		const { MessageEmbed } = require('discord.js');
+		const img = await new DIG.Spank().getImage(interaction.user.displayAvatarURL({ format: 'png' }), user.displayAvatarURL({ format: 'png' }));
+		const attach = new MessageAttachment(img, 'spank.png');
+
 		const imageEmbed = new MessageEmbed()
 			.setTitle('Spank')
 			.setImage('attachment://spank.png')

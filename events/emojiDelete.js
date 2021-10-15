@@ -7,7 +7,7 @@ const config = require('../config.json');
 module.exports = async emoji => {
 	const logChannel = getLogChannel(emoji.guild, db);
 	const { client } = emoji;
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const webhooks = await logChannel.fetchWebhooks();
 	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);

@@ -5,21 +5,21 @@ const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["channelCreate"]) => Promise<any>} */
 module.exports = async channel => {
-	if (channel.type === 'DM') {return;}
+	if (channel.type === 'DM') return;
 
 	const logChannel = getLogChannel(channel.guild, db);
 
 	const { client } = channel;
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const botPerms = logChannel.permissionsFor(channel.guild.me);
 
-	if (!botPerms.has('VIEW_CHANNEL')) {return;}
+	if (!botPerms.has('VIEW_CHANNEL')) return;
 
-	if (!botPerms.has('MANAGE_WEBHOOKS')) {return;}
+	if (!botPerms.has('MANAGE_WEBHOOKS')) return;
 
-	if (!botPerms.has('SEND_MESSAGES')) {return;}
+	if (!botPerms.has('SEND_MESSAGES')) return;
 
 	const jumpToChannel = new MessageActionRow()
 		.addComponents(

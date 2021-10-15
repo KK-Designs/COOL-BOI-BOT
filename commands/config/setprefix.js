@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const prefix = require('discord-prefix');
 const color = require('../../color.json');
+const config = require('../../config.json');
 module.exports = {
 	name: 'setprefix',
 	description: 'Set the bots prefix!',
@@ -22,6 +23,7 @@ module.exports = {
 	},
 	execute(message, args) {
 		const guild = message.guild;
+		const guildPrefix = prefix.getPrefix(guild?.id ?? message.author.id) ?? config.defaultPrefix;
 
 		if (!args.length || args[0].toLowerCase() === 'disable' || args[0].toLowerCase() === 'none') {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
@@ -45,6 +47,9 @@ module.exports = {
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '${message.client.user} prefix'*`),
 		] });
+		if (guildPrefix !== config.defaultPrefix) {
+			guild.me.setNickname(`${guild.me.displayName} [${args[0]}]`);
+		}
 	},
 	async executeSlash(interaction) {
 		const newPrefix = interaction.options.getString('prefix', true);

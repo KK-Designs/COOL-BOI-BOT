@@ -56,7 +56,7 @@ module.exports = {
 			const result = meant(commandName, thing);
 			let error = `There is no command with name or alias with \`${commandName}\`, did you mean \`${result.join(' or ')}\`?`;
 			if (!result.length) {
-				error = `There is no command with name or alias \`${commandName}\`, ${interaction.member.user}!`;
+				error = `There is no command with name or alias \`${commandName}\`, ${interaction.user}!`;
 			}
 
 			return interaction.reply({ content: error });

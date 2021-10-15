@@ -36,7 +36,7 @@ module.exports = {
 			.setColor(color.random)
 			.setTitle(answer.word)
 			.setURL(answer.permalink)
-			.setThumbnail('https://images-ext-2.discordapp.net/external/HMmIAukJm0YaGc2BKYGx5MuDJw8LUbwqZM9BW9oey5I/https/i.imgur.com/VFXr0ID.jpg')
+			.setThumbnail('https://i.imgur.com/VFXr0ID.jpg')
 			.addFields(
 				{ name: 'Definition', value: trim(answer.definition, 1024) },
 				{ name: 'Example', value: trim(answer.example, 1024) },
@@ -64,7 +64,7 @@ module.exports = {
 			.setColor(color.random)
 			.setTitle(answer.word)
 			.setURL(answer.permalink)
-			.setThumbnail('https://images-ext-2.discordapp.net/external/HMmIAukJm0YaGc2BKYGx5MuDJw8LUbwqZM9BW9oey5I/https/i.imgur.com/VFXr0ID.jpg')
+			.setThumbnail('https://i.imgur.com/VFXr0ID.jpg')
 			.addFields(
 				{ name: 'Definition', value: trim(answer.definition, 1024) },
 				{ name: 'Example', value: trim(answer.example, 1024) },

@@ -5,21 +5,21 @@ const color = require('../color.json');
 const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["channelUpdate"]) => Promise<any>} */
 module.exports = async (oldchannel, newchannel) => {
-	if (oldchannel.type === 'DM' || oldchannel.name === newchannel.name) {return;}
+	if (oldchannel.type === 'DM' || oldchannel.name === newchannel.name) return;
 
 	const logChannel = getLogChannel(oldchannel.guild, db);
 
 	const { client } = newchannel;
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const botPerms = logChannel.permissionsFor(newchannel.guild.me);
 
-	if (!botPerms.has('VIEW_CHANNEL')) {return;}
+	if (!botPerms.has('VIEW_CHANNEL')) return;
 
-	if (!botPerms.has('SEND_MESSAGES')) {return;}
+	if (!botPerms.has('SEND_MESSAGES')) return;
 
-	if (!botPerms.has('MANAGE_WEBHOOKS')) {return;}
+	if (!botPerms.has('MANAGE_WEBHOOKS')) return;
 
 	const jumpToChannel = new MessageActionRow()
 		.addComponents(

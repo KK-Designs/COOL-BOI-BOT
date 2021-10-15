@@ -181,7 +181,7 @@ module.exports = {
 				prize,
 				winnerCount,
 			});
-			await interaction.editReply('<:check:807305471282249738> Success! Giveaway created!');
+			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway created!', ephemeral: true });
 		} break;
 		case 'edit': {
 			const messageID = interaction.options.getString('messageid', true);
@@ -202,7 +202,7 @@ module.exports = {
 
 				return await interaction.editReply(`No giveaway found for ${messageID}, please check and try again`);
 			}
-			await interaction.editReply('<:check:807305471282249738> Success! Giveaway will updated soon.');
+			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.', ephemeral: true });
 		} break;
 		case 'delete': {
 			const messageID = interaction.options.getString('messageid');
@@ -215,7 +215,7 @@ module.exports = {
 
 				return await interaction.reply(`No giveaway found for ${messageID}, please check and try again`);
 			}
-			await interaction.reply({ content: '<:check:807305471282249738> Success! Giveaway deleted!' });
+			await interaction.reply({ content: '<:check:807305471282249738> Success! Giveaway deleted!', ephemeral: true });
 		} break;
 		case 'reroll': {
 			const messageID = interaction.options.getString('messageid');
@@ -228,7 +228,7 @@ module.exports = {
 
 				return await interaction.reply(`No giveaway found for ${messageID}, please check and try again`);
 			}
-			await interaction.reply({ content: '<:check:807305471282249738> Success! Giveaway rerolled!' });
+			await interaction.reply({ content: '<:check:807305471282249738> Success! Giveaway rerolled!', ephemeral: true });
 		} break;
 		}
 	},

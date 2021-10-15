@@ -12,10 +12,10 @@ const rest = new REST({ version: '9' })
 const commands = [];
 const startSlashCommandsMS = new Date().getTime();
 for (const categoryEnt of fs.readdirSync('./commands', { withFileTypes: true })) {
-	if (!categoryEnt.isDirectory()) {continue;}
+	if (!categoryEnt.isDirectory()) continue;
 
 	for (const fileEnt of fs.readdirSync(`./commands/${categoryEnt.name}`, { withFileTypes: true })) {
-		if (!fileEnt.isFile() || fileEnt.name.startsWith('.') || !fileEnt.name.endsWith('.js')) {continue;}
+		if (!fileEnt.isFile() || fileEnt.name.startsWith('.') || !fileEnt.name.endsWith('.js')) continue;
 
 		console.log(`Loading ${categoryEnt.name}/${fileEnt.name}`);
 		// eslint-disable-next-line global-require

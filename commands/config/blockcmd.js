@@ -63,7 +63,6 @@ module.exports = {
 	},
 	async executeSlash(interaction) {
 		const name = interaction.options.getString('command', true);
-		console.log(name);
 		const { commands } = interaction.client;
 		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
@@ -78,7 +77,6 @@ module.exports = {
 		}
 		if (!command) {
 			const thing = commands.map(command => command.name);
-			console.log(thing);
 			const result = meant(name.toLowerCase(), thing);
 			let error = `that's not a valid command, did you mean \`${result.join(' or ')}\`?`;
 			if (!result.length) {

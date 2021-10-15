@@ -53,7 +53,7 @@ module.exports = {
 			avatar: config.webhookAvatarURL,
 		});
 
-		console.log(`Created webhook ${webhook}`);
+		console.log(`Created webhook ${JSON.stringify(webhook)}`);
 		message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
@@ -85,7 +85,7 @@ module.exports = {
 			avatar: config.webhookAvatarURL,
 		});
 
-		console.log(`Created webhook ${webhook}`);
+		console.log(`Created webhook ${JSON.stringify(webhook)}`);
 		interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)

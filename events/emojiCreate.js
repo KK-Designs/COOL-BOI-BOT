@@ -7,7 +7,7 @@ const config = require('../config.json');
 module.exports = async emoji => {
 	const logChannel = getLogChannel(emoji.guild, db);
 	const { client } = emoji;
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await logChannel.fetchWebhooks();

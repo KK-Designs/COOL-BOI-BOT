@@ -5,19 +5,19 @@ const { getLogChannel } = require('../utils.js');
 const config = require('../config.json');
 /** @type {(...args: import("discord.js").ClientEvents["messageDelete"]) => Promise<any>} */
 module.exports = async message => {
-	if (message.partial) {return;}
+	if (message.partial) return;
 
-	if (message.channel.type === 'DM') {return;}
+	if (message.channel.type === 'DM') return;
 
-	if (message.author.bot) {return;}
+	if (message.author.bot) return;
 
-	if (!message.content) {return;}
+	if (!message.content) return;
 
 	const messageChannel = message.channel.name;
 	const { client } = message;
 	const logChannel = getLogChannel(message.guild, db);
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const fetchedLogs = await message.guild.fetchAuditLogs({
 		limit: 1,

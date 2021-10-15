@@ -9,7 +9,7 @@ module.exports = async (ban) => {
 	const modLogChannelID = db.get('loggingchannel_' + ban.guild.id);
 	const modLogChannel = ban.guild.channels.cache.get(modLogChannelID);
 
-	if (!modLogChannel) {return;}
+	if (!modLogChannel) return;
 
 	const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
 	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);

@@ -7,7 +7,7 @@ const config = require('../config.json');
 module.exports = async (oldemoji, newemoji) => {
 	const logChannel = getLogChannel(newemoji.guild, db);
 	const { client } = newemoji;
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
 	const embed = new MessageEmbed()
 		.setTitle('📝 Emoji Update')

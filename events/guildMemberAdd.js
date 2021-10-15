@@ -18,7 +18,7 @@ module.exports = async member => {
 		const { client } = member.guild;
 
 		// Send the message to a designated channel on a server:
-		if (!welcomeChannel) {return;}
+		if (!welcomeChannel) return;
 		const statuses = {
 			online: '#00ff5e',
 			dnd: '#bf000d',
@@ -48,7 +48,7 @@ module.exports = async member => {
 		});
 
 		getWelcomeChannel(member.guild, db)?.send({ files: [{ name: 'welcome-card.png', attachment: image }] });
-		if (!getLogChannel(member.guild, db)) {return;}
+		if (!getLogChannel(member.guild, db)) return;
 
 		const embed = new MessageEmbed()
 			.setAuthor('Member joined', 'https://cdn.discordapp.com/emojis/812013459298058260.png')

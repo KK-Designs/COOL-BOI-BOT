@@ -5,6 +5,9 @@ module.exports = async guild => {
 	);
 
 	return await channel?.send({
-		content: 'Hello and thanks for inviting me here! You can use `!help` to see all commands',
+		embeds: [{
+			color: 'GREEN',
+			description: '<:join:812013459298058260> Hello and thanks for inviting me here! You can use `!help` to see all commands',
+		}],
 	});
 };

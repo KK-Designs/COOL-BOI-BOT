@@ -25,13 +25,13 @@ module.exports = {
 	},
 	async executeSlash(interaction) {
 		const { client } = interaction;
-		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.author.id) ?? config.defaultPrefix;
+		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.user.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
 			.setTitle(`The bots prefix is ${guildPrefix}`)
 			.setColor(interaction.guild?.me.displayHexColor ?? color.discord)
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription('This command prefix is always `!` or a @mention')
-			.setFooter(interaction.member.user.username, interaction.member.user.displayAvatarURL({ dynamic: true }))
+			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		interaction.reply({ embeds: [embed] });

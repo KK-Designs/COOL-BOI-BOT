@@ -1,4 +1,6 @@
 const { MessageEmbed } = require('discord.js');
+const db = require('quick.db');
+const { bold, inlineCode } = require('@discordjs/builders');
 const statuses = {
 	online: '<:online:806215585415168040> Online',
 	dnd: '<:dnd:806215804773335120> Do not disturb',
@@ -35,7 +37,15 @@ module.exports = {
 		if (!member) {
 			return message.channel.send('Member not found');
 		}
+		const commands = db.fetch(`commands_${message.guild.id}_${message.author.id}`) ?? 0;
+		const messages = db.fetch(`messages_${message.guild.id}_${message.author.id}`) ?? 0;
 		const roles = member.roles.cache.map(role => role.toString());
+		let activity;
+		if (!member.presence?.activities[0]) {
+			activity = 'None';
+		} else {
+			activity = `${capitalizeFirstLetter(member.presence.activities[0].type.toLowerCase())} ${bold(`${member.presence.activities[0].name}`)}`;
+		}
 		let color = member.displayHexColor;
 		if (color === '#000000') {color = '#C0C0C0';}
 
@@ -44,24 +54,24 @@ module.exports = {
 			: Object.keys(allBadges).filter(b => member.user.flags.has(b)).map(b => allBadges[b]);
 
 		if (member.id === message.guild.ownerId) {badges.push('<:serverowner:885673359885606942>');}
-
 		const status = statuses[member.presence?.status ?? 'offline'];
 		const embed = new MessageEmbed()
-			.setTitle(`${member.user.username}`)
+			.setTitle(`${member.displayName}`)
 			.setColor(color)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.setImage(await member.user.bannerURL())
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
+			.addField('Messages sent', inlineCode(messages.toString()), true)
+			.addField('Commands ran:', inlineCode(commands.toString()), true)
 			.addField('Account Created', member.user.createdAt.toDateString(), true)
 			.addField('Joined Server', member.joinedAt.toDateString(), true)
 			.addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
 			.addField('Status: ', status, true)
+			.addField('Activity: ', activity, true)
 			.addField('Roles', roles.join(' **|** '), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
 			.setFooter(`Powered by the ${message.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
-
 		return await message.reply({ embeds: [embed] });
 	},
 	/**
@@ -76,7 +86,15 @@ module.exports = {
 		if (!member) {
 			return interaction.reply('Member not found');
 		}
+		const commands = db.fetch(`commands_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
+		const messages = db.fetch(`messages_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
 		const roles = member.roles.cache.map(role => role.toString());
+		let activity;
+		if (!member.presence?.activities[0]) {
+			activity = 'None';
+		} else {
+			activity = `${capitalizeFirstLetter(member.presence.activities[0].type.toLowerCase())} ${bold(`${member.presence.activities[0].name}`)}`;
+		}
 		let color = member.displayHexColor;
 		if (color === '#000000') {color = '#C0C0C0';}
 
@@ -88,21 +106,26 @@ module.exports = {
 
 		const status = statuses[member.presence?.status ?? 'offline'];
 		const embed = new MessageEmbed()
-			.setTitle(`${member.user.username}`)
+			.setTitle(`${member.displayName}`)
 			.setColor(color)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.setImage(await member.user.bannerURL())
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
+			.addField('Messages sent', inlineCode(messages.toString()), true)
+			.addField('Commands ran:', inlineCode(commands.toString()), true)
 			.addField('Account Created', member.user.createdAt.toDateString(), true)
 			.addField('Joined Server', member.joinedAt.toDateString(), true)
 			.addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
 			.addField('Status: ', status, true)
-			.addField('Roles', roles.join(' **|** '), true)
+			.addField('Activity: ', activity, true)
+			.addField('Roles', roles.join(` ${bold('|')} `), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
 			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
-
 		return await interaction.reply({ embeds: [embed] });
 	},
 };
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}

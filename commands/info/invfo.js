@@ -40,8 +40,6 @@ module.exports = {
 		}
 		const colors = await getColors(user.displayAvatarURL({ format: 'png' }));
 		const color = colors.map(c => c.hex())[0].toString();
-
-		console.log(colors.map(c => c.hex())[0].toString());
 		const inviteEmbed = new MessageEmbed()
 			.setColor(color)
 			.setTitle(invite.guild.name)

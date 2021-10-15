@@ -1,15 +1,16 @@
+const db = require('quick.db');
 /** @type {(...args: import("discord.js").ClientEvents["interactionCreate"]) => Promise<any>} */
 module.exports = async (interaction) => {
-	console.log('Interaction', Date.now() - interaction.createdTimestamp);
-	if (!interaction.isCommand()) {return;}
+	if (!interaction.isCommand()) return;
 
 	const { client } = interaction;
 	const command = client.commands.get(interaction.commandName);
 
-	if (!command?.executeSlash) {return;}
+	if (!command?.executeSlash) return;
 
 	try {
 		await command.executeSlash(interaction, client);
+		db.add(`commands_${interaction.guild.id}_${interaction.user.id}`, 1);
 	}
 	catch (e) {
 		console.error(e);

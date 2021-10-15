@@ -10,15 +10,15 @@ module.exports = async member => {
 	const welcomeChannel = getWelcomeChannel(guild, db);
 
 	// Do nothing if the channel wasn't found on this server
-	if (!welcomeChannel) {return;}
+	if (!welcomeChannel) return;
 
 	// Send the message, mentioning the member
 	welcomeChannel.send({ content: `${member.user.tag} just left the server  :c` });
 	const logChannel = getLogChannel(member.guild, db);
 
-	if (!logChannel) {return;}
+	if (!logChannel) return;
 
-	if (member.user.bot) {return;}
+	if (member.user.bot) return;
 
 	const embed = new MessageEmbed()
 		.setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
