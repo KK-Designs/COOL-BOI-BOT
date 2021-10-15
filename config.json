@@ -1,5 +1,6 @@
 {
   "defaultPrefix": "!",
   "webhookURL": "https://discord.com/api/webhooks/894057616173572107/K-WUekPK2ij7KfAm14SoMpJhOHvQ0FOQdKu6O6pJqscdPH7FevHkWapcNXVB3ofn27hI",
-  "webhookAvatarURL": "https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png"
+  "webhookAvatarURL": "https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png",
+  "guildId": "800597178602225725"
 }
