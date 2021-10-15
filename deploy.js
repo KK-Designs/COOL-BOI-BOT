@@ -7,6 +7,7 @@ const db = require('quick.db');
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } = require('@discordjs/builders');
 const { Routes } = require('discord-api-types/v9');
 const { REST } = require('@discordjs/rest');
+const config = require('./config.json');
 const rest = new REST({ version: '9' })
 	.setToken(process.env.BOT_TOKEN);
 const commands = [];
@@ -50,9 +51,11 @@ const main = async () => {
 	const app = (await rest.get(Routes.oauth2CurrentApplication()));
 
 	console.log(`Deploying ${commands.length} commands as Application "${app.name}" (${app.id})...`);
+	const route = process.env.NODE_ENV === 'production'
+		? Routes.applicationCommands(app.id)
+		: Routes.applicationGuildCommands(app.id, config.guildId);
 	await rest.put(
-		//  Routes.applicationCommands(app.id),
-		Routes.applicationGuildCommands(app.id, '800597178602225725'),
+		route,
 		{ body: commands },
 	);
 	console.log(`Successfully deployed ${commands.length} commands`);
@@ -62,7 +65,6 @@ function build(builder, options) {
 		switch (optionData.type) {
 		// Can't define choices
 		case 'Boolean':
-		case 'Channel':
 		case 'Mentionable':
 		case 'Role':
 		case 'User': {
@@ -73,6 +75,22 @@ function build(builder, options) {
 				.setName(name)
 				.setDescription(optionData.description)
 				.setRequired(required));
+		} break;
+		case 'Channel': {
+			assert(!(builder instanceof SlashCommandSubcommandGroupBuilder));
+			const required = optionData.required ?? true;
+
+			builder.addChannelOption(option => {
+				option
+					.setName(name)
+					.setDescription(optionData.description)
+					.setRequired(required);
+
+				// Waiting for @discordjs/builders PR 41 to merge
+				// optionData.channelTypes?.forEach(type => option.addChannelType(ChannelType[type]));
+
+				return option;
+			});
 		} break;
 			// Can define choices
 		case 'Integer':

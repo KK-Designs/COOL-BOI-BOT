@@ -29,6 +29,9 @@ module.exports = {
 			required: false,
 		},
 	},
+	/**
+   * @param {import("discord.js").Message} message
+   */
 	async execute(message, args, client) {
 		const member = args[0]
 			? message.mentions.members.first() || message.guild.members.cache.get(args[0])
@@ -75,19 +78,21 @@ module.exports = {
 		return await message.reply({ embeds: [embed] });
 	},
 	/**
-   * @param {CommandInteraction} interaction
+   * @param {import("discord.js").CommandInteraction} interaction
    * @param {import("discord.js").Client} client
    */
 	async executeSlash(interaction, client) {
-		/** @type {GuildMember} */
-		// eslint-disable-next-line no-extra-parens
-		const member = (interaction.options.getMember('user') ?? interaction.member);
-
+		/** @type {import("discord.js").User} */
+		const user = (interaction.options.getUser('user') ?? interaction.user);
+		const member = interaction.guild.members.resolve(user);
 		if (!member) {
 			return interaction.reply('Member not found');
 		}
 		const commands = db.fetch(`commands_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
 		const messages = db.fetch(`messages_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
+		// Force fetch to get banner
+		await user.fetch(true);
+
 		const roles = member.roles.cache.map(role => role.toString());
 		let activity;
 		if (!member.presence?.activities[0]) {
