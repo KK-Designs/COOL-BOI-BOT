@@ -12,11 +12,11 @@ module.exports = {
 		const sendError = require('../../error.js');
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue) {return message.reply({ content: 'There is nothing playing that I could skip for you.' });}
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could skip for you.' });}
 
 		const queue = message.client.queue.get(message.guild.id);
 
-		if (args[0] > queue.songs.length) {return message.channel.send({ content: `The queue has only ${queue.songs.length} songs long!` }).catch(console.error);}
+		if (args[0] > queue.songs.length) {return await message.channel.send({ content: `The queue has only ${queue.songs.length} songs long!` }).catch(console.error);}
 
 		queue.playing = true;
 		if (queue.loop) {

@@ -9,13 +9,13 @@ module.exports = {
 		message.channel.sendTyping();
 		request
 			.get('http://api.adviceslip.com/advice')
-			.end((err, res) => {
+			.end(async (err, res) => {
 				if (!err && res.status === 200) {
 					try {
 						JSON.parse(res.text);
 					}
 					catch (e) {
-						return message.reply({ content: 'An api error occurred.' });
+						return await message.reply({ content: 'An api error occurred.' });
 					}
 					const advice = JSON.parse(res.text);
 

@@ -39,7 +39,7 @@ module.exports = {
 				error = 'that\'s not a valid command!';
 			}
 
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription(`<:X_:807305490160943104> ${error}`),
@@ -48,7 +48,7 @@ module.exports = {
 		if (args[0].toLowerCase() === 'level') {
 			await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
 
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `),
@@ -83,7 +83,7 @@ module.exports = {
 				error = 'that\'s not a valid command!';
 			}
 
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription(`<:X_:807305490160943104> ${error}`),
@@ -92,7 +92,7 @@ module.exports = {
 		if (name.toLowerCase() === 'level') {
 			await db.set(`blockcmds_${interaction.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
 
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}. Please note: Since you disabled the \`level\` command you will not be able to recive the "You Leveled up!" message, however, messages will still be saved for later use. `),

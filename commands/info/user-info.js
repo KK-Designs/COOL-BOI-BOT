@@ -38,7 +38,7 @@ module.exports = {
 			: message.member;
 
 		if (!member) {
-			return message.channel.send('Member not found');
+			return await message.channel.send('Member not found');
 		}
 		const commands = db.fetch(`commands_${message.guild.id}_${message.author.id}`) ?? 0;
 		const messages = db.fetch(`messages_${message.guild.id}_${message.author.id}`) ?? 0;
@@ -86,7 +86,7 @@ module.exports = {
 		const user = (interaction.options.getUser('user') ?? interaction.user);
 		const member = interaction.guild.members.resolve(user);
 		if (!member) {
-			return interaction.reply('Member not found');
+			return await interaction.reply('Member not found');
 		}
 		const commands = db.fetch(`commands_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
 		const messages = db.fetch(`messages_${interaction.guild.id}_${interaction.user.id}`) ?? 0;

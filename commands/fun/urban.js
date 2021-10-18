@@ -29,7 +29,7 @@ module.exports = {
 		const { list } = await res.json();
 
 		if (!list.length) {
-			return message.reply({ content: `No results found for **${args.join(' ')}**.` });
+			return await message.reply({ content: `No results found for **${args.join(' ')}**.` });
 		}
 		const [answer] = list;
 		const embed = new MessageEmbed()

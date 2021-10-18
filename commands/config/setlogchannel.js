@@ -27,7 +27,7 @@ module.exports = {
 		const x = message.mentions.channels.first() || message.guild.channels.cache.find(channel => channel.name === args[0]) || message.guild.channels.cache.get(args[0]);
 
 		if (!args[0] && !x) {
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> An invalid argument was provided. The only 2 valid ones are `none` to reset configuration or `[channel]` to set a logging channel.'),
@@ -43,7 +43,7 @@ module.exports = {
 			return await db.delete(`loggingchannel_${message.guild.id}`);
 		}
 		if (!x) {
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> Please specify a valid channel.'),
@@ -75,7 +75,7 @@ module.exports = {
 			return await db.delete(`loggingchannel_${interaction.guild.id}`);
 		}
 		if (!x) {
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> Please specify a valid channel.'),

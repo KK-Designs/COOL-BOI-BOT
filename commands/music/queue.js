@@ -12,7 +12,7 @@ module.exports = {
 		const humanizeDuration = require('humanize-duration');
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue) {return message.reply({ content: 'There is nothing playing.' });}
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing.' });}
 
 		if (args[0]) {
 
@@ -35,7 +35,7 @@ module.exports = {
 					],
 				});
 
-				return message.client.queue.delete(message.guild.id);
+				return await message.client.queue.delete(message.guild.id);
 			}
 
 		}

@@ -29,6 +29,6 @@ module.exports = {
 		}
 	},
 	async executeSlash(interaction) {
-		interaction.reply({ content: '<:X_:807305490160943104> Slash commands are not supported on this command' });
+		await interaction.reply({ content: '<:X_:807305490160943104> Slash commands are not supported on this command' });
 	},
 };

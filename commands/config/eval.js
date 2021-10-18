@@ -19,7 +19,7 @@ module.exports = {
    */
 	async execute(message, args) {
 		console.log('Eval command executed.');
-		if (message.author.id !== process.env.OWNER_ID) {return message.channel.send('You try to use the eval command? Straight to jail.');}
+		if (message.author.id !== process.env.OWNER_ID) {return await message.channel.send('You try to use the eval command? Straight to jail.');}
 
 		try {
 			let evaled = await eval(args.join(' '));
@@ -35,7 +35,7 @@ module.exports = {
 	async executeSlash(interaction) {
 		const args = interaction.options.getString('statement', true);
 		console.log('Eval command executed.');
-		if (interaction.member.id !== process.env.OWNER_ID) {return interaction.reply('You try to use the eval command? Straight to jail.');}
+		if (interaction.member.id !== process.env.OWNER_ID) {return await interaction.reply('You try to use the eval command? Straight to jail.');}
 
 		try {
 			let evaled = await eval(args);

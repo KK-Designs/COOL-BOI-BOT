@@ -54,7 +54,7 @@ module.exports = {
 	},
 	async executeSlash(interaction) {
 		const difficulty = interaction.options.getString('difficulty', true);
-		if (!difficulties.includes(difficulty)) {return interaction.reply('Please provide a valid difficulty');}
+		if (!difficulties.includes(difficulty)) {return await interaction.reply('Please provide a valid difficulty');}
 		const user = interaction.options.getUser('user', true);
 		await interaction.deferReply();
 		const message = {

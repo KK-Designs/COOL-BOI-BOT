@@ -8,11 +8,11 @@ module.exports = {
 	async execute(message) {
 		const { channel } = message.member.voice;
 
-		if (!channel) {return message.reply({ content: 'You need to be in a voice channel to do this.' });}
+		if (!channel) {return await message.reply({ content: 'You need to be in a voice channel to do this.' });}
 
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue) {return message.reply({ content: 'There is nothing playing that I could stop for you.' });}
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could stop for you.' });}
 
 		serverQueue.songs = [];
 		try {

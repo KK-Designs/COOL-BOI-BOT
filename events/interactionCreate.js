@@ -6,7 +6,7 @@ module.exports = async (interaction) => {
 	const { client } = interaction;
 	const command = client.commands.get(interaction.commandName);
 
-	if (!command?.executeSlash) return;
+	if (!command?.executeSlash) return await interaction.reply('Unknown command');
 
 	try {
 		await command.executeSlash(interaction, client);

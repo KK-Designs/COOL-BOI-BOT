@@ -19,12 +19,12 @@ module.exports = {
 	async execute(message, args) {
 		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? '?';
 		if (!args[0]) {
-			return message.reply({ content: 'Please provide a word for me to define!' });
+			return await message.reply({ content: 'Please provide a word for me to define!' });
 		}
 		const result = await client.define(args[0]).catch(() => null);
 
 		if (!result?.definitions) {
-			return message.reply({ content: `Could not find definitions for "${args[0]}". Try using the \`${guildPrefix}urban\` command for slangs.` });
+			return await message.reply({ content: `Could not find definitions for "${args[0]}". Try using the \`${guildPrefix}urban\` command for slangs.` });
 		}
 		const embed = new MessageEmbed()
 			.setTitle(`Definition for "${result.word}"`)
@@ -44,7 +44,7 @@ module.exports = {
 		const result = await client.define(word).catch(() => null);
 
 		if (!result?.definitions) {
-			return interaction.reply({
+			return await interaction.reply({
 				content: `Could not find definitions for "${word}". Try using the \`${guildPrefix}urban\` command for slangs.`,
 			});
 		}

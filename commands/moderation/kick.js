@@ -27,7 +27,7 @@ module.exports = {
 		if (!user) {return sendError('Please provide a valid user for me to kick', message.channel);}
 
 		if (user.id === message.client.user.id) {
-			return message.reply({ content: 'You can\'t kick me!' });
+			return await message.reply({ content: 'You can\'t kick me!' });
 		}
 		let reason = args.slice(1).join(' ');
 		if (reason === '') {
@@ -86,7 +86,7 @@ module.exports = {
 		}
 		else {
 			// The mentioned user isn't in this guild
-			return message.reply({ content: 'That user isn\'t in this guild!' });
+			return await message.reply({ content: 'That user isn\'t in this guild!' });
 		}
 	},
 	async executeSlash(interaction) {
@@ -95,7 +95,7 @@ module.exports = {
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
 
 		if (member.id === interaction.client.user.id) {
-			return interaction.reply({ content: 'You can\'t kick me!' });
+			return await interaction.reply({ content: 'You can\'t kick me!' });
 		}
 		if (!member.user.bot) {
 			const kickembeddm = new MessageEmbed()

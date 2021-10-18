@@ -21,21 +21,21 @@ module.exports = {
 			required: false,
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		const guild = message.guild;
 		const guildPrefix = prefix.getPrefix(guild?.id ?? message.author.id) ?? config.defaultPrefix;
 
 		if (!args.length || args[0].toLowerCase() === 'disable' || args[0].toLowerCase() === 'none') {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
 
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
 			] });
 		}
 		else if (args[0].length > 3) {
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> I can\'t set the prefix to anything more than 3'),
@@ -59,14 +59,14 @@ module.exports = {
 		if (reset) {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
 
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
 			] });
 		}
 		else if (newPrefix.length > 3) {
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> I can\'t set the prefix to anything more than 3'),

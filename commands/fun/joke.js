@@ -29,7 +29,7 @@ module.exports = {
 				.setFooter(`ID: ${joke.id} | The ${message.client.user.username}`)
 				.setTimestamp();
 
-			return message.reply({ embeds: [embed] });
+			return await message.reply({ embeds: [embed] });
 		}
 		if (isNaN(id)) {
 			return await message.reply({ embeds: [
@@ -72,7 +72,7 @@ module.exports = {
 				.setFooter(`ID: ${joke.id} | The ${interaction.client.user.username}`)
 				.setTimestamp();
 
-			return interaction.editReply({ embeds: [embed] });
+			return await interaction.editReply({ embeds: [embed] });
 		} else if (id < 0 || id > 100) {
 			return await interaction.editReply({ embeds: [
 				new MessageEmbed()

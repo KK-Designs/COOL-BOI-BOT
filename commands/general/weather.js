@@ -49,7 +49,7 @@ module.exports = {
 		url.searchParams.set('appid', 'c1ba87d2a335656425a17e4395303046');
 		const res = await fetch(url);
 
-		if (!res.ok) {return interaction.reply(`HTTP Error ${res.status}: ${res.statusText}`);}
+		if (!res.ok) {return await interaction.reply(`HTTP Error ${res.status}: ${res.statusText}`);}
 
 		const body = await res.json();
 		const currentTemp = Math.ceil(body.main.temp);

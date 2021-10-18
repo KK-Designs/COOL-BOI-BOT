@@ -34,9 +34,9 @@ module.exports = {
 			description: 'The question to ask',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {
-			return message.reply({ content: 'Please ask me a question.' });
+			return await message.reply({ content: 'Please ask me a question.' });
 		}
 		message.channel.sendTyping();
 		const index = Math.floor(Math.random() * Math.floor(eightball.length));

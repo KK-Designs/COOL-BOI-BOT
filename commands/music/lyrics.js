@@ -12,7 +12,7 @@ module.exports = {
 
 		const queue = message.client.queue.get(message.guild.id);
 
-		if (!queue) {return message.reply({ content: 'There is nothing playing.' });}
+		if (!queue) {return await message.reply({ content: 'There is nothing playing.' });}
 
 		let lyrics;
 		const msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
@@ -43,7 +43,7 @@ module.exports = {
 
 		const queue = interaction.client.queue.get(interaction.guild.id);
 
-		if (!queue) {return interaction.reply({ content: 'There is nothing playing.' });}
+		if (!queue) {return await interaction.reply({ content: 'There is nothing playing.' });}
 
 		let lyrics;
 		try {

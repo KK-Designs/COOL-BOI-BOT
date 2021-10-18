@@ -108,7 +108,7 @@ module.exports = {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			}
 
-			return message.delete();
+			return await message.delete();
 			// message.channel.send('<:check:807305471282249738> Success! Giveaway rerolled!');
 		}
 		if (args[0]?.toLowerCase() === 'edit') {

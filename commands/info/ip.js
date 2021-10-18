@@ -14,18 +14,18 @@ module.exports = {
 		},
 	},
 	async execute(message, args) {
-		if (!args.length) {return message.reply({ content: 'I need your IPv4 to get your info' });}
+		if (!args.length) {return await message.reply({ content: 'I need your IPv4 to get your info' });}
 
 		if (message.guild) {
 			message.delete();
 
-			return message.reply({ content: 'if you want to expose you ip to everyone here do this in a dm with me 🙂' });
+			return await message.reply({ content: 'if you want to expose you ip to everyone here do this in a dm with me 🙂' });
 		}
 		const data = await fetch(`https://ipinfo.io/${args[0]}/geo`)
 			.then((res) => res.json());
 
 		if (data.error) {
-			return message.reply({ content: data.error.message });
+			return await message.reply({ content: data.error.message });
 		}
 		const ip = data.ip;
 		const embed = new MessageEmbed()

@@ -22,7 +22,7 @@ module.exports = {
 			: message.channel;
 
 		if (!channel) {
-			return message.reply({ content: 'please enter a valid channel.' });
+			return await message.reply({ content: 'please enter a valid channel.' });
 		}
 		const secondstoms = Math.floor(channel.rateLimitPerUser * 1000);
 		let slowmode = humanizeDuration(secondstoms);

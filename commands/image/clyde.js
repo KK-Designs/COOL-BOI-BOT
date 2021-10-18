@@ -22,7 +22,7 @@ module.exports = {
 		const user = message.mentions.users.first() ?? message.client.users.cache.get(args[0]) ?? message.author;
 
 		// Get message
-		if (!args[0]) {return message.reply('Please provide a message to clydify');}
+		if (!args[0]) {return await message.reply('Please provide a message to clydify');}
 
 		let clyde = message.cleanContent.slice(message.content.indexOf(args[0]), message.content.length);
 		if (clyde.length > 68) {clyde = clyde.slice(0, 65) + '...';}

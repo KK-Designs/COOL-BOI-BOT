@@ -31,7 +31,7 @@ module.exports = {
 			? message.mentions.members.first() ?? message.guild.members.cache.get(args[0])
 			: message.member;
 
-		if (member.user.bot) {return message.reply({ content: 'I don\'t track bots activity' });}
+		if (member.user.bot) {return await message.reply({ content: 'I don\'t track bots activity' });}
 		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
 			const levelfetch = await db.fetch(`level_${message.guild.id}_${member.user.id}`) ?? 1;
 			const totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
@@ -55,9 +55,7 @@ module.exports = {
 	 * @param {{ deferReply: () => any; options: { getMember: (arg0: string) => any; }; member: any; reply: (arg0: { content: string; }) => any; guild: { id: any; bannerURL: (arg0: { format: string; }) => any; }; editReply: (arg0: { files: Discord.MessageAttachment[]; }) => any; }} interaction
 	 */
 	async executeSlash(interaction) {
-		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(1);
 		const member = interaction.options.getMember('user') ?? interaction.member;
 
 		if (member.user.bot) {return await interaction.editReply({ content: 'I don\'t track bots activity' });}

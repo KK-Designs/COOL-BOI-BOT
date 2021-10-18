@@ -15,10 +15,10 @@ module.exports = {
 		if (!asciitext) {
 			return await message.reply({ content: 'You didn\'t give me the text! please use the command like so; `!ascii bacon`' });
 		}
-		figlet(asciitext, (err, data) => {
+		figlet(asciitext, async (err, data) => {
 			if (err) {
 				if (asciitext.length >= 2000) {
-					return message.reply({ content: 'I can\'t send messages longer than 2000 characters.' });
+					return await message.reply({ content: 'I can\'t send messages longer than 2000 characters.' });
 				}
 			}
 			message.reply({ content: `Here is your ascii text:\n\`\`\`${data}\`\`\`` });

@@ -27,7 +27,7 @@ module.exports = {
 				error = `There is no command with name or alias \`${commandName}\`, ${message.author}!`;
 			}
 
-			return message.reply({ content: error });
+			return await message.reply({ content: error });
 		}
 		const folderName = command.category;
 
@@ -59,7 +59,7 @@ module.exports = {
 				error = `There is no command with name or alias \`${commandName}\`, ${interaction.user}!`;
 			}
 
-			return interaction.reply({ content: error });
+			return await interaction.reply({ content: error });
 		}
 		const folderName = command.category;
 

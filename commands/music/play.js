@@ -19,17 +19,17 @@ module.exports = {
 	async execute(message, args) {
 		const sendError = require('../../error.js');
 
-		if (!args.length) {return message.reply({ content: 'Please provide a youtube URL for me to play, or just put the name of the song' });}
+		if (!args.length) {return await message.reply({ content: 'Please provide a youtube URL for me to play, or just put the name of the song' });}
 
 		const { channel } = message.member.voice;
 
-		if (!channel) {return message.reply({ content: 'You need to join a a voice channel to use this command.' });}
+		if (!channel) {return await message.reply({ content: 'You need to join a a voice channel to use this command.' });}
 
 		const permissions = channel.permissionsFor(message.client.user);
 
-		if (!permissions.has('CONNECT')) {return message.reply({ content: 'I cannot connect to your voice channel, make sure I have the proper permissions!' });}
+		if (!permissions.has('CONNECT')) {return await message.reply({ content: 'I cannot connect to your voice channel, make sure I have the proper permissions!' });}
 
-		if (!permissions.has('SPEAK')) {return message.reply({ content: 'I cannot speak in this voice channel, make sure I have the proper permissions!' });}
+		if (!permissions.has('SPEAK')) {return await message.reply({ content: 'I cannot speak in this voice channel, make sure I have the proper permissions!' });}
 
 		const searchString = args.join(' ');
 		const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
@@ -49,7 +49,7 @@ module.exports = {
 		else {
 			// message.reply('Please pass a valid youtube URL.');
 			const searched = await yts.search(searchString);
-			if (searched.videos.length === 0) {return message.reply({ content: 'Looks like i was unable to find the song on YouTube' });}
+			if (searched.videos.length === 0) {return await message.reply({ content: 'Looks like i was unable to find the song on YouTube' });}
 
 			const video = searched.videos[0];
 
@@ -66,7 +66,7 @@ module.exports = {
 
 		if (serverQueue) {
 			serverQueue.songs.push(songReq);
-			return message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
+			return await message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
 		}
 		const player = createAudioPlayer();
 		const queueConstruct = {
