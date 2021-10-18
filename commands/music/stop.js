@@ -24,7 +24,28 @@ module.exports = {
 			console.error(err);
 			serverQueue.destroy();
 
-			return message.client.queue.delete(message.guild.id);
+			return await message.client.queue.delete(message.guild.id);
+		}
+	},
+	async executeSlash(interaction) {
+		const { channel } = interaction.member.voice;
+
+		if (!channel) {return await interaction.reply({ content: 'You need to be in a voice channel to do this.' });}
+
+		const serverQueue = interaction.client.queue.get(interaction.guild.id);
+
+		if (!serverQueue) {return await interaction.reply({ content: 'There is nothing playing that I could stop for you.' });}
+
+		serverQueue.songs = [];
+		try {
+			serverQueue.connection.dispatcher.end('Stop command has been used!');
+			await interaction.channel.send({ content: 'Stopped playing songs' });
+			interaction.client.queue.delete(interaction.guild.id);
+		} catch (err) {
+			console.error(err);
+			serverQueue.destroy();
+
+			return await interaction.client.queue.delete(interaction.guild.id);
 		}
 	},
 };

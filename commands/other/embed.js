@@ -7,13 +7,28 @@ module.exports = {
 	cooldown: 3,
 	category: 'other',
 	clientPermissons: 'EMBED_LINKS',
-	options: {},
+	options: {
+		title: {
+			type: 'String',
+			description: 'The title of the embed',
+		},
+		description: {
+			type: 'String',
+			description: 'The description of the embed',
+			required: false,
+		},
+		footer: {
+			type: 'String',
+			description: 'The footer of the embed',
+			required: false,
+		},
+	},
 	async execute(message, args) {
 
 		const customargs = args.join(' ').split('|');
 
 		if (!args[0]) {
-			return message.reply({
+			return await message.reply({
 				content: 'You must provide a title. Feilds are seperated by `|` Like this: `!embed Test embed | embed description | embed footer` ',
 			});
 		}
@@ -25,5 +40,19 @@ module.exports = {
 			.setFooter(!customargs[2] ? '\u200B' : customargs[2]);
 
 		message.channel.send({ embeds: [customEmbed] });
+	},
+	async executeSlash(interaction) {
+		const title = interaction.options.getString('title', true);
+		const description = interaction.options.getString('description') ?? '\u200b';
+		const footer = interaction.options.getString('footer') ?? '\u200b';
+
+		const customEmbed = new MessageEmbed()
+			.setColor(color.discord)
+			.setTitle(title)
+			.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setDescription(description)
+			.setFooter(footer);
+
+		await interaction.reply({ embeds: [customEmbed] });
 	},
 };

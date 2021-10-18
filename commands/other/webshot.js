@@ -9,7 +9,12 @@ module.exports = {
 	cooldown: 3,
 	usage: '[url]',
 	category: 'other',
-	options: {},
+	options: {
+		url: {
+			type: 'String',
+			description: 'The url to screenshot',
+		},
+	},
 	async execute(message, args) {
 		const user = message.author;
 
@@ -36,5 +41,30 @@ module.exports = {
 			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }));
 
 		await message.reply({ embeds: [embed], files: [attachment] });
+	},
+	async executeSlash(interaction) {
+		const user = interaction.user;
+		const url = interaction.options.getString('url', true);
+		if (!url.match(regex)) {return await interaction.reply('Please provide a valid URL. Something like `https://google.com`');}
+		await interaction.deferReply();
+		const data = await new Promise((resolve, reject) => {
+			printscreen(url, {
+				viewport: {
+					width: 1650,
+					height: 1060,
+				},
+				format: 'png',
+				timeout: 5000,
+			}, (err, d) => (err ? reject(err) : resolve(d)));
+		});
+		const attachment = new MessageAttachment(data.filepath, 'img.png');
+		const embed = new MessageEmbed()
+			.setTitle(`Web shot for ${url}`)
+			.setImage(`attachment://${attachment.name}`)
+			.setAuthor(user.username)
+			.setColor(interaction.guild?.me.displayHexColor ?? color.discord)
+			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }));
+
+		await interaction.editReply({ embeds: [embed], files: [attachment] });
 	},
 };

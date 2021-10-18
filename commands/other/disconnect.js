@@ -7,6 +7,7 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 3,
 	category: 'other',
+	options: {},
 	async execute(message) {
 
 		const connection = getVoiceConnection(message.guild.id);
@@ -17,5 +18,14 @@ module.exports = {
 		connection.destroy();
 		await message.reply({ content: 'I have disconnected from the voice channel <:voice_channel:804772497684693052>' });
 
+	},
+	async executeSlash(interaction) {
+		const connection = getVoiceConnection(interaction.guild.id);
+
+		if (!connection) {
+			return await interaction.reply('Im not in a voice channel!');
+		}
+		connection.destroy();
+		await interaction.reply({ content: 'I have disconnected from the voice channel <:voice_channel:804772497684693052>' });
 	},
 };
