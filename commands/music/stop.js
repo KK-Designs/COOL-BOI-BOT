@@ -14,18 +14,8 @@ module.exports = {
 
 		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could stop for you.' });}
 
-		serverQueue.songs = [];
-		try {
-			serverQueue.connection.dispatcher.end('Stop command has been used!');
-			await message.channel.send({ content: 'Stopped playing songs' });
-			message.client.queue.delete(message.guild.id);
-		}
-		catch (err) {
-			console.error(err);
-			serverQueue.destroy();
-
-			return await message.client.queue.delete(message.guild.id);
-		}
+		serverQueue.destroy();
+		await message.channel.send({ content: 'Stopped playing songs' });
 	},
 	async executeSlash(interaction) {
 		const { channel } = interaction.member.voice;
@@ -36,16 +26,7 @@ module.exports = {
 
 		if (!serverQueue) {return await interaction.reply({ content: 'There is nothing playing that I could stop for you.' });}
 
-		serverQueue.songs = [];
-		try {
-			serverQueue.connection.dispatcher.end('Stop command has been used!');
-			await interaction.channel.send({ content: 'Stopped playing songs' });
-			interaction.client.queue.delete(interaction.guild.id);
-		} catch (err) {
-			console.error(err);
-			serverQueue.destroy();
-
-			return await interaction.client.queue.delete(interaction.guild.id);
-		}
+		serverQueue.destroy();
+		await interaction.reply({ content: 'Stopped playing songs' });
 	},
 };
