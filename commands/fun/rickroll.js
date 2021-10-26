@@ -4,13 +4,11 @@ const {
 	entersState,
 	getVoiceConnection,
 	joinVoiceChannel,
-
 	AudioPlayerStatus,
 	NoSubscriberBehavior,
 	VoiceConnectionStatus,
 } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
-const subscriptions = new Set();
+const pdl = require('play-dl');
 module.exports = {
 	name: 'rickroll',
 	description: 'Rickroll the voice channel you\'re in! <a:rickroll:805174355797082132>',
@@ -46,12 +44,18 @@ module.exports = {
 			return await interaction.reply({ content: 'You need to join a voice channel to use this command.' });
 		}
 		await interaction.deferReply({ ephemeral: true });
-		const { connection } = await getOrCreateConnection(interaction.member.voice.channel);
+		const res = await getOrCreateConnection(interaction.member.voice.channel);
 
-		if (!connection) {return await interaction.editReply('VC Error: Connection Refused');}
+		if (!res.connection) {return await interaction.editReply('VC Error: Connection Refused');}
 
-		if (connection.joinConfig.channelId !== interaction.member.voice.channelId) {return await interaction.editReply('I\'m still playing music in another channel');}
+		if (res.connection.joinConfig.channelId !== interaction.member.voice.channelId) {return await interaction.editReply('I\'m still playing music in another channel');}
 
+		if (res.player?.state.status === AudioPlayerStatus.Playing) {return await interaction.editReply('It\'s rude to interrupt someone\'s music.');}
+
+		const player = makePlayer();
+
+		res.connection.subscribe(player);
+		await entersState(player, AudioPlayerStatus.Playing, 20_000);
 		await interaction.editReply('Success');
 	},
 };
@@ -84,16 +88,18 @@ async function getOrCreateConnection(channel) {
 	};
 }
 function makePlayer() {
+	const subscriptions = new Set();
 	const player = createAudioPlayer({
 		behaviors: {
 			noSubscriber: NoSubscriberBehavior.Stop,
 		},
 	})
-		.on('subscribe', subscription => {
+		.on('subscribe', async subscription => {
 			subscriptions.add(subscription);
 			if (player.state.status !== AudioPlayerStatus.Idle) return;
 
-			const resource = createAudioResource(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'));
+			const output = await pdl.stream('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+			const resource = createAudioResource(output.stream, { type: output.type });
 
 			player.play(resource);
 		}).on('unsubscribe', subscription => {

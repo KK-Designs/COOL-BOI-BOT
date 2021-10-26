@@ -1,10 +1,8 @@
 const assert = require('assert/strict');
 const { Util } = require('discord.js');
 const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnection } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
 const sendError = require('../../error.js');
-// Use ytdl-core-discord instead
-// const ytdl = require('ytdl-core-discord');
+const pdl = require('play-dl');
 const yts = require('yt-search');
 module.exports = {
 	name: 'play',
@@ -42,14 +40,14 @@ module.exports = {
 		const regex = new RegExp(videoPattern);
 		let songReq;
 		if (args[0].match(regex)) {
-			const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
+			const songInfo = await pdl.video_info(searchString.replace(/<(.+)>/g, '$1'));
 
 			songReq = {
-				id: songInfo.videoDetails.videoId,
-				title: Util.escapeMarkdown(songInfo.videoDetails.title),
-				duration: +songInfo.videoDetails.lengthSeconds,
-				author: songInfo.videoDetails.ownerChannelName,
-				url: songInfo.videoDetails.video_url,
+				id: songInfo.video_details.id,
+				title: Util.escapeMarkdown(songInfo.video_details.title),
+				duration: +songInfo.video_details.durationInSec,
+				author: songInfo.video_details.channel.name,
+				url: songInfo.video_details.url,
 			};
 		}
 		else {
@@ -76,23 +74,6 @@ module.exports = {
 		const player = createAudioPlayer();
 		const queueConstruct = new GuildQueue({ client: message.client, textChannel: message.channel, guildId: message.guildId });
 
-		player.on(AudioPlayerStatus.Idle, async () => {
-			if (queueConstruct.loop === true) {
-				queueConstruct.songs.push(queueConstruct.songs.shift());
-			}
-			else {
-				queueConstruct.songs.shift();
-			}
-			if (queueConstruct.songs[0]) {return void await queueConstruct.playNext();}
-
-			queueConstruct.destroy();
-			message.client.queue.delete(message.guild.id);
-		}).on('error', error => {
-			console.error(error);
-
-
-			return sendError(`<:no:803069123918823454> An error occurred while playing music: ${error}`, message.channel);
-		});
 		message.client.queue.set(message.guild.id, queueConstruct);
 		queueConstruct.songs.push(songReq);
 		if (message.guild.me.voice.channelId) {
@@ -101,7 +82,7 @@ module.exports = {
 			connection.subscribe(player);
 			queueConstruct.setConnection(connection);
 			await queueConstruct.playNext();
-			return;
+			return await message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
 		}
 		try {
 			await queueConstruct.connect(channel, player);
@@ -129,14 +110,14 @@ module.exports = {
 		const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
 		let songReq;
 		if (videoPattern.test(searchString)) {
-			const songInfo = await ytdl.getInfo(searchString.replace(/<(.+)>/g, '$1'));
+			const songInfo = await pdl.video_info(searchString.replace(/<(.+)>/g, '$1'));
 
 			songReq = {
-				id: songInfo.videoDetails.videoId,
-				title: Util.escapeMarkdown(songInfo.videoDetails.title),
-				duration: +songInfo.videoDetails.lengthSeconds,
-				author: songInfo.videoDetails.ownerChannelName,
-				url: songInfo.videoDetails.video_url,
+				id: songInfo.video_details.id,
+				title: Util.escapeMarkdown(songInfo.video_details.title),
+				duration: +songInfo.video_details.durationInSec,
+				author: songInfo.video_details.channel.name,
+				url: songInfo.video_details.url,
 			};
 		}
 		else {
@@ -175,8 +156,9 @@ module.exports = {
 			connection.subscribe(player);
 			queueConstruct.setConnection(connection);
 			await queueConstruct.playNext();
-			return;
+			return await interaction.editReply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
 		}
+		await interaction.deferReply({ ephemeral: true });
 		try {
 			await queueConstruct.connect(channel, player);
 			await queueConstruct.playNext();
@@ -185,8 +167,9 @@ module.exports = {
 			console.error(`Error: ${error}`);
 			queueConstruct.destroy();
 
-			return await interaction.reply(`<:no:803069123918823454> I could not join the voice channel: ${error}`);
+			return await interaction.editReply(`<:no:803069123918823454> I could not join the voice channel: ${error}`);
 		}
+		await interaction.editReply('Successfully started playing music');
 	},
 };
 
@@ -253,8 +236,8 @@ class GuildQueue {
 	}
 	async play(song) {
 		console.log('Now playing %s (%s)', song.title, song.url);
-		const stream = ytdl(song.url, { filter: 'audioonly', highWaterMark: 32 });
-		const resource = createAudioResource(stream, { inlineVolume: true });
+		const output = await pdl.stream(song.url);
+		const resource = createAudioResource(output.stream, { type: output.type, inlineVolume: true });
 
 		resource.volume.setVolumeLogarithmic(this.volume / 100);
 		this.player.play(resource);
@@ -283,7 +266,6 @@ class GuildQueue {
 		});
 		connection.on(VoiceConnectionStatus.Destroyed, () => {
 			console.log('Connection destroyed');
-			console.log(new Error().stack.replaceAll(process.cwd(), '.'));
 			this.client.queue.delete(this.id);
 		});
 		connection.on('error', error => {
