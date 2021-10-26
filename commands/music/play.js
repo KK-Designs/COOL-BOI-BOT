@@ -254,14 +254,9 @@ class GuildQueue {
 	async play(song) {
 		console.log('Now playing %s (%s)', song.title, song.url);
 		const stream = ytdl(song.url, { filter: 'audioonly', highWaterMark: 32 });
-		stream.on('aborted', async arg => {
-			console.log('Abort was called', arg);
-
-			await this.textChannel.send('Stream was aborted');
-		});
 		const resource = createAudioResource(stream, { inlineVolume: true });
 
-		// resource.volume.setVolumeLogarithmic(this.volume / 100);
+		resource.volume.setVolumeLogarithmic(this.volume / 100);
 		this.player.play(resource);
 
 		await this.textChannel.send({ content: `<:music:813204224456261632> Start playing: **${song.title}**` });
