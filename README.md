@@ -2,7 +2,7 @@
 
 ---
 
-A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands! Built to provide a fun space for your Discord server.
+A multi-purpose, music, logging, moderation, and fun bot with almost 100 commands! Built to provide a fun space for your Discord server.
 
 ---
 
