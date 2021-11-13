@@ -40,7 +40,7 @@ module.exports = {
 			.addField(':arrow_right: Category', channel.parent ? channel.parent.name : 'None', true)
 			.addField(':arrow_right: Topic', channel.topic || 'None', true);
 
-		message.reply({ embeds: [channelEmbed] });
+		await message.reply({ embeds: [channelEmbed] });
 	},
 	async executeSlash(interaction) {
 		const channel = interaction.options.getChannel('channel') ?? interaction.channel;

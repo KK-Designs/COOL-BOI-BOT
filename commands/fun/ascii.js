@@ -21,7 +21,7 @@ module.exports = {
 					return await message.reply({ content: 'I can\'t send messages longer than 2000 characters.' });
 				}
 			}
-			message.reply({ content: `Here is your ascii text:\n\`\`\`${data}\`\`\`` });
+			await message.reply({ content: `Here is your ascii text:\n\`\`\`${data}\`\`\`` });
 		});
 	},
 	async executeSlash(interaction) {

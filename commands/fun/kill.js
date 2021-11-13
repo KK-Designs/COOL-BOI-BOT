@@ -22,14 +22,14 @@ module.exports = {
 			description: 'The user to kill',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		const user = message.mentions.users.first() ?? message.client.users.cache.get(args[0]) ?? message.author;
 		const index = Math.floor(Math.random() * Math.floor(killnotes.length));
 		const note = killnotes[index]
 			.replaceAll('{{user}}', `${user}`)
 			.replaceAll('{{author}}', `${message.author}`);
 
-		message.channel.send({ content: `${user} ${note}` });
+		await message.reply({ content: `${user} ${note}` });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.options.getUser('user', true);

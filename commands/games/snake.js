@@ -24,7 +24,7 @@ module.exports = {
 	cooldown: 5,
 	category: 'games',
 	options: {},
-	execute(message) {
+	async execute(message) {
 		new Snake({
 			...gameOptions,
 			message: message,

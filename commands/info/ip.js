@@ -55,7 +55,7 @@ module.exports = {
 				.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
 				.setTimestamp();
 		}
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const ipReq = interaction.options.getString('ip');

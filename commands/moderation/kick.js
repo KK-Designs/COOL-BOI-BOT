@@ -82,7 +82,7 @@ module.exports = {
 				.setFooter('Kicked at:');
 
 			// We let the message author know we were able to kick the person
-			message.channel.send({ embeds: [kickembed] });
+			await message.reply({ embeds: [kickembed] });
 		}
 		else {
 			// The mentioned user isn't in this guild

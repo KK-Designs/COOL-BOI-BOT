@@ -41,7 +41,7 @@ module.exports = {
 			] });
 		}
 		if (args[0].toLowerCase() === 'none' || args[0].toLowerCase() === 'disable') {
-			message.reply({ embeds: [
+			await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
@@ -62,7 +62,7 @@ module.exports = {
 		});
 
 		console.log(`Created webhook ${JSON.stringify(webhook)}`);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),
@@ -72,7 +72,7 @@ module.exports = {
 		const sub = interaction.options.getSubcommand(true);
 
 		if (sub === 'reset') {
-			interaction.reply({ embeds: [
+			await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
@@ -95,7 +95,7 @@ module.exports = {
 		});
 
 		console.log(`Created webhook ${JSON.stringify(webhook)}`);
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),

@@ -18,23 +18,23 @@ module.exports = {
    * @returns
    */
 	async execute(message, args) {
-		console.log('Eval command executed.');
-		if (message.author.id !== process.env.OWNER_ID) {return await message.channel.send('You try to use the eval command? Straight to jail.');}
+		console.log('Eval command async executed.');
+		if (message.author.id !== process.env.OWNER_ID) {return await message.reply('You try to use the eval command? Straight to jail.');}
 
 		try {
 			let evaled = await eval(args.join(' '));
 			if (typeof evaled !== 'string') {evaled = require('util').inspect(evaled);}
 
-			await message.channel.send({ content: code(evaled.slice(0, 1990), 'js') });
+			await message.reply({ content: code(evaled.slice(0, 1990), 'js') });
 		}
 		catch (err) {
 			console.log(err);
-			await message.channel.send(`\`ERROR\` ${code(err)}`);
+			await message.reply(`\`ERROR\` ${code(err)}`);
 		}
 	},
 	async executeSlash(interaction) {
 		const args = interaction.options.getString('statement', true);
-		console.log('Eval command executed.');
+		console.log('Eval command async executed.');
 		if (interaction.member.id !== process.env.OWNER_ID) {return await interaction.reply('You try to use the eval command? Straight to jail.');}
 
 		try {

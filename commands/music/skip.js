@@ -15,7 +15,7 @@ module.exports = {
 		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could skip for you.' });}
 
 		serverQueue.player.stop();
-		message.reply({ content: 'Skiped to the next song in queue!' });
+		await message.reply({ content: 'Skiped to the next song in queue!' });
 	},
 	async executeSlash(interaction) {
 		const { channel } = interaction.member.voice;

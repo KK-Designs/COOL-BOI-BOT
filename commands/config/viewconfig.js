@@ -10,7 +10,7 @@ module.exports = {
 	category: 'config',
 	aliases: ['configuration'],
 	options: {},
-	execute(message) {
+	async execute(message) {
 		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
 			.setTitle(`${message.guild.name} config`)
@@ -24,7 +24,7 @@ module.exports = {
 			.setFooter(message.guild.name, message.guild.iconURL())
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.user.id) ?? config.defaultPrefix;
@@ -40,6 +40,6 @@ module.exports = {
 			.setFooter(interaction.guild.name, interaction.guild.iconURL())
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
-		interaction.reply({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed] });
 	},
 };

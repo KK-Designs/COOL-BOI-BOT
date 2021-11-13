@@ -36,11 +36,11 @@ module.exports = {
 			const newCommand = require(`../${folderName}/${command.name}.js`);
 
 			message.client.commands.set(newCommand.name, newCommand);
-			message.reply({ content: `Command \`${command.name}\` was reloaded!` });
+			await message.reply({ content: `Command \`${command.name}\` was reloaded!` });
 		}
 		catch (error) {
 			console.error(error);
-			message.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
+			await message.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}
 	},
 	async executeSlash(interaction) {
@@ -68,11 +68,11 @@ module.exports = {
 			const newCommand = require(`../${folderName}/${command.name}.js`);
 
 			client.commands.set(newCommand.name, newCommand);
-			interaction.reply({ content: `Command \`${command.name}\` was reloaded!` });
+			await interaction.reply({ content: `Command \`${command.name}\` was reloaded!` });
 		}
 		catch (error) {
 			console.error(error);
-			interaction.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
+			await interaction.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}
 	},
 };

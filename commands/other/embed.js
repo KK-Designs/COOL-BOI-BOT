@@ -39,7 +39,7 @@ module.exports = {
 			.setDescription(!customargs[1] ? '\u200B' : customargs[1])
 			.setFooter(!customargs[2] ? '\u200B' : customargs[2]);
 
-		message.channel.send({ embeds: [customEmbed] });
+		await message.reply({ embeds: [customEmbed] });
 	},
 	async executeSlash(interaction) {
 		const title = interaction.options.getString('title', true);

@@ -15,7 +15,7 @@ module.exports = {
 		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could stop for you.' });}
 
 		serverQueue.destroy();
-		await message.channel.send({ content: 'Stopped playing songs' });
+		await message.reply({ content: 'Stopped playing songs' });
 	},
 	async executeSlash(interaction) {
 		const { channel } = interaction.member.voice;

@@ -41,6 +41,6 @@ module.exports = {
 			.setTimestamp()
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 };

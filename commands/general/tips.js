@@ -14,10 +14,10 @@ module.exports = {
 	category: 'general',
 	cooldown: 1.5,
 	options: {},
-	execute(message) {
+	async execute(message) {
 		const tip = Math.floor(Math.random() * Math.floor(tipslist.length));
 
-		message.channel.send({ content: `${tipslist[tip]}` });
+		await message.reply({ content: `${tipslist[tip]}` });
 	},
 	async executeSlash(interaction) {
 		const index = Math.floor(Math.random() * tipslist.length);

@@ -19,7 +19,7 @@ module.exports = {
 	cooldown: 5,
 	category: 'games',
 	options: {},
-	execute(message) {
+	async execute(message) {
 		new GuessThePokemon({
 			...gameOptions,
 			message: message,

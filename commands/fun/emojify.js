@@ -36,7 +36,7 @@ module.exports = {
 			description: 'The text to emojify',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {
 			return sendError('Please provide text for me to emojify (i.e. `!emojify hello`)', message.channel);
 		}
@@ -60,7 +60,7 @@ module.exports = {
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? color.discord);
 
-		message.reply({ embeds: [emojiembed] });
+		await message.reply({ embeds: [emojiembed] });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.user;

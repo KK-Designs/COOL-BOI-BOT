@@ -7,10 +7,10 @@ module.exports = {
 	async execute(message) {
 		const random = Math.floor(Math.random() * Math.floor(2));
 		if (random === 0) {
-			message.reply({ content: 'I flipped heads!' });
+			await message.reply({ content: 'I flipped heads!' });
 		}
 		else {
-			message.reply({ content: 'I flipped tails!' });
+			await message.reply({ content: 'I flipped tails!' });
 		}
 	},
 	async executeSlash(interaction) {

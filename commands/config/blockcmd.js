@@ -23,7 +23,7 @@ module.exports = {
 		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
 		if (args[0].toLowerCase() === 'clear' || args[0].toLowerCase() === 'none') {
-			message.reply({ embeds: [
+			await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Unblocked all commands'),
@@ -55,7 +55,7 @@ module.exports = {
 			] });
 		}
 		await db.set(`blockcmds_${message.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}`),
@@ -67,7 +67,7 @@ module.exports = {
 		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
 		if (name.toLowerCase() === 'clear' || name.toLowerCase() === 'none') {
-			interaction.reply({ embeds: [
+			await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Unblocked all commands'),
@@ -99,7 +99,7 @@ module.exports = {
 			] });
 		}
 		await db.set(`blockcmds_${interaction.guild.id}`, [command.name, command.aliases ? command.aliases : '']);
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly blocked the command ${command.name}`),

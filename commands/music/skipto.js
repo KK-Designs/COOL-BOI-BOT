@@ -21,7 +21,7 @@ module.exports = {
 
 		const queue = message.client.queue.get(message.guild.id);
 
-		if (args[0] > queue.songs.length) {return await message.channel.send({ content: `The queue has only ${queue.songs.length} songs long!` }).catch(console.error);}
+		if (args[0] > queue.songs.length) {return await message.reply({ content: `The queue has only ${queue.songs.length} songs long!` }).catch(console.error);}
 
 		queue.playing = true;
 		if (queue.loop) {

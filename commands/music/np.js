@@ -12,7 +12,7 @@ module.exports = {
 	async execute(message) {
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue) {return await message.channel.send('There is nothing playing.');}
+		if (!serverQueue) {return await message.reply('There is nothing playing.');}
 
 		const currentSong = serverQueue.songs[0];
 		const currentDuration = Math.round(serverQueue.player.state.resource.playbackDuration / 1000);

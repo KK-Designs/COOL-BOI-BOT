@@ -35,7 +35,7 @@ module.exports = {
 
 			if (args[0].toLowerCase() === 'raw_json') {
 				message.client.queue.delete(message.guild.id);
-				message.reply({
+				await message.reply({
 					embeds: [
 						new MessageEmbed()
 							.setColor('ORANGE')
@@ -44,7 +44,7 @@ module.exports = {
 				});
 			}
 			if (args[0].toLowerCase() === 'clear') {
-				message.reply({
+				await message.reply({
 					embeds: [
 						new MessageEmbed()
 							.setColor('GREEN')
@@ -67,7 +67,7 @@ module.exports = {
 		if (embed.description.length >= 4096) {
 			embed.description = `${embed.description.substr(0, 4093)}...`;
 		}
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const serverQueue = interaction.client.queue.get(interaction.guild.id);

@@ -73,7 +73,7 @@ module.exports = {
 			.setFooter('Banned at:');
 
 		// We let the message author know we were able to ban the person
-		message.channel.send({ embeds: [banembed] });
+		await message.reply({ embeds: [banembed] });
 	},
 	async executeSlash(interaction) {
 		const member = interaction.options.getMember('user', true);

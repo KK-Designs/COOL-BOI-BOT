@@ -4,6 +4,7 @@ const {
 	entersState,
 	getVoiceConnection,
 	joinVoiceChannel,
+	AudioPlayer,
 	AudioPlayerStatus,
 	NoSubscriberBehavior,
 	VoiceConnectionStatus,
@@ -38,7 +39,7 @@ module.exports = {
 	async executeSlash(interaction) {
 		// Only try to join the sender's voice channel if they are in one themselves
 		// if (!interaction.client.options.intents.has("GUILD_VOICE_STATES"))
-		// return await interaction.reply("I'm missing the Guild Voice States intent");
+		// return await message.reply("I'm missing the Guild Voice States intent");
 
 		if (!interaction.member?.voice.channelId) {
 			return await interaction.reply({ content: 'You need to join a voice channel to use this command.' });
@@ -99,7 +100,7 @@ function makePlayer() {
 			if (player.state.status !== AudioPlayerStatus.Idle) return;
 
 			const output = await pdl.stream('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-			const resource = createAudioResource(output.stream, { type: output.type });
+			const resource = createAudioResource(output.stream, { inputType: output.type });
 
 			player.play(resource);
 		}).on('unsubscribe', subscription => {

@@ -40,7 +40,7 @@ module.exports = {
 		}
 
 		if (args[0].toLowerCase() === 'none' || args[0].toLowerCase() === 'disable') {
-			message.reply({ embeds: [
+			await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging members'),
@@ -57,7 +57,7 @@ module.exports = {
 		}
 
 		await db.set(`welcomechannel_${message.guild.id}`, x.id);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set welcome channel to ${x}`),
@@ -67,7 +67,7 @@ module.exports = {
 		const sub = interaction.options.getSubcommand(true);
 
 		if (sub === 'reset') {
-			interaction.reply({ embeds: [
+			await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging members'),
@@ -86,7 +86,7 @@ module.exports = {
 		}
 		await db.set(`welcomechannel_${interaction.guild.id}`, x.id);
 
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set welcome channel to ${x}`),

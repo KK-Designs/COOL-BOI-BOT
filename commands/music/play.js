@@ -85,7 +85,7 @@ module.exports = {
 		}
 	},
 	/**
-   * @param {import("discord.js").CommandInteraction & import("discord.js").BaseGuildCommandInteraction<"cached"> & { client: { queue: import("discord.js").Collection<string, GuildQueue> }, channel: import("discord.js").TextChannel } } interaction
+   * @param {import("discord.js").CommandInteraction<"cached"> & { client: { queue: import("discord.js").Collection<string, GuildQueue> }, channel: import("discord.js").TextChannel } } interaction
    */
 	async executeSlash(interaction) {
 		const { channel } = interaction.member.voice;

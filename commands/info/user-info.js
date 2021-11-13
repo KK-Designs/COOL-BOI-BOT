@@ -38,7 +38,7 @@ module.exports = {
 			: message.member;
 
 		if (!member) {
-			return await message.channel.send('Member not found');
+			return await message.reply('Member not found');
 		}
 		const commands = db.fetch(`commands_${message.guild.id}_${message.author.id}`) ?? 0;
 		const messages = db.fetch(`messages_${message.guild.id}_${message.author.id}`) ?? 0;
@@ -127,7 +127,7 @@ module.exports = {
 			.addField('Badges: ', badges.join(' ') || 'None', true)
 			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
-		return await interaction.reply({ embeds: [embed] });
+		return await messinteractionage.reply({ embeds: [embed] });
 	},
 };
 

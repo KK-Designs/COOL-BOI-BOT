@@ -21,7 +21,7 @@ module.exports = {
 				.setColor(args[0])
 				.setImage('attachment://color.png')
 				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			message.reply({ embeds: [ embed ], files: [ attachment ] });
+			await message.reply({ embeds: [ embed ], files: [ attachment ] });
 		}
 		if (!args[0]) {
 			const ranColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
@@ -32,7 +32,7 @@ module.exports = {
 				.setColor(ranColor)
 				.setImage('attachment://color.png')
 				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			message.reply({ embeds: [ embed ], files: [ attachment ] });
+			await message.reply({ embeds: [ embed ], files: [ attachment ] });
 		}
 	},
 	async executeSlash(interaction, client) {
@@ -48,7 +48,7 @@ module.exports = {
 				.setColor(args)
 				.setImage('attachment://color.png')
 				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
+			await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
 		}
 		if (!args) {
 			const ranColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
@@ -59,7 +59,7 @@ module.exports = {
 				.setColor(ranColor)
 				.setImage('attachment://color.png')
 				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
+			await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
 		}
 	},
 };

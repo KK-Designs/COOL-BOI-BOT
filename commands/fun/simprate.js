@@ -30,7 +30,7 @@ module.exports = {
 		};
 		const secretChance = chancify(chance, 1 / 10);
 		secretChance();
-		await message.channel.send({ content: `${user}'s simprate is ${simprate}%` });
+		await message.reply({ content: `${user}'s simprate is ${simprate}%` });
 	},
 	async executeSlash(interaction, client) {
 		const user = interaction.options.getUser('user');

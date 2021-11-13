@@ -1,3 +1,4 @@
+const { setTimeout: delay } = require('timers/promises');
 const request = require('node-superfetch');
 module.exports = {
 	name: 'advice',
@@ -5,8 +6,8 @@ module.exports = {
 	cooldown: 1,
 	category: 'fun',
 	options: {},
-	execute(message) {
-		message.channel.sendTyping();
+	async execute(message) {
+		await message.replyTyping();
 		request
 			.get('http://api.adviceslip.com/advice')
 			.end(async (err, res) => {
@@ -19,12 +20,11 @@ module.exports = {
 					}
 					const advice = JSON.parse(res.text);
 
-					setTimeout(() => {
-						message.reply({ content: `📜  "${advice.slip.advice}"` });
-					}, 750);
+					await delay(750);
+					await message.reply({ content: `📜  "${advice.slip.advice}"` });
 				}
 				else {
-					message.reply({ content: `Opps, well this is an error. If this continues dm <@765686109073440808>. \n \nSpeficic error: ${err}` });
+					await message.reply({ content: `Opps, well this is an error. If this continues dm <@765686109073440808>. \n \nSpeficic error: ${err}` });
 					console.error(`REST call failed: ${err}, status code: ${res.status}`);
 				}
 			});
@@ -36,9 +36,8 @@ module.exports = {
 
 		const advice = JSON.parse(res.body.toString());
 
-		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(750);
+		await delay(750);
 		await interaction.editReply({
 			content: `📜  "${advice.slip.advice}"`,
 		});

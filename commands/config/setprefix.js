@@ -42,7 +42,7 @@ module.exports = {
 			] });
 		}
 		prefix.setPrefix(args[0], guild.id);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '${message.client.user} prefix'*`),
@@ -73,7 +73,7 @@ module.exports = {
 			] });
 		}
 		prefix.setPrefix(newPrefix, guild.id);
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${newPrefix}\n\n *you can check the new prefix by running '${interaction.client.user} prefix'*`),

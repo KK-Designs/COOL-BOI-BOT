@@ -28,7 +28,7 @@ module.exports = {
 			description: 'The user you wan\'t to challenge',
 		},
 	},
-	execute(message) {
+	async execute(message) {
 		new Connect4({
 			...gameOptions,
 			message: message,
