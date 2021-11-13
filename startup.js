@@ -38,38 +38,30 @@ module.exports = async (client) => {
 	const totalBootTime = (timeSlashCommandsMS + timeCommandsMS + timeEventsMS);
 	if (timeCommandsMS <= 2500) {
 		commandColor = chalk.greenBright;
-	}
-	else if (timeCommandsMS >= 5000 && timeCommandsMS <= 10000) {
+	} else if (timeCommandsMS <= 10000) {
 		commandColor = chalk.yellowBright;
-	}
-	else if (timeCommandsMS >= 10000) {
+	} else {
 		commandColor = chalk.redBright;
 	}
 	if (timeEventsMS <= 2500) {
 		eventColor = chalk.greenBright;
-	}
-	else if (timeEventsMS >= 5000 && timeEventsMS <= 10000) {
+	} else if (timeEventsMS <= 10000) {
 		eventColor = chalk.yellowBright;
-	}
-	else if (timeEventsMS >= 10000) {
+	} else {
 		eventColor = chalk.redBright;
 	}
 	if (timeSlashCommandsMS <= 2500) {
 		slashCommandsColor = chalk.greenBright;
-	}
-	else if (timeSlashCommandsMS >= 5000 && timeSlashCommandsMS <= 10000) {
+	} else if (timeSlashCommandsMS <= 10000) {
 		slashCommandsColor = chalk.yellowBright;
-	}
-	else if (timeSlashCommandsMS >= 10000) {
+	} else {
 		slashCommandsColor = chalk.redBright;
 	}
 	if (totalBootTime <= 2500) {
 		totalColor = chalk.greenBright;
-	}
-	else if (totalBootTime >= 5000 && totalBootTime <= 20000) {
+	} else if (totalBootTime <= 20000) {
 		totalColor = chalk.yellowBright;
-	}
-	else if (totalBootTime >= 20000) {
+	} else {
 		totalColor = chalk.redBright;
 	}
 	client.commands.forEach(command => {
