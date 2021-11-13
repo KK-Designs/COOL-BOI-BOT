@@ -1,9 +1,9 @@
 const assert = require('assert/strict');
 const { Util } = require('discord.js');
 const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnection } = require('@discordjs/voice');
-const sendError = require('../../error.js');
 const pdl = require('play-dl');
-const yts = require('yt-search');
+const { YouTubeVideo } = require('play-dl/dist/YouTube/classes/Video');
+const sendError = require('../../error.js');
 module.exports = {
 	name: 'play',
 	description: '<:music:813204224456261632> Play A song with the given youtube url',
@@ -36,53 +36,42 @@ module.exports = {
 		if (!permissions.has('SPEAK')) {return await message.reply({ content: 'I cannot speak in this voice channel, make sure I have the proper permissions!' });}
 
 		const searchString = args.join(' ');
-		const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
-		const regex = new RegExp(videoPattern);
-		let songReq;
-		if (args[0].match(regex)) {
-			const songInfo = await pdl.video_info(searchString.replace(/<(.+)>/g, '$1'));
 
-			songReq = {
-				id: songInfo.video_details.id,
-				title: Util.escapeMarkdown(songInfo.video_details.title),
-				duration: +songInfo.video_details.durationInSec,
-				author: songInfo.video_details.channel.name,
-				url: songInfo.video_details.url,
-			};
+		let result;
+		try {
+			result = await getSongs(searchString);
+		} catch (e) {
+			if (e.message === 'The provided url type is not supported') {
+				return await message.reply(`${e.message}`);
+			}
+
+			throw e;
 		}
-		else {
-			// message.reply('Please pass a valid youtube URL.');
-			const searched = await yts.search(searchString);
-			if (searched.videos.length === 0) {return await message.reply({ content: 'Looks like i was unable to find the song on YouTube' });}
-
-			const video = searched.videos[0];
-			songReq = {
-				id: video.videoId,
-				title: Util.escapeMarkdown(video.title),
-				author: video.author.name,
-				url: video.url,
-				duration: video.duration.seconds,
-			};
-
+		if (result.songs.length === 0) {
+			return await message.reply('Looks like i was unable to find the song on YouTube');
 		}
 		const serverQueue = message.client.queue.get(message.guild.id);
 
 		if (serverQueue) {
-			serverQueue.songs.push(songReq);
-			return await message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
+			serverQueue.songs.push(...result.songs);
+			if (result.songs.length === 1) {
+			  return await message.reply({ content: `<:check:807305471282249738> **${result.songs[0].title}** has been added to the queue!` });
+			}
+
+			return await message.reply({ content: `<:check:807305471282249738> **${result.songs.length} songs** from the **${result.playlist.title ?? 'Untitled'}** playlist has been added to the queue!` });
 		}
 		const player = createAudioPlayer();
 		const queueConstruct = new GuildQueue({ client: message.client, textChannel: message.channel, guildId: message.guildId });
 
 		message.client.queue.set(message.guild.id, queueConstruct);
-		queueConstruct.songs.push(songReq);
+		queueConstruct.songs.push(...result.songs);
 		if (message.guild.me.voice.channelId) {
 			const connection = getVoiceConnection(message.guild.id);
 
 			connection.subscribe(player);
 			queueConstruct.setConnection(connection);
 			await queueConstruct.playNext();
-			return await message.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
+			return await message.reply({ content: `<:check:807305471282249738> **${result.songs[0].title}** has been added to the queue!` });
 		}
 		try {
 			await queueConstruct.connect(channel, player);
@@ -95,6 +84,9 @@ module.exports = {
 			return sendError(`<:no:803069123918823454> I could not join the voice channel: ${error}`, message.channel);
 		}
 	},
+	/**
+   * @param {import("discord.js").CommandInteraction & import("discord.js").BaseGuildCommandInteraction<"cached"> & { client: { queue: import("discord.js").Collection<string, GuildQueue> }, channel: import("discord.js").TextChannel } } interaction
+   */
 	async executeSlash(interaction) {
 		const { channel } = interaction.member.voice;
 
@@ -107,40 +99,25 @@ module.exports = {
 		if (!permissions.has('SPEAK')) {return await interaction.reply({ content: 'I cannot speak in this voice channel, make sure I have the proper permissions!' });}
 
 		const searchString = interaction.options.getString('song', true);
-		const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
-		let songReq;
-		if (videoPattern.test(searchString)) {
-			const songInfo = await pdl.video_info(searchString.replace(/<(.+)>/g, '$1'));
+		let result;
+		try {
+			result = await getSongs(searchString);
+		} catch (e) {
+			if (e.message === 'The provided url type is not supported') {
+				return await interaction.reply(`${e.message}`);
+			}
 
-			songReq = {
-				id: songInfo.video_details.id,
-				title: Util.escapeMarkdown(songInfo.video_details.title),
-				duration: +songInfo.video_details.durationInSec,
-				author: songInfo.video_details.channel.name,
-				url: songInfo.video_details.url,
-			};
+			throw e;
 		}
-		else {
-			// message.reply('Please pass a valid youtube URL.');
-			const searched = await yts.search(searchString);
-			if (searched.videos.length === 0) {return await interaction.reply({ content: 'Looks like i was unable to find the song on YouTube' });}
-
-			const video = searched.videos[0];
-
-			songReq = {
-				id: video.videoId,
-				title: Util.escapeMarkdown(video.title),
-				author: video.author.name,
-				url: video.url,
-				duration: video.duration.seconds,
-			};
-
+		if (result.songs.length === 0) {
+			return await interaction.reply('Looks like i was unable to find the song on YouTube');
 		}
 		const serverQueue = interaction.client.queue.get(interaction.guild.id);
 
 		if (serverQueue) {
-			serverQueue.songs.push(songReq);
-			return await interaction.reply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
+			serverQueue.songs.push(...result.songs);
+
+			return await interaction.reply({ content: `<:check:807305471282249738> **${result.songs[0].title}** has been added to the queue!` });
 		}
 		const player = createAudioPlayer();
 		const queueConstruct = new GuildQueue({
@@ -149,16 +126,16 @@ module.exports = {
 			guildId: interaction.guildId,
 		});
 		interaction.client.queue.set(interaction.guild.id, queueConstruct);
-		queueConstruct.songs.push(songReq);
+		queueConstruct.songs.push(...result.songs);
+		await interaction.deferReply({ ephemeral: true });
 		if (interaction.guild.me.voice.channelId) {
 			const connection = getVoiceConnection(interaction.guild.id);
 
 			connection.subscribe(player);
 			queueConstruct.setConnection(connection);
 			await queueConstruct.playNext();
-			return await interaction.editReply({ content: `<:check:807305471282249738> **${songReq.title}** has been added to the queue!` });
+			return await interaction.editReply({ content: `<:check:807305471282249738> **${result.songs[0].title}** has been added to the queue!` });
 		}
-		await interaction.deferReply({ ephemeral: true });
 		try {
 			await queueConstruct.connect(channel, player);
 			await queueConstruct.playNext();
@@ -172,7 +149,73 @@ module.exports = {
 		await interaction.editReply('Successfully started playing music');
 	},
 };
+class Song {
+	constructor({ id, title, author, url, duration }) {
+		assert.strictEqual(typeof id, 'string');
+		assert.strictEqual(typeof title, 'string');
+		assert.strictEqual(typeof author, 'string');
+		assert.strictEqual(typeof url, 'string');
+		assert.strictEqual(typeof duration, 'number');
 
+		this.id = id,
+		this.title = Util.escapeMarkdown(title);
+		this.author = author;
+		this.url = url;
+		this.duration = duration;
+	}
+	static create(data) {
+		if (data instanceof YouTubeVideo) {
+			return new Song({
+				id: data.id,
+				title: data.title,
+				author: data.channel.name,
+				url: data.url,
+				duration: data.durationInSec,
+			});
+		}
+
+		throw new Error('Unknown data, received ' + data.constructor?.name ?? data);
+	}
+}
+/**
+ * @param {string} query
+ * @returns { Promise<{ songs: Song[], playlist?: import("play-dl/dist/YouTube/classes/Playlist").YouTubePlayList }> }
+ */
+async function getSongs(query) {
+	const type = await pdl.validate(query);
+	switch (type) {
+	case 'yt_playlist': {
+		const playlist = await pdl.playlist_info(query);
+
+		return {
+			playlist: playlist,
+			songs: playlist.page(1).map(song => Song.create(song)),
+		};
+	}
+	case 'yt_video': {
+		const song = await pdl.video_info(query);
+
+		return {
+			songs: [Song.create(song)],
+		};
+	}
+	case 'so_playlist':
+	case 'so_track':
+	case 'sp_album':
+	case 'sp_playlist':
+	case 'sp_track':
+		throw new Error('The provided url type is not supported');
+
+	default: {
+		const results = await pdl.search(query, { limit: 1, source: { youtube: 'video' } });
+		const song = results[0];
+
+		return {
+			songs: [Song.create(song)],
+		};
+	}
+	}
+}
 class GuildQueue {
 	/**
    * @param {Object} options
@@ -183,6 +226,7 @@ class GuildQueue {
 	constructor({ client, textChannel, guildId }) {
 		this.id = guildId;
 		this.client = client;
+		/** @type {Song[]} */
 		this.songs = [];
 		this.connection = null;
 		this.textChannel = textChannel;
@@ -237,7 +281,7 @@ class GuildQueue {
 	async play(song) {
 		console.log('Now playing %s (%s)', song.title, song.url);
 		const output = await pdl.stream(song.url);
-		const resource = createAudioResource(output.stream, { type: output.type, inlineVolume: true });
+		const resource = createAudioResource(output.stream, { inputType: output.type, inlineVolume: true });
 
 		resource.volume.setVolumeLogarithmic(this.volume / 100);
 		this.player.play(resource);
