@@ -10,15 +10,22 @@ module.exports = {
 	usage: '[channel] or (`none` to clear)',
 	category: 'config',
 	options: {
-		channel: {
-			type: 'Channel',
-			description: 'The channel to send welcome messages to',
-			channelTypes: ['GuildText'],
+		set: {
+			type: 'Subcommand',
+			description: 'Set the welcome channel',
+			options: {
+				channel: {
+					type: 'Channel',
+					description: 'The channel to send welcome messages to',
+					channelTypes: ['GUILD_TEXT'],
+				},
+			},
 		},
 		reset: {
-			type: 'Boolean',
-			description: 'If I should reset the welcome channel',
+			type: 'Subcommand',
+			description: 'Disable the welcome channel',
 			required: false,
+			options: {},
 		},
 	},
 	async execute(message, args) {
@@ -57,18 +64,19 @@ module.exports = {
 		] });
 	},
 	async executeSlash(interaction) {
-		const x = interaction.options.getChannel('channel');
-		const reset = interaction.options.getBoolean('reset');
+		const sub = interaction.options.getSubcommand(true);
 
-		if (reset) {
+		if (sub === 'reset') {
 			interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging members'),
 			] });
 
-			return await db.set(`welcomechannel_${interaction.guild.id}`, '0');
+			return db.delete(`welcomechannel_${interaction.guild.id}`);
 		}
+		const x = interaction.options.getChannel('channel', true);
+
 		if (!x) {
 			return await interaction.reply({ embeds: [
 				new MessageEmbed()

@@ -4,6 +4,7 @@ require('dotenv').config();
 const assert = require('assert/strict');
 const fs = require('fs');
 const db = require('quick.db');
+const { Constants } = require('discord.js');
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } = require('@discordjs/builders');
 const { Routes } = require('discord-api-types/v9');
 const { REST } = require('@discordjs/rest');
@@ -27,7 +28,7 @@ for (const categoryEnt of fs.readdirSync('./commands', { withFileTypes: true }))
 			continue;
 		}
 		if (!command.options) {
-			throw new Error('Has slashExecute, but no options object');
+			throw new Error(`The ${command.name} command has a executeSlash function, but no options object`);
 		}
 		const slashCmd = new SlashCommandBuilder()
 			.setName(command.name)
@@ -45,7 +46,7 @@ async function saveDeployMS() {
 }
 saveDeployMS();
 const main = async () => {
-	console.log('Retriving client id...');
+	console.log('Retrieving client id...');
 	/** @type {import("discord-api-types").APIApplication} */
 	// eslint-disable-next-line no-extra-parens
 	const app = (await rest.get(Routes.oauth2CurrentApplication()));
@@ -71,7 +72,7 @@ function build(builder, options) {
 			assert(!(builder instanceof SlashCommandSubcommandGroupBuilder));
 			const required = optionData.required ?? true;
 
-			builder[`add${optionData.type}Option`](/** @param {import("@discordjs/builders/dist/interactions/slashCommands/mixins/CommandOptionBase").SlashCommandOptionBase} option */ option => option
+			builder[`add${optionData.type}Option`](option => option
 				.setName(name)
 				.setDescription(optionData.description)
 				.setRequired(required));
@@ -86,8 +87,7 @@ function build(builder, options) {
 					.setDescription(optionData.description)
 					.setRequired(required);
 
-				// Waiting for @discordjs/builders PR 41 to merge
-				// optionData.channelTypes?.forEach(type => option.addChannelType(ChannelType[type]));
+				/** @type {string[]} */ (optionData.channelTypes)?.forEach(type => option.addChannelType(Constants.ChannelTypes[type]));
 
 				return option;
 			});
@@ -100,7 +100,7 @@ function build(builder, options) {
 
 			const choices = Object.entries(optionData.choices ?? {});
 
-			builder[`add${optionData.type}Option`](/** @param {import("@discordjs/builders/dist/interactions/slashCommands/mixins/CommandOptionWithChoices").ApplicationCommandOptionWithChoicesBase<string|number>} option */ option => {
+			builder[`add${optionData.type}Option`](option => {
 				// eslint-disable-next-line no-self-assign
 				optionData = /** @type {import("./handlers/command").ChoiceOption} */ optionData;
 

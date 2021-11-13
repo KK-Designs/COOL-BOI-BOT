@@ -12,15 +12,22 @@ module.exports = {
 	usage: '[channel name] or (`none` to clear)',
 	category: 'config',
 	options: {
-		channel: {
-			type: 'Channel',
-			description: 'The channel to send logs to',
-			channelTypes: ['GuildText'],
+		set: {
+			type: 'Subcommand',
+			description: 'Set the log channel',
+			options: {
+				channel: {
+					type: 'Channel',
+					description: 'The channel to send logs to',
+					channelTypes: ['GUILD_TEXT'],
+				},
+			},
 		},
 		reset: {
-			type: 'Boolean',
-			description: 'If I should reset the logging channel',
+			type: 'Subcommand',
+			description: 'Disable the log channel',
 			required: false,
+			options: {},
 		},
 	},
 	async execute(message, args) {
@@ -62,10 +69,9 @@ module.exports = {
 		] });
 	},
 	async executeSlash(interaction) {
-		const x = interaction.options.getChannel('channel');
-		const reset = interaction.options.getBoolean('reset');
+		const sub = interaction.options.getSubcommand(true);
 
-		if (reset) {
+		if (sub === 'reset') {
 			interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
@@ -74,6 +80,8 @@ module.exports = {
 
 			return await db.delete(`loggingchannel_${interaction.guild.id}`);
 		}
+		const x = interaction.options.getChannel('channel', true);
+
 		if (!x) {
 			return await interaction.reply({ embeds: [
 				new MessageEmbed()
