@@ -64,7 +64,6 @@
     "update-notifier": "^5.1.0",
     "weird-to-normal-chars": "^1.6.0",
     "youtube-playlist-summary": "^2.1.6",
-    "yt-search": "^2.10.2",
     "yuri-canvas": "^4.0.6"
   },
   "devDependencies": {
