@@ -1,17 +1,27 @@
 {
-	"extends": ["eslint:recommended", "prettier"],	
-	// "plugins": ["autofix"], // https://openbase.com/js/eslint-plugin-autofix/documentation
+	"extends": ["eslint:recommended"],
+	// "plugins": ["autofix", "prettier"], // https://openbase.com/js/eslint-plugin-autofix/documentation
 	"env": {
 		"node": true,
 		"es6": true
 	},
 	"parserOptions": {
 		"ecmaVersion": 2021
-	},	
+	},
 	"rules": {
+		/* "prettier/prettier": ["error", {
+			"useTabs": true,
+			"semi": true,
+			"singleQuote": true,
+			"trailingComma": "none",
+			"bracketSpacing": true,
+			"arrowParens": "always",
+			"tabWidth": 4
+		}],*/
 		"no-unused-vars": "error",
 		// "autofix/no-unused-vars": "error",
 		"arrow-spacing": ["warn", { "before": true, "after": true }],
+		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
 		"comma-dangle": ["error", "always-multiline"],
 		"comma-spacing": "error",
 		"comma-style": "error",

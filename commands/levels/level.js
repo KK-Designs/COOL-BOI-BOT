@@ -3,6 +3,7 @@ const { MessageAttachment } = require('discord.js');
 const db = require('quick.db');
 const yuricanvas = require('yuri-canvas');
 const getColors = require('get-image-colors');
+const { weirdToNormalChars } = require('weird-to-normal-chars');
 /**
  * @param {import("discord.js").GuildMember} member
  */
@@ -33,22 +34,41 @@ module.exports = {
 
 		if (member.user.bot) {return message.reply({ content: 'I don\'t track bots activity' });}
 		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
-			const levelfetch = await db.fetch(`level_${message.guild.id}_${member.user.id}`) ?? 1;
-			const totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
-			const messagefetch = await db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 1;
-			const image = await yuricanvas.rank({
-				username: member.user.username,
-				discrim: member.user.discriminator,
-				status: member.presence?.status ?? 'offline',
-				level: levelfetch,
-				neededXP: totalmessages,
-				currentXP: messagefetch,
-				avatarURL: member.user.displayAvatarURL({ format: 'png' }),
-				color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
-				background: message.guild.bannerURL({ format: 'png' }) ?? undefined,
+			const levelfetch = await db.fetch(`level_${member.guild.id}_${member.user.id}`) ?? 1;
+			const totalmessages = 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25;
+			let messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
+			if (messagesNeeded == 0) {
+				messagesNeeded = 1;
+			}
+			const rankMemberData = [];
+			member.guild.members.fetch().then(async members => {
+				members.array().map(async m => {
+					if (m.user.bot) return;
+					const level = await db.fetch(`level_${m.guild.id}_${m.user.id}`) ?? 0;
+					rankMemberData.push({
+						userid: m.id,
+						level: level,
+					});
+					rankMemberData.sort((a, b) => b.level - a.level);
+					return rankMemberData.findIndex(array => array.userid === member.user.id) + 1;
+				});
+			}).then(async () => {
+				rankMemberData.sort((a, b) => b.level - a.level);
+				const image = await yuricanvas.rank({
+					username: weirdToNormalChars(member.user.username),
+					discrim: member.user.discriminator,
+					status: member.presence?.status ?? 'offline',
+					level: levelfetch,
+					rank: `#${rankMemberData.findIndex(array => array.userid === member.user.id) + 1}  `,
+					neededXP: totalmessages,
+					currentXP: messagesNeeded,
+					avatarURL: member.user.displayAvatarURL({ format: 'png' }),
+					color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
+					background: member.guild.bannerURL({ format: 'png' }) ?? undefined,
+				});
+				const attachment = new MessageAttachment(image, `${member.user.username}'s_rankcard'.png`);
+				await message.reply({ files: [ attachment ] });
 			});
-			const attachment = new MessageAttachment(image, 'rank.png');
-			await message.reply({ files: [ attachment ] });
 		});
 	},
 	/**
@@ -65,21 +85,39 @@ module.exports = {
 		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
 			const levelfetch = await db.fetch(`level_${interaction.guild.id}_${member.user.id}`) ?? 1;
 			const totalmessages = 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25;
-			const messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
-			console.log(messagesNeeded);
-			const image = await yuricanvas.rank({
-				username: member.user.username,
-				discrim: member.user.discriminator,
-				status: member.presence?.status ?? 'offline',
-				level: levelfetch,
-				neededXP: totalmessages,
-				currentXP: messagesNeeded,
-				avatarURL: member.user.displayAvatarURL({ format: 'png' }),
-				color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
-				background: interaction.guild.bannerURL({ format: 'png' }) ?? undefined,
+			let messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
+			if (messagesNeeded == 0) {
+				messagesNeeded = 1;
+			}
+			const rankMemberData = [];
+			interaction.guild.members.fetch().then(async members => {
+				members.array().map(async m => {
+					if (m.user.bot) return;
+					const level = await db.fetch(`level_${m.guild.id}_${m.user.id}`) ?? 0;
+					rankMemberData.push({
+						userid: m.id,
+						level: level,
+					});
+					rankMemberData.sort((a, b) => b.level - a.level);
+					return rankMemberData.findIndex(array => array.userid === member.user.id) + 1;
+				});
+			}).then(async () => {
+				rankMemberData.sort((a, b) => b.level - a.level);
+				const image = await yuricanvas.rank({
+					username: weirdToNormalChars(member.user.username),
+					discrim: member.user.discriminator,
+					status: member.presence?.status ?? 'offline',
+					level: levelfetch,
+					rank: `#${rankMemberData.findIndex(array => array.userid === member.user.id) + 1}  `,
+					neededXP: totalmessages,
+					currentXP: messagesNeeded,
+					avatarURL: member.user.displayAvatarURL({ format: 'png' }),
+					color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
+					background: interaction.guild.bannerURL({ format: 'png' }) ?? undefined,
+				});
+				const attachment = new MessageAttachment(image, `${member.user.username}'s_rankcard'.png`);
+				await interaction.editReply({ files: [ attachment ] });
 			});
-			const attachment = new MessageAttachment(image, 'rank.png');
-			await interaction.editReply({ files: [ attachment ] });
 		});
 	},
 };

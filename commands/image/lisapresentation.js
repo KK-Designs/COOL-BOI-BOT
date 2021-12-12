@@ -16,7 +16,7 @@ module.exports = {
 	async execute(message, args) {
 
 		const DIG = require('discord-image-generation');
-		const text = args.join(' ');
+		const text = message.cleanContent.slice(message.content.indexOf(args[0]), message.content.length);
 
 		if (!text) {return await message.reply({ content: 'Please provide text for me to make a lisa presentation' });}
 

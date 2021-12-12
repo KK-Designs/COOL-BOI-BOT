@@ -60,8 +60,7 @@ module.exports = {
        */
 			try {
 				await member.kick();
-			}
-			catch (e) {
+			} catch (e) {
 				console.error(e);
 
 				return await message.reply(
@@ -83,8 +82,7 @@ module.exports = {
 
 			// We let the message author know we were able to kick the person
 			message.channel.send({ embeds: [kickembed] });
-		}
-		else {
+		} else {
 			// The mentioned user isn't in this guild
 			return message.reply({ content: 'That user isn\'t in this guild!' });
 		}
@@ -117,8 +115,7 @@ module.exports = {
      */
 		try {
 			await member.kick();
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e);
 
 			return await interaction.reply(

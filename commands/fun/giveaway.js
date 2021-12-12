@@ -102,8 +102,7 @@ module.exports = {
 
 			try {
 				await client.giveawaysManager.reroll(messageID);
-			}
-			catch (err) {
+			} catch (err) {
 				console.error(err);
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			}
@@ -196,8 +195,7 @@ module.exports = {
 					newPrize: prize,
 					setEndTimestamp: interaction.createdTimestamp + ms(time),
 				});
-			}
-			catch (e) {
+			} catch (e) {
 				if (typeof e !== 'string' || !e.startsWith('No giveaway found with message Id ')) {throw e;}
 
 				return await interaction.editReply(`No giveaway found for ${messageID}, please check and try again`);
@@ -209,8 +207,7 @@ module.exports = {
 
 			try {
 				await client.giveawaysManager.delete(messageID);
-			}
-			catch (e) {
+			} catch (e) {
 				if (typeof e !== 'string' || !e.startsWith('No giveaway found with message Id ')) {throw e;}
 
 				return await interaction.reply(`No giveaway found for ${messageID}, please check and try again`);
@@ -222,8 +219,7 @@ module.exports = {
 
 			try {
 				await client.giveawaysManager.reroll(messageID);
-			}
-			catch (e) {
+			} catch (e) {
 				if (typeof e !== 'string' || !e.startsWith('No giveaway found with message Id ')) {throw e;}
 
 				return await interaction.reply(`No giveaway found for ${messageID}, please check and try again`);

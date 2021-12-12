@@ -37,8 +37,7 @@ module.exports = {
 
 			message.client.commands.set(newCommand.name, newCommand);
 			message.reply({ content: `Command \`${command.name}\` was reloaded!` });
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 			message.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}
@@ -69,8 +68,7 @@ module.exports = {
 
 			client.commands.set(newCommand.name, newCommand);
 			interaction.reply({ content: `Command \`${command.name}\` was reloaded!` });
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 			interaction.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}

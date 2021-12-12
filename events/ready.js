@@ -1,9 +1,16 @@
+const fs = require('fs');
 const Discord = require('discord.js');
 const config = require('../config.json');
 module.exports = async (client) => {
-	const trim = (str) => (`${str.slice(0, 34)}**********************************`);
+	// Fetch the current application
+	if (!client.application?.owner) await client.application?.fetch();
+	const trimToken = (str) => (`${str.slice(0, 34)}**********************************`);
 	const version = Discord.version;
-	console.log(`Ready! Logged in as ${client.user.tag} with token of ${trim(client.token)}`);
+	fs.writeFile('bot.log', `-----------------------${client.user.tag}'s Logs (${new Date()})-----------------------`, (err) => {
+		// In case of a error throw err.
+		if (err) throw err;
+	});
+	console.log(`Ready! Logged in as ${client.user.tag} with token of ${trimToken(client.token)}`);
 	console.log(`© ${client.user.username} ${new Date().getFullYear()}`);
 	console.log(`v${version}`);
 	const status = [
@@ -22,8 +29,7 @@ module.exports = async (client) => {
 				],
 				status: 'dnd',
 			});
-		}
-		else {
+		} else {
 			client.user.setPresence({
 				activities: [
 					{

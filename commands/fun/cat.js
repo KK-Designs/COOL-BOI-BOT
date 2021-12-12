@@ -5,8 +5,8 @@ const { bold } = require('@discordjs/builders');
 module.exports = {
 	name: 'cat',
 	description: 'Sends a picture of a cat 🐱',
-  	cooldown: 3,
-  	category: 'fun',
+	cooldown: 3,
+	category: 'fun',
 	options: {},
 	execute(message) {
 		fetch('https://cataas.com/cat?json=true').then(res => res.json()).then(res => {

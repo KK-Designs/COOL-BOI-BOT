@@ -33,8 +33,7 @@ module.exports = {
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
 			] });
-		}
-		else if (args[0].length > 3) {
+		} else if (args[0].length > 3) {
 			return message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
@@ -64,8 +63,7 @@ module.exports = {
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
 			] });
-		}
-		else if (newPrefix.length > 3) {
+		} else if (newPrefix.length > 3) {
 			return interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)

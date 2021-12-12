@@ -19,8 +19,7 @@ module.exports = {
 			serverQueue.connection.dispatcher.end('Stop command has been used!');
 			await message.channel.send({ content: 'Stopped playing songs' });
 			message.client.queue.delete(message.guild.id);
-		}
-		catch (err) {
+		} catch (err) {
 			console.error(err);
 			serverQueue.destroy();
 

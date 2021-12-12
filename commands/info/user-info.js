@@ -40,8 +40,16 @@ module.exports = {
 		if (!member) {
 			return message.channel.send('Member not found');
 		}
-		const commands = db.fetch(`commands_${message.guild.id}_${message.author.id}`) ?? 0;
-		const messages = db.fetch(`messages_${message.guild.id}_${message.author.id}`) ?? 0;
+		let commands = db.fetch(`commands_${member.guild.id}_${member.user.id}`) ?? 0;
+		let messages = db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 0;
+		if (member.user.bot) {
+			commands = 'N/A';
+			messages = 'N/A';
+		}
+
+		// Force fetch to get banner
+		await member.user.fetch(true);
+
 		const roles = member.roles.cache.map(role => role.toString());
 		let activity;
 		if (!member.presence?.activities[0]) {
@@ -62,12 +70,13 @@ module.exports = {
 			.setTitle(`${member.displayName}`)
 			.setColor(color)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+			.setImage(member.user.bannerURL())
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
 			.addField('Messages sent', inlineCode(messages.toString()), true)
 			.addField('Commands ran:', inlineCode(commands.toString()), true)
-			.addField('Account Created', member.user.createdAt.toDateString(), true)
-			.addField('Joined Server', member.joinedAt.toDateString(), true)
+			.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
+			.addField('Joined Server', `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`, true)
 			.addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
 			.addField('Status: ', status, true)
 			.addField('Activity: ', activity, true)
@@ -88,8 +97,13 @@ module.exports = {
 		if (!member) {
 			return interaction.reply('Member not found');
 		}
-		const commands = db.fetch(`commands_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
-		const messages = db.fetch(`messages_${interaction.guild.id}_${interaction.user.id}`) ?? 0;
+		let commands = db.fetch(`commands_${member.guild.id}_${member.user.id}`) ?? 0;
+		let messages = db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 0;
+		if (member.user.bot) {
+			commands = 'N/A';
+			messages = 'N/A';
+		}
+
 		// Force fetch to get banner
 		await user.fetch(true);
 
@@ -114,12 +128,13 @@ module.exports = {
 			.setTitle(`${member.displayName}`)
 			.setColor(color)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+			.setImage(member.user.bannerURL())
 			.addField('Username', member.user.tag)
 			.addField('ID', member.id, true)
 			.addField('Messages sent', inlineCode(messages.toString()), true)
 			.addField('Commands ran:', inlineCode(commands.toString()), true)
-			.addField('Account Created', member.user.createdAt.toDateString(), true)
-			.addField('Joined Server', member.joinedAt.toDateString(), true)
+			.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
+			.addField('Joined Server', `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`, true)
 			.addField('Current VC: ', member.voice.channel === null ? 'None' : `<:voice_channel:804772497684693052> ${member.voice.channel.name}`, true)
 			.addField('Status: ', status, true)
 			.addField('Activity: ', activity, true)

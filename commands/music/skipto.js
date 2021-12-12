@@ -23,14 +23,12 @@ module.exports = {
 			for (let i = 0; i < args[0] - 2; i++) {
 				queue.songs.push(queue.songs.shift());
 			}
-		}
-		else {
+		} else {
 			queue.songs = queue.songs.slice(args[0] - 2);
 		}
 		try {
 			queue.connection.dispatcher.end();
-		}
-		catch (error) {
+		} catch (error) {
 			queue.voiceChannel.leave();
 			message.client.queue.delete(message.guild.id);
 

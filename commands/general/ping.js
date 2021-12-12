@@ -5,9 +5,10 @@ module.exports = {
 	cooldown: 2,
 	category: 'general',
 	options: {},
-	async execute(message, client) {
+	async execute(message) {
+		const { client } = message;
 		const embed = new MessageEmbed()
-			.setTitle('Pinging...')
+			.setTitle('<a:loading:808390866367545384> Pinging...')
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.member.displayHexColor : '#FFB700');
 
 		message.reply({ embeds: [embed] }).then((msg) => {
@@ -27,7 +28,7 @@ module.exports = {
 	/** @param {CommandInteraction & { member: GuildMember }} interaction */
 	async executeSlash(interaction) {
 		const embed = new MessageEmbed()
-			.setTitle('Pinging...')
+			.setTitle('<a:loading:808390866367545384> Pinging...')
 			.setColor(interaction.member?.displayHexColor ?? '#FFB700');
 		/** @type {Message} */
 		// eslint-disable-next-line no-extra-parens

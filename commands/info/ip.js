@@ -35,8 +35,7 @@ module.exports = {
 
 		if (data.bogon) {
 			embed.addField('Bogon', 'true');
-		}
-		else {
+		} else {
 			const city = data.city;
 			const region = data.region;
 			const country = data.country;
@@ -73,8 +72,7 @@ module.exports = {
 
 		if (data.bogon) {
 			embed.addField('Bogon', 'true');
-		}
-		else {
+		} else {
 			const city = data.city;
 			const region = data.region;
 			const country = data.country;

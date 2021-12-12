@@ -8,44 +8,44 @@ module.exports = {
 	clientPermissons: 'EMBED_LINKS',
 	options: {},
 	async execute(message) {
-		const guild = message.guild;
+		const { guild } = message;
 		const serverName = guild.name;
-		const serverIcon = message.guild.iconURL();
-		const owner = await message.guild.fetchOwner();
+		const serverIcon = guild.iconURL();
+		const owner = await guild.fetchOwner();
 		const infoembed = new MessageEmbed()
-			.setColor(message.guild.me.displayHexColor)
+			.setColor(guild.me.displayHexColor)
 			.setTitle('Server Info')
 			.setThumbnail(serverIcon)
-			.setDescription(`${message.guild}'s information`)
+			.setDescription(`${guild}'s information`)
 			.addField('Owner', `The owner of this server is ${owner}`)
 			.addField('Server ID: ', guild.id)
-			.addField('Server Created: ', guild.createdAt.toDateString())
-			.addField('Member Count', `This server has ${message.guild.memberCount} members`)
-			.addField('Emoji Count', `This server has ${message.guild.emojis.cache.size} emojis`)
-			.addField('Roles Count', `This server has ${message.guild.roles.cache.size} roles`)
+			.addField('Server Created: ', `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>`)
+			.addField('Member Count', `This server has ${guild.memberCount} members`)
+			.addField('Emoji Count', `This server has ${guild.emojis.cache.size} emojis`)
+			.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
 			.setFooter(serverName, serverIcon);
 
 		message.reply({ embeds: [infoembed] });
 	},
 	async executeSlash(interaction) {
-		const guild = interaction.guild;
+		const { guild } = interaction;
 
 		if (!guild) {return await interaction.reply('The command must be ran in a guild');}
 
 		const serverName = guild.name;
-		const serverIcon = interaction.guild.iconURL();
-		const owner = await interaction.guild.fetchOwner();
+		const serverIcon = guild.iconURL();
+		const owner = await guild.fetchOwner();
 		const infoembed = new MessageEmbed()
-			.setColor(interaction.guild.me.displayHexColor)
+			.setColor(guild.me.displayHexColor)
 			.setTitle('Server Info')
 			.setThumbnail(serverIcon)
-			.setDescription(`${interaction.guild}'s information`)
+			.setDescription(`${guild}'s information`)
 			.addField('Owner', `The owner of this server is ${owner}`)
 			.addField('Server ID: ', guild.id)
-			.addField('Server Created: ', guild.createdAt.toDateString())
-			.addField('Member Count', `This server has ${interaction.guild.memberCount} members`)
-			.addField('Emoji Count', `This server has ${interaction.guild.emojis.cache.size} emojis`)
-			.addField('Roles Count', `This server has ${interaction.guild.roles.cache.size} roles`)
+			.addField('Server Created: ', `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>`)
+			.addField('Member Count', `This server has ${guild.memberCount} members`)
+			.addField('Emoji Count', `This server has ${guild.emojis.cache.size} emojis`)
+			.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
 			.setFooter(serverName, serverIcon);
 
 		await interaction.reply({ embeds: [infoembed] });

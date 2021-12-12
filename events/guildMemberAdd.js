@@ -4,11 +4,11 @@ const { drawCard, Gradient } = require('discord-welcome-card');
 const db = require('quick.db');
 const color = require('../color.json');
 const Canvas = require('canvas');
+const { weirdToNormalChars } = require('weird-to-normal-chars');
 const config = require('../config.json');
 const { getLogChannel, getWelcomeChannel } = require('../utils.js');
 
 Canvas.registerFont('./BalooTammudu2-Regular.ttf', { family: 'sans-serif' });
-// registerFont('./OpenSans-Regular.ttf', { family: 'sans-serif' });
 /** @type {(...args: import("discord.js").ClientEvents["guildMemberAdd"]) => Promise<any>} */
 module.exports = async member => {
 	getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
@@ -29,7 +29,7 @@ module.exports = async member => {
 			theme: 'circuit',
 			text: {
 				title: 'Hello',
-				text: member.user.tag + ',',
+				text: `${weirdToNormalChars(member.user.username)}#${member.user.discriminator},`,
 				subtitle: `welcome to ${guild.name}!`,
 				color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 75),
 			},
@@ -47,14 +47,14 @@ module.exports = async member => {
 			rounded: true,
 		});
 
-		getWelcomeChannel(member.guild, db)?.send({ files: [{ name: 'welcome-card.png', attachment: image }] });
+		getWelcomeChannel(member.guild, db)?.send({ files: [{ name: `welcome-${member.user.username}.png`, attachment: image }] });
 		if (!getLogChannel(member.guild, db)) return;
 
 		const embed = new MessageEmbed()
 			.setAuthor('Member joined', 'https://cdn.discordapp.com/emojis/812013459298058260.png')
 			.setColor(color.bot_theme)
 			.setDescription(`${member.user.tag} joined ${member.guild.name}`)
-			.addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
+			.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
 			.setFooter(`${client.user.username} MEMBER LOGGING`)
 			.setTimestamp();
 		const logChannel = getLogChannel(member.guild, db);

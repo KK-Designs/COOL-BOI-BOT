@@ -6,8 +6,11 @@ const DiscordStopSpam = require('discord-stop-spam-package');
 const { weirdToNormalChars } = require('weird-to-normal-chars');
 const isURI = require('@stdlib/assert-is-uri');
 const prefix = require('discord-prefix');
+const { GoogleTranslator } = require('@translate-tools/core/translators/GoogleTranslator');
+const { detect } = require('tinyld');
 const sendError = require('../error');
 const config = require('../config.json');
+const color = require('../color.json');
 /** @type {Collection<string, Collection<string, number>>} */
 const cooldowns = new Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -15,19 +18,34 @@ const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 module.exports = async (message) => {
 	const { client } = message;
 	const { commands } = client;
-	message.content = await weirdToNormalChars(message.content);
-	await DiscordStopSpam.logAuthor(message.author.id);
-	await DiscordStopSpam.logMessage(message.author.id, message.content);
-	const SpamDetected = await DiscordStopSpam.checkMessageInterval(message);
+	message.content = weirdToNormalChars(message.content);
+	DiscordStopSpam.logAuthor(message.author.id);
+	DiscordStopSpam.logMessage(message.author.id, message.content);
+	const SpamDetected = DiscordStopSpam.checkMessageInterval(message);
 
 	if (SpamDetected) return console.log('Spam detected; ignoring messages');
-
-	if (await runDetector(message)) {
-		await message.delete();
-
-		return await message.channel.send(`${message.author} Please don't send malicious files`);
+	if (await runDetector(message).crasher) {
+		const m = await runDetector(message).crasherMessage;
+		m.reply({ embeds: [{
+			color: color.fail,
+			description: '<:X_:807305490160943104> Please don\'t send videos that crashes the discord client.',
+		}] }).them(async () => {
+			setTimeout(async function() {
+				return await m.delete();
+			}, 10000);
+		});
 	}
 	if (message.author.bot) return;
+
+	const translator = new GoogleTranslator();
+	if (!detect(message.content) === 'en') {
+		translator
+			.translate(message.content, detect(message.content), 'en')
+			.then((translate) => {
+				message.content = translate;
+				console.log(message.content, translate);
+			});
+	}
 
 	if (message.channel.type === 'GUILD_TEXT') {
 		await handleLevels(message);
@@ -42,13 +60,11 @@ module.exports = async (message) => {
 	const [, matchedPrefix] = message.content.match(prefixRegex);
 
 	if (!message.content.startsWith(matchedPrefix)) return;
-
 	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
 	console.log('Looking for command %s', commandName);
 	const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
 	if (!command) {return console.log('Command not found:', commandName);}
 
 	if (userIsBlocked(message.author)) {return void await message.reply({ content: '<:no:803069123918823454> You are blocked from using commands' });}
@@ -59,12 +75,9 @@ module.exports = async (message) => {
 		const embed = new MessageEmbed()
 			.setTitle('Slow down there')
 			.setDescription(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-			.setFooter(message.author.username, message.author.displayAvatarURL({
-				dynamic: true,
-			}))
+			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(message.member?.displayHexColor ?? '#FFB700');
-
 		return void await message.channel.send({ embeds: [embed] });
 	}
 	if (message.guild) {
@@ -73,8 +86,7 @@ module.exports = async (message) => {
 		if (!checkPermissions(message.member, message.channel, command.permissions)) {return void await message.reply({ content: '<:no:803069123918823454> You do not have permission to use this command.' });}
 
 		if (!checkPermissions(message.member, message.channel, command.clientPermissions)) {return void await message.reply({ content: '<:no:803069123918823454> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.' });}
-	}
-	else if (command.guildOnly) {
+	} else if (command.guildOnly) {
 		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.' });
 	}
 	addUserToCooldown(message.author, command);
@@ -82,8 +94,7 @@ module.exports = async (message) => {
 	try {
 		command.execute(message, args, client);
 		console.log(`Executed command: ${command.name}`);
-	}
-	catch (e) {
+	} catch (e) {
 		console.error(e);
 		sendError(`An error has occurred: ${e.message}`, message.channel);
 	}
@@ -96,17 +107,19 @@ module.exports = async (message) => {
 };
 /** @param {import("discord.js").Message} message */
 async function handleLevels(message) {
+	DiscordStopSpam.logAuthor(message.author.id);
+	DiscordStopSpam.logMessage(message.author.id, message.content);
+	const SpamDetected = DiscordStopSpam.checkMessageInterval(message);
+	if (SpamDetected) return console.log('Spam detected');
+	if (message.author.bot) return;
 	const { client } = message;
 	const { commands } = client;
 	const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
-	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(guildPrefix)})\\s*`);
-	if (!prefixRegex.test(message.content)) return;
-	const [, matchedPrefix] = message.content.match(prefixRegex);
-	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
+	const args = message.content.slice(guildPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 	if (command) {
-		return await db.add(`commands_${message.guild.id}_${message.author.id}`, 1);
+		await db.add(`commands_${message.guild.id}_${message.author.id}`, 1);
 	}
 	let res = await fetch(`https://top.gg/api/bots/${message.client.user.id}/check?userId=${message.author.id}`);
 	res = res.json();
@@ -124,7 +137,6 @@ async function handleLevels(message) {
 		await db.set(`level_${message.guild.id}_${message.author.id}`, 0);
 		await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
 	}
-	console.log(db.fetch(`messagesneeded_${message.guild.id}_${message.author.id}`) ?? 1);
 	let messages;
 	if (messagefetch === 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25) {messages = messagefetch;}
 
@@ -133,13 +145,13 @@ async function handleLevels(message) {
 		await db.set(`messagesneeded_${message.guild.id}_${message.author.id}`, 0);
 		const levelembed = new MessageEmbed()
 			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(`${message.author}, You have leveled up to level ${levelfetch}!`)
+			.setDescription(`${message.author}, You have leveled up to level ${levelfetch}! <:LevelUp:899397460991033374>`)
+			.setImage('https://i.imgur.com/USBv4U1.gif?noredirect=true')
 			.setTimestamp()
 			.setColor(message.member?.displayHexColor ?? '#FFB700');
 		if (db.get('blockcmds_' + message.guild.id) === 'level') {
 			// ...
-		}
-		else {
+		} else {
 			await message.channel.send({ embeds: [levelembed] });
 		}
 	}
@@ -220,5 +232,8 @@ async function runDetector(message, videoUrl = message.content) {
 
 	console.log('Analysis: %s', analysis.crasher);
 
-	return analysis.crasher ?? false;
+	return {
+		crasher: analysis.crasher ?? false,
+		crasherMessage: message,
+	};
 }

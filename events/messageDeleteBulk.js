@@ -16,7 +16,7 @@ module.exports = async messages => {
 	if (!logChannel) return;
 
 	const messageArray = [...messages.values()];
-	// messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
+	messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
 	let stringedArray = messageArray.join('\n'); // We join the array using \n to separate the lines
 	if (stringedArray.length > 2048) {stringedArray = stringedArray.slice(0, 2045) + '...';}
 

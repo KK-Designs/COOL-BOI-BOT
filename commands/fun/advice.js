@@ -13,8 +13,7 @@ module.exports = {
 				if (!err && res.status === 200) {
 					try {
 						JSON.parse(res.text);
-					}
-					catch (e) {
+					} catch (e) {
 						return message.reply({ content: 'An api error occurred.' });
 					}
 					const advice = JSON.parse(res.text);
@@ -22,8 +21,7 @@ module.exports = {
 					setTimeout(() => {
 						message.reply({ content: `📜  "${advice.slip.advice}"` });
 					}, 750);
-				}
-				else {
+				} else {
 					message.reply({ content: `Opps, well this is an error. If this continues dm <@765686109073440808>. \n \nSpeficic error: ${err}` });
 					console.error(`REST call failed: ${err}, status code: ${res.status}`);
 				}

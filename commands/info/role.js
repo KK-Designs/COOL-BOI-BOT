@@ -26,7 +26,7 @@ module.exports = {
 			.setThumbnail(member.displayAvatarURL({ dynamic: true }))
 			.addField('Role name: ', roleinfo.name, true)
 			.addField('Role ID: ', roleinfo.id)
-			.addField('Role Created: ', roleinfo.createdAt.toDateString(), true)
+			.addField('Role Created: ', `<t:${Math.floor(roleinfo.createdTimestamp / 1000)}:f>`, true)
 			.setFooter(`Powered by the ${message.client.user.username}`, member.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
@@ -41,7 +41,7 @@ module.exports = {
 			.setThumbnail(user.displayAvatarURL({ dynamic: true }))
 			.addField('Role name: ', role.name, true)
 			.addField('Role ID: ', role.id)
-			.addField('Role Created: ', role.createdAt.toDateString(), true)
+			.addField('Role Created: ', `<t:${Math.floor(role.createdTimestamp / 1000)}:f>`, true)
 			.setFooter(`Powered by the ${interaction.client.user.username}`, user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 

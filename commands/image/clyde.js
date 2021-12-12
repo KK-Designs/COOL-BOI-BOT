@@ -38,9 +38,8 @@ module.exports = {
 
 		await message.reply({ embeds: [embed] });
 	},
-	async executeSlash(interaction) {
+	async executeSlash(interaction, client) {
 		let clyde = interaction.options.getString('message', true);
-		const user = interaction.options.getUser('user') ?? interaction.user;
 
 		if (clyde.length > 68) {clyde = clyde.slice(0, 65) + '...';}
 
@@ -56,7 +55,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('<:clyde:772958152214839307>  Clyde  <:clyde:772958152214839307>')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor('#CFF6FF');
 

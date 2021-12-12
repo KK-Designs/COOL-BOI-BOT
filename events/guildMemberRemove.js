@@ -24,8 +24,8 @@ module.exports = async member => {
 		.setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
 		.setColor(color.bot_theme)
 		.setDescription(`${member.user.tag} left ${member.guild.name}`)
-		.addField('Joined:', `${member.joinedAt.toDateString()}`, true)
-		.addField('Account Created:', `${member.user.createdAt.toDateString()}`, true)
+		.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
+		.addField('Joined Server', `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`, true)
 		.setFooter(`${client.user.username} MEMBER LOGGING`)
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();

@@ -4,6 +4,20 @@ const db = require('quick.db');
 const chalk = require('chalk');
 const start_giveaway = require('./giveaway.js');
 module.exports = async (client) => {
+	// Start custom functions
+	console.stdlog = console.log.bind(console);
+	console.logs = [];
+	console.log = function() {
+		console.logs.push(Array.from(arguments));
+		console.stdlog.apply(console, arguments);
+		fs.writeFile('bot.log', console.logs.join('\n'), (err) => {
+			// In case of a error throw err.
+			if (err) throw err;
+		});
+	};
+	Collection.prototype.array = function() {
+		return [...this.values()];
+	};
 	client.queue = new Collection();
 	const commandFolders = fs.readdirSync('./commands');
 	const events = fs.readdirSync('./events');
@@ -30,46 +44,38 @@ module.exports = async (client) => {
 	const timeCommandsMS = endCommandsMS - startCommandsMS;
 	const startEventsMS = new Date().getTime();
 	for (const eventName of events) {
-		console.log('Loading event %s', eventName);
+		console.log('Loading event %s', eventName, '(event)');
 	}
 	const endEventsMS = new Date().getTime();
 	const timeEventsMS = endEventsMS - startEventsMS;
 	const timeSlashCommandsMS = db.get('_slashCommandsMS');
 	const totalBootTime = (timeSlashCommandsMS + timeCommandsMS + timeEventsMS);
-	if (timeCommandsMS <= 2500) {
+	if (timeCommandsMS <= 10000) {
 		commandColor = chalk.greenBright;
-	}
-	else if (timeCommandsMS >= 5000 && timeCommandsMS <= 10000) {
+	} else if (timeCommandsMS >= 10000 && timeCommandsMS <= 30000) {
 		commandColor = chalk.yellowBright;
-	}
-	else if (timeCommandsMS >= 10000) {
+	} else if (timeCommandsMS >= 30000) {
 		commandColor = chalk.redBright;
 	}
-	if (timeEventsMS <= 2500) {
+	if (timeEventsMS <= 10000) {
 		eventColor = chalk.greenBright;
-	}
-	else if (timeEventsMS >= 5000 && timeEventsMS <= 10000) {
+	} else if (timeEventsMS >= 10000 && timeEventsMS <= 30000) {
 		eventColor = chalk.yellowBright;
-	}
-	else if (timeEventsMS >= 10000) {
+	} else if (timeEventsMS >= 30000) {
 		eventColor = chalk.redBright;
 	}
-	if (timeSlashCommandsMS <= 2500) {
+	if (timeSlashCommandsMS <= 10000) {
 		slashCommandsColor = chalk.greenBright;
-	}
-	else if (timeSlashCommandsMS >= 5000 && timeSlashCommandsMS <= 10000) {
+	} else if (timeSlashCommandsMS >= 10000 && timeSlashCommandsMS <= 30000) {
 		slashCommandsColor = chalk.yellowBright;
-	}
-	else if (timeSlashCommandsMS >= 10000) {
+	} else if (timeSlashCommandsMS >= 30000) {
 		slashCommandsColor = chalk.redBright;
 	}
-	if (totalBootTime <= 2500) {
+	if (totalBootTime <= 20500) {
 		totalColor = chalk.greenBright;
-	}
-	else if (totalBootTime >= 5000 && totalBootTime <= 20000) {
+	} else if (totalBootTime >= 20500 && totalBootTime <= 40000) {
 		totalColor = chalk.yellowBright;
-	}
-	else if (totalBootTime >= 20000) {
+	} else if (totalBootTime >= 40000) {
 		totalColor = chalk.redBright;
 	}
 	client.commands.forEach(command => {
@@ -77,8 +83,7 @@ module.exports = async (client) => {
 
 		if (category) {
 			category.set(command.name, command);
-		}
-		else {
+		} else {
 			categories.set(command.category, new Collection().set(command.name, command));
 		}
 	});

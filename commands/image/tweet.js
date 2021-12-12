@@ -22,7 +22,7 @@ module.exports = {
 		// Get message
 		if (!args[0]) {return sendError('Please provide a message to tweet', message.channel);}
 
-		let tweet = message.content.slice(message.content.indexOf(args[0]), message.content.length);
+		let tweet = message.cleanContent.slice(message.content.indexOf(args[0]), message.content.length);
 		if (tweet.length >= 68) {tweet = tweet.slice(0, 65) + '...';}
 
 		const res = await fetch('https://nekobot.xyz/api/imagegen?type=trumptweet&text=' + tweet);

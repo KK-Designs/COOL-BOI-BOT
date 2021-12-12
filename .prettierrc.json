@@ -4,5 +4,6 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"bracketSpacing": true,
-	"arrowParens": "always"
+	"arrowParens": "always",
+	"tabWidth": 4
 }

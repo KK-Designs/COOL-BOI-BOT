@@ -37,8 +37,7 @@ module.exports = {
 					.setColor('RED')
 					.setDescription('<:X_:807305490160943104> That doesn\'t seem to be a valid number.'),
 			] });
-		}
-		else if (id < 0 || id > 100) {
+		} else if (id < 0 || id > 100) {
 			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor('RED')

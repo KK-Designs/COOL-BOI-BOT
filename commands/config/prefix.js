@@ -11,7 +11,8 @@ module.exports = {
 	clientPermissons: 'EMBED_LINKS',
 	permissons: 'ADMINISTRATOR',
 	options: {},
-	execute(message, client) {
+	execute(message) {
+		const { client } = message;
 		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
 			.setTitle(`The bots prefix is ${guildPrefix}`)

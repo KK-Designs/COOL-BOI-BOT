@@ -13,7 +13,13 @@ module.exports = {
 	cooldown: 3,
 	category: 'general',
 	clientPermissons: 'EMBED_LINKS',
-	// eslint-disable-next-line complexity
+	options: {
+		argument: {
+			type: 'String',
+			description: 'The command or category you want to get info for',
+			required: false,
+		},
+	},
 	async execute(message, args) {
 		const user = message.author;
 		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
@@ -121,8 +127,7 @@ module.exports = {
 								.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
 							i.update({ embeds: [categoryEmbed1], components: [categoryMenu] });
-						}
-						else {
+						} else {
 							i.reply({ content: '<:X_:807305490160943104> You are not allowed to use the select menu on this command', ephemeral: true });
 						}
 					}
@@ -228,23 +233,20 @@ module.exports = {
 		if (command.aliases) {
 			aliasesinfo.push(`${command.aliases.join(', ')}`);
 			aliasename.push('**Aliases**');
-		}
-		else if (command.aliases == undefined) {
+		} else if (command.aliases == undefined) {
 			aliasesinfo.push('** **');
 			aliasename.push('** **');
 		}
 		if (command.permissions) {
 			perms.push(`\`${command.permissions}\`, \`SEND_MESSAGES\`, \`VIEW_CHANNEL\``);
-		}
-		else if (command.permissions == null) {
+		} else if (command.permissions == null) {
 			perms.push('`SEND_MESSAGES`, `VIEW_CHANNEL`');
 		}
 		const data1 = [];
 
 		if (command.guildOnly) {
 			data1.push('This command can be used only in servers');
-		}
-		else {
+		} else {
 			data1.push('This command can be used in servers and dms');
 		}
 		const cmdPath = path.join(__dirname, '../', command.category, `${command.name.toLowerCase()}.js`);
@@ -268,5 +270,255 @@ module.exports = {
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
 		return await message.reply({ embeds: [embed] });
+	},
+	async executeSlash(interaction, client) {
+		const user = interaction.user;
+		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.author.id) ?? config.defaultPrefix;
+		const data = [];
+		const { commands } = client;
+		let name = interaction.options.getString('argument');
+		if (name) name = name.toLowerCase();
+		if (!name) {
+			data.push(commands.map(command => `\`${command.name}\``).join(' | '));
+			data.push(`\nYou can use \`${guildPrefix}help [command name]\` to get info on a specific command. Use \`${guildPrefix}help [category name]\` to get specific category commands. Make sure to use \`${guildPrefix}\` or @mention me before each command!`);
+			const embed = new MessageEmbed()
+				.setTitle('Commands')
+				.setDescription(data.toString())
+				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+				.setTimestamp()
+				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+
+			return interaction.reply({ embeds: [embed] });
+		}
+		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+		if (name === 'category' || name === 'categories') {
+			const categoryMenu = new MessageActionRow()
+				.addComponents(
+					new MessageSelectMenu()
+						.setCustomId('categorySelectMenu')
+						.setPlaceholder('Click here to select a category')
+						.addOptions([
+							{
+								label: 'Fun',
+								description: 'All of the commands in the "fun" category',
+								value: 'fun',
+							},
+							{
+								label: 'General',
+								description: 'All of the commands in the "general" category',
+								value: 'general',
+							},
+							{
+								label: 'Games',
+								description: 'All of the commands in the "games" category',
+								value: 'games',
+							},
+							{
+								label: 'Image',
+								description: 'All of the commands in the "image" category',
+								value: 'image',
+							},
+							{
+								label: 'Info',
+								description: 'All of the commands in the "info" category',
+								value: 'info',
+							},
+							{
+								label: 'Levels',
+								description: 'All of the commands in the "levels" category',
+								value: 'levels',
+							},
+							{
+								label: 'Moderation',
+								description: 'All of the commands in the "moderation" category',
+								value: 'moderation',
+							},
+							{
+								label: 'Music',
+								description: 'All of the commands in the "music" category',
+								value: 'music',
+							},
+							{
+								label: 'Other',
+								description: 'All of the commands in the "other" category',
+								value: 'other',
+							},
+							{
+								label: 'Config',
+								description: 'All of the commands in the "Config" category',
+								value: 'config',
+							},
+						]),
+				);
+			const categoryEmbed = new MessageEmbed()
+				.setTitle('All categories')
+				.setDescription(`\`${categorynames.join('` | `')}\``)
+				.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+				.setTimestamp()
+				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+
+			return interaction.reply({ embeds: [categoryEmbed], components: [categoryMenu], fetchReply: true }).then(m => {
+				const collector = m.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 60000 });
+
+				collector.on('collect', i => {
+					if (i.customId === 'categorySelectMenu') {
+						if (i.user.id === interaction.user.id) {
+							const category = commands.filter(cmd => cmd.category === i.values[0]);
+							const cmds = [];
+							const categorycmd = category.map(cmd => `\`${cmd.name}\``);
+
+							cmds.push(categorycmd.join(' | '));
+							cmds.push(`\n\nYou can use \`${guildPrefix}help [command name]\` to get info on a specific command. Make sure to use \`${guildPrefix}\` or @mention me before each command!`);
+							const categoryEmbed1 = new MessageEmbed()
+								.setTitle(`Commands in ${i.values[0]}`)
+								.setDescription(`${cmds}`)
+								.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+								.setTimestamp()
+								.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+
+							i.update({ embeds: [categoryEmbed1], components: [categoryMenu] });
+						} else {
+							i.reply({ content: '<:X_:807305490160943104> You are not allowed to use the select menu on this command', ephemeral: true });
+						}
+					}
+				});
+				collector.on('end', () => {
+					const categoryMenu1 = new MessageActionRow()
+						.addComponents(
+							new MessageSelectMenu()
+								.setCustomId('categorySelectMenu')
+								.setPlaceholder('Click here to select a category')
+								.addOptions([
+									{
+										label: 'Fun',
+										description: 'All of the commands in the "fun" category',
+										value: 'fun',
+									},
+									{
+										label: 'General',
+										description: 'All of the commands in the "general" category',
+										value: 'general',
+									},
+									{
+										label: 'Games',
+										description: 'All of the commands in the "games" category',
+										value: 'games',
+									},
+									{
+										label: 'Image',
+										description: 'All of the commands in the "image" category',
+										value: 'image',
+									},
+									{
+										label: 'Info',
+										description: 'All of the commands in the "info" category',
+										value: 'info',
+									},
+									{
+										label: 'Levels',
+										description: 'All of the commands in the "levels" category',
+										value: 'levels',
+									},
+									{
+										label: 'Moderation',
+										description: 'All of the commands in the "moderation" category',
+										value: 'moderation',
+									},
+									{
+										label: 'Music',
+										description: 'All of the commands in the "music" category',
+										value: 'music',
+									},
+									{
+										label: 'Other',
+										description: 'All of the commands in the "other" category',
+										value: 'other',
+									},
+									{
+										label: 'Config',
+										description: 'All of the commands in the "Config" category',
+										value: 'config',
+									},
+								])
+								.setDisabled(true),
+						);
+
+					m.edit({ components: [categoryMenu1] });
+				});
+			});
+		}
+		if (categorynames.includes(name)) {
+			const category = commands.filter(cmd => cmd.category === name);
+			const cmds = [];
+			const categorycmd = category.map(cmd => `\`${cmd.name}\``);
+
+			cmds.push(categorycmd.join(' | '));
+			cmds.push(`\n\nYou can use \`${guildPrefix}help [command name]\` to get info on a specific command. Make sure to use \`${guildPrefix}\` or @mention me before each command!`);
+			const embed1 = new MessageEmbed()
+				.setTitle(`Commands in ${name}`)
+				.setDescription(`${cmds}`)
+				.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+				.setTimestamp()
+				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+
+			return await interaction.reply({ embeds: [embed1] });
+		}
+		if (!command && !categorynames.includes(name)) {
+			const thing = commands.map(cmd => cmd.name);
+			const result = meant(name, thing);
+			let error = `that's not a valid command, did you mean \`${result.join(' or ')}\`?`;
+			if (!result.length) {
+				error = 'that\'s not a valid command!';
+			}
+
+			return await interaction.reply({ content: `${error}` });
+		}
+		if (command.usage == undefined) {command.usage = ' ';}
+
+		data.push(`**Name:** ${command.name}`);
+		const aliasesinfo = [];
+		const aliasename = [];
+		const perms = [];
+
+		if (command.aliases) {
+			aliasesinfo.push(`${command.aliases.join(', ')}`);
+			aliasename.push('**Aliases**');
+		} else if (command.aliases == undefined) {
+			aliasesinfo.push('** **');
+			aliasename.push('** **');
+		}
+		if (command.permissions) {
+			perms.push(`\`${command.permissions}\`, \`SEND_MESSAGES\`, \`VIEW_CHANNEL\``);
+		} else if (command.permissions == null) {
+			perms.push('`SEND_MESSAGES`, `VIEW_CHANNEL`');
+		}
+		const data1 = [];
+
+		if (command.guildOnly) {
+			data1.push('This command can be used only in servers');
+		} else {
+			data1.push('This command can be used in servers and dms');
+		}
+		const cmdPath = path.join(__dirname, '../', command.category, `${command.name.toLowerCase()}.js`);
+		const cmdFileStat = fs.statSync(cmdPath);
+		const embed = new MessageEmbed()
+			.setTitle(`Command Name: ${command.name}`)
+			.addFields(
+				{ name: '**Description**', value: `${command.description}`, inline: true },
+				{ name: '**Usage**', value: `${guildPrefix}${command.name} ${command.usage}`, inline: true },
+				{ name: '**Cooldown**', value: `${command.cooldown || 3} seconds`, inline: true },
+				{ name: '**Category**', value: `${command.category}`, inline: true },
+				{ name: `${aliasename}`, value: `${aliasesinfo}`, inline: true },
+				{ name: '**Permissions**', value: `${perms}`, inline: true },
+				{ name: '**Bot Permissions**', value: `\`${command.clientPermissons == undefined ? 'VIEW_CHANNEL' : command.clientPermissons}\`, \`SEND_MESSAGES\` `, inline: true },
+				{ name: '**Last updated**', value: `${new Date(cmdFileStat.mtime).toLocaleString('en-US', { timeZone: 'America/los_angeles' }) || 'No date available'}`, inline: true },
+			)
+			.addField(data1.toString(), '** **')
+			.setDescription('[] arguments mean required, and () arguments mean optional. If theres none it means the there are no arguments nedded to run the command')
+			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setTimestamp()
+			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+
+		return await interaction.reply({ embeds: [embed] });
 	},
 };

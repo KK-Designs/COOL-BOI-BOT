@@ -1,3 +1,4 @@
+const config = require('../../config.json');
 module.exports = {
 	name: 'eval',
 	description: 'eval',
@@ -26,16 +27,28 @@ module.exports = {
 			if (typeof evaled !== 'string') {evaled = require('util').inspect(evaled);}
 
 			await message.channel.send({ content: code(evaled.slice(0, 1990), 'js') });
-		}
-		catch (err) {
+		} catch (err) {
 			console.log(err);
 			await message.channel.send(`\`ERROR\` ${code(err)}`);
 		}
 	},
-	async executeSlash(interaction) {
+	async executeSlash(interaction, client) {
 		const args = interaction.options.getString('statement', true);
+		let permissions;
 		console.log('Eval command executed.');
-		if (interaction.member.id !== process.env.OWNER_ID) {return interaction.reply('You try to use the eval command? Straight to jail.');}
+		if (!client.application?.owner) await client.application?.fetch();
+
+		const slashcmd = await client.guilds.cache.get(config.guildId)?.commands.fetch(interaction.commandId);
+		if (interaction.member.id !== process.env.OWNER_ID) {
+			permissions = [
+				{
+					id: interaction.user.id,
+					type: 'USER',
+					permission: false,
+				},
+			];
+			return void await slashcmd.permissions.set({ permissions });
+		}
 
 		try {
 			let evaled = await eval(args);
@@ -44,8 +57,7 @@ module.exports = {
 			await interaction.deferReply();
 			await wait(1000);
 			await interaction.editReply({ content: code(evaled.slice(0, 1990), 'js') });
-		}
-		catch (err) {
+		} catch (err) {
 			console.log(err);
 			await interaction.reply(`\`ERROR\` ${code(err)}`);
 		}

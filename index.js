@@ -1,8 +1,9 @@
 require('dotenv').config();
 const { Client, WebhookClient, MessageEmbed, Collection, Intents } = require('discord.js');
 const db = require('quick.db');
+const fs = require('fs');
+const path = require('path');
 const updateNotifier = require('update-notifier');
-const { exec } = require('child_process');
 const chalk = require('chalk');
 const startup = require('./startup.js');
 const color = require('./color.json');
@@ -11,12 +12,12 @@ const pkg = require('./package.json');
 const client = new Client({
 	intents: [
 		Intents.FLAGS.GUILDS,
-		Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 		Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.GUILD_BANS,
+		Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
 		Intents.FLAGS.GUILD_PRESENCES,
 		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_BANS,
-		Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 		Intents.FLAGS.DIRECT_MESSAGES,
 	],
 	partials: [
@@ -37,14 +38,13 @@ const reqEvent = (event) => {
 	return async (...args) => {
 		try {
 			await run(...args);
-		}
-		catch (e) {
+		} catch (e) {
 			console.error(e);
 		}
 	};
 };
 startup(client);
-client.once('ready', reqEvent('ready').bind(null, client));
+// client.once('ready', reqEvent('ready').bind(null, client));
 client.on('disconnect', (event) => {
 	console.log('The WebSocket has closed and will no longer attempt to reconnect', event);
 });
@@ -54,26 +54,15 @@ client.on('warn', (info) => {
 // Delete the value "_slashCommandsMS" incase the script wasn't ran
 db.delete('_slashCommandsMS');
 try {
-	client.on('guildCreate', reqEvent('guildCreate'));
-	client.on('guildDelete', reqEvent('guildDelete'));
-	client.on('guildBanRemove', reqEvent('guildBanRemove'));
-	client.on('guildBanAdd', reqEvent('guildBanAdd'));
-	client.on('guildMemberUpdate', reqEvent('guildMemberUpdate'));
-	client.on('emojiUpdate', reqEvent('emojiUpdate'));
-	client.on('channelDelete', reqEvent('channelDelete'));
-	client.on('channelCreate', reqEvent('channelCreate'));
-	client.on('channelUpdate', reqEvent('channelUpdate'));
-	client.on('emojiDelete', reqEvent('emojiDelete'));
-	client.on('emojiCreate', reqEvent('emojiCreate'));
-	client.on('messageCreate', reqEvent('messageCreate'));
-	client.on('messageUpdate', reqEvent('messageUpdate'));
-	client.on('messageDeleteBulk', reqEvent('messageDeleteBulk'));
-	client.on('messageDelete', reqEvent('messageDelete'));
-	client.on('guildMemberAdd', reqEvent('guildMemberAdd'));
-	client.on('guildMemberRemove', reqEvent('guildMemberRemove'));
-	client.on('interactionCreate', reqEvent('interactionCreate'));
-}
-catch (err) {
+	const files = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+	for (const events of files) {
+		if (!path.parse(events).name === 'ready') {
+			client.on(path.parse(events).name, reqEvent(path.parse(events).name));
+		} else {
+			client.once(path.parse(events).name, reqEvent(path.parse(events).name));
+		}
+	}
+} catch (err) {
 	console.error(err);
 }
 client.login(process.env.BOT_TOKEN);
@@ -84,8 +73,9 @@ process.on('SIGINT', async () => {
 		input: process.stdin,
 		output: process.stdout,
 	});
+	const spawn = require('child_process').spawn;
 
-	readline.question('Are you sure you want to shut down? (y/n)', res => {
+	readline.question(`Are you sure you want to shut down? (${chalk.greenBright('y')}/${chalk.redBright('n')})`, res => {
 		if (res === 'y') {
 			console.log('Shutting down...');
 			const timer = setTimeout(() => {
@@ -103,7 +93,24 @@ process.on('SIGINT', async () => {
 			process.exit();
 		} else if (res === 'n') {
 			console.log('Rebooting bot...');
-			exec('node .');
+			(function main() {
+
+				if (process.env.process_restarting) {
+					delete process.env.process_restarting;
+					// Give old process one second to shut down before continuing ...
+					setTimeout(main, 1000);
+					return;
+				}
+
+				// ...
+
+				// Restart process ...
+				spawn(process.argv[0], process.argv.slice(1), {
+					env: { process_restarting: 1 },
+					stdio: 'ignore',
+					detached: true,
+				}).unref();
+			})();
 		} else {
 			console.error(`${chalk.red(`Error: Expected "y" or "n" but got "${res}"`)}`);
 			process.exit(1);

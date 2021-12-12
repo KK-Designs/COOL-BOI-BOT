@@ -8,8 +8,7 @@ module.exports = {
 		const random = Math.floor(Math.random() * Math.floor(2));
 		if (random === 0) {
 			message.reply({ content: 'I flipped heads!' });
-		}
-		else {
+		} else {
 			message.reply({ content: 'I flipped tails!' });
 		}
 	},

@@ -7,8 +7,8 @@ module.exports = {
 	name: 'dog',
 	description: 'Sends a picture of a dog 🐶',
 	usage: '(breed)',
-  	cooldown: 5,
-  	category: 'fun',
+	cooldown: 5,
+	category: 'fun',
 	options: {
 		breed: {
 			type: 'String',
@@ -34,8 +34,7 @@ module.exports = {
 					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
 				message.reply({ embeds: [ embed ] });
 			});
-		}
-		else {
+		} else {
 			fetch(`https://api.thedogapi.com/v1/breeds/search?q=${encodeURIComponent(args.join(' '))}`).then(res => res.json()).then(res => {
 				if (!res.length) {
 					return sendError('I couldn\'t find any dog! Please try and enter a valid search and try again', message.channel);
@@ -84,8 +83,7 @@ module.exports = {
 					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
 				interaction.editReply({ embeds: [ embed ] });
 			});
-		}
-		else {
+		} else {
 			fetch(`https://api.thedogapi.com/v1/breeds/search?q=${encodeURIComponent(breed)}`).then(res => res.json()).then(res => {
 				if (!res.length) {
 					return sendError('I couldn\'t find any dog! Please try and enter a valid search and try again', interaction.channel);

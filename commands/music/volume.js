@@ -31,7 +31,7 @@ module.exports = {
 		serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
 		const xd = new MessageEmbed()
 			.setDescription(`I have set the volume to: **${args[0]}/100**`)
-			.setAuthor('Server Volume Manager', 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif')
+			.setAuthor('Server Volume Manager', 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif')
 			.setColor('BLUE');
 
 		return message.reply({ embeds: [xd] });

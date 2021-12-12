@@ -23,7 +23,7 @@ module.exports = {
 
 		const { channel } = message.member.voice;
 
-		if (!channel) {return message.reply({ content: 'You need to join a a voice channel to use this command.' });}
+		if (!channel.channelId) {return message.reply({ content: 'You need to join a a voice channel to use this command.' });}
 
 		const permissions = channel.permissionsFor(message.client.user);
 
@@ -45,8 +45,7 @@ module.exports = {
 				author: songInfo.videoDetails.ownerChannelName,
 				url: songInfo.videoDetails.video_url,
 			};
-		}
-		else {
+		} else {
 			// message.reply('Please pass a valid youtube URL.');
 			const searched = await yts.search(searchString);
 			if (searched.videos.length === 0) {return message.reply({ content: 'Looks like i was unable to find the song on YouTube' });}
@@ -101,8 +100,7 @@ module.exports = {
 		player.on(AudioPlayerStatus.Idle, async () => {
 			if (queueConstruct.loop === true) {
 				queueConstruct.songs.push(queueConstruct.songs.shift());
-			}
-			else {
+			} else {
 				queueConstruct.songs.shift();
 			}
 			if (queueConstruct.songs[0]) {return void await queueConstruct.playNext();}
@@ -145,8 +143,7 @@ module.exports = {
 			connection.subscribe(player);
 			queueConstruct.connection = connection;
 			queueConstruct.playNext();
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(`Error: ${error}`);
 			queueConstruct.destroy();
 

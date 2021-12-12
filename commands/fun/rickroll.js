@@ -4,12 +4,11 @@ const {
 	entersState,
 	getVoiceConnection,
 	joinVoiceChannel,
-
 	AudioPlayerStatus,
 	NoSubscriberBehavior,
 	VoiceConnectionStatus,
 } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 const subscriptions = new Set();
 module.exports = {
 	name: 'rickroll',

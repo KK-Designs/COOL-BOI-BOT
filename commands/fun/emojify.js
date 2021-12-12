@@ -41,12 +41,15 @@ module.exports = {
 			return sendError('Please provide text for me to emojify (i.e. `!emojify hello`)', message.channel);
 		}
 		const user = message.author;
-		let msg = message.content.slice(message.content.indexOf(args[0]), message.content.length);
+		let msg = message.cleanContent.slice(message.content.indexOf(args[0]), message.content.length);
 		msg = msg.split('').map(c => {
-			if (c === ' ') {return c;}
-			else if (/[0-9]/.test(c)) {return numberMap[c];}
-			else if (/^[?!!!!?$x#*]*$/.test(c)) {return numericalMap[c];}
-
+			if (c === ' ') {
+				return c;
+			} else if (/[0-9]/.test(c)) {
+				return numberMap[c];
+			} else if (/^[?!!!!?$x#*]*$/.test(c)) {
+				return numericalMap[c];
+			}
 			return /[a-zA-Z]/.test(c) ? ':regional_indicator_' + c.toLowerCase() + ':' : '';
 		}).join('');
 		if (msg.length > 2048) {
@@ -66,10 +69,13 @@ module.exports = {
 		const user = interaction.user;
 		let msg = interaction.options.getString('message', true);
 		msg = msg.split('').map(c => {
-			if (c === ' ') {return c;}
-			else if (/[0-9]/.test(c)) {return numberMap[c];}
-			else if (/^[?!!!!?$x#*]*$/.test(c)) {return numericalMap[c];}
-
+			if (c === ' ') {
+				return c;
+			} else if (/[0-9]/.test(c)) {
+				return numberMap[c];
+			} else if (/^[?!!!!?$x#*]*$/.test(c)) {
+				return numericalMap[c];
+			}
 			return /[a-zA-Z]/.test(c) ? ':regional_indicator_' + c.toLowerCase() + ':' : '';
 		}).join('');
 		if (msg.length > 2048) {

@@ -1,6 +1,8 @@
 const { MessageEmbed } = require('discord.js');
 const color = require('../../color.json');
 const fetch = require('node-fetch').default;
+const Filter = require('bad-words'),
+	filter = new Filter();
 module.exports = {
 	name: 'lyrics',
 	description: '🎶 Get lyrics for the currently playing song',
@@ -14,30 +16,30 @@ module.exports = {
 
 		if (!queue) {return message.reply({ content: 'There is nothing playing.' });}
 
-		let lyrics;
+		let lyricsinfo;
 		const msg = await message.channel.send(`Fetching lyrics for ${queue.songs[0].title}...`);
 		try {
-			// lyrics = await lyricsFinder(queue.songs[0].title, "");
-			lyrics = await getLyrics(queue.songs[0].title);
-			if (!lyrics) {lyrics = `No lyrics found for ${queue.songs[0].title}.`;}
+			lyricsinfo = await getLyrics(queue.songs[0].title);
+			if (!lyricsinfo.lyrics) {lyricsinfo.lyrics = `No lyrics found for ${queue.songs[0].title}.`;}
+		} catch (error) {
+			lyricsinfo.lyrics = `No lyrics found for ${queue.songs[0].title}.`;
 		}
-		catch (error) {
-			lyrics = `No lyrics found for ${queue.songs[0].title}.`;
+		if (filter.clean(lyricsinfo.lyrics).includes('**')) {
+			message.reply('⚠ Warning: This lyrics contains swears. We removed most of them from the lyrics');
 		}
 		const lyricsEmbed = new MessageEmbed()
-			.setAuthor(`${queue.songs[0].title} — Lyrics`, 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif', queue.songs[0].url)
-			.setThumbnail(queue.songs[0].img)
-			.setColor(message.guild?.me.displayHexColor ?? color.bot_theme)
-			.setDescription(lyrics)
+			.setAuthor(`${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', queue.songs[0].url)
+			.setThumbnail(lyricsinfo?.thumbnail ?? 'https://thumbs.dreamstime.com/b/music-note-icon-element-simple-web-name-mobile-concept-apps-thin-line-can-be-used-white-background-170192321.jpg')
+			.setURL(lyricsinfo?.link ?? queue.songs[0].url)
+			.setColor(message.channel.type === 'DM' ? color.bot_theme : message.guild.me.displayHexColor)
+			.setDescription(filter.clean(lyricsinfo.lyrics))
 			.setTimestamp()
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
-		if (lyricsEmbed.description.length >= 2048) {
-			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
-		}
-		else {
+			.setFooter(`Song by ${lyricsinfo?.author ?? 'Unknown'}`);
+		if (lyricsEmbed.description.length >= 4093) {
+			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 	4093)}...`;
+		} else {
 			await msg.edit({ embeds: [lyricsEmbed] });
 		}
-
 	},
 	async executeSlash(interaction) {
 
@@ -45,25 +47,28 @@ module.exports = {
 
 		if (!queue) {return interaction.reply({ content: 'There is nothing playing.' });}
 
-		let lyrics;
+		let lyricsinfo;
 		try {
 			await interaction.deferReply();
-			lyrics = await getLyrics(queue.songs[0].title)
+			lyricsinfo = await getLyrics(queue.songs[0].title)
         ?? `No lyrics found for ${queue.songs[0].title}.`;
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
-			lyrics = `No lyrics found for ${queue.songs[0].title}.`;
+			lyricsinfo = `No lyrics found for ${queue.songs[0].title}.`;
+		}
+		if (filter.clean(lyricsinfo.lyrics).includes('**')) {
+			interaction.editReply('⚠ Warning: This lyrics contains swears. We removed most of them from the lyrics');
 		}
 		const lyricsEmbed = new MessageEmbed()
-			.setAuthor(`${queue.songs[0].title} — Lyrics`, 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif', queue.songs[0].url)
-			.setThumbnail(queue.songs[0].img)
+			.setAuthor(`${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', queue.songs[0].url)
+			.setThumbnail(lyricsinfo?.thumbnail ?? 'https://thumbs.dreamstime.com/b/music-note-icon-element-simple-web-name-mobile-concept-apps-thin-line-can-be-used-white-background-170192321.jpg')
+			.setURL(lyricsinfo?.link ?? queue.songs[0].url)
 			.setColor(interaction.channel.type === 'DM' ? color.bot_theme : interaction.guild.me.displayHexColor)
-			.setDescription(lyrics)
+			.setDescription(filter.clean(lyricsinfo.lyrics))
 			.setTimestamp()
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }));
-		if (lyricsEmbed.description.length >= 2048) {
-			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
+			.setFooter(`Song by ${lyricsinfo?.author ?? 'Unknown'}`);
+		if (lyricsEmbed.description.length >= 4093) {
+			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 	4093)}...`;
 		}
 		await interaction.editReply({ embeds: [lyricsEmbed] }).catch(console.error);
 	},
@@ -79,5 +84,5 @@ async function getLyrics(title) {
 	}
 	const json = await res.json();
 
-	return json.lyrics;
+	return { lyrics: json?.lyrics, title: json?.title, author: json?.author, thumbnail: json.thumbnail?.genius, link: json.links?.genius };
 }
