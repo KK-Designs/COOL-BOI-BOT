@@ -19,7 +19,7 @@ module.exports = {
 			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.user;

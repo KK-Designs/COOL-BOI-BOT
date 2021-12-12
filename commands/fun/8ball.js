@@ -1,4 +1,5 @@
 const { spoiler } = require('@discordjs/builders');
+const { setTimeout: delay } = require('timers/promises');
 const eightball = [
 	'It is certain',
 	'It is decidedly so',
@@ -34,22 +35,20 @@ module.exports = {
 			description: 'The question to ask',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {
-			return message.reply({ content: 'Please ask me a question.' });
+			return await message.reply({ content: 'Please ask me a question.' });
 		}
-		message.channel.sendTyping();
+		await message.replyTyping();
 		const index = Math.floor(Math.random() * Math.floor(eightball.length));
-		setTimeout(() => {
-			message.channel.send({ content: `${eightball[index]}` });
-		}, 750);
+		await delay(750);
+		await message.reply({ content: `${eightball[index]}` });
 
 	},
 	async executeSlash(interaction) {
-		const wait = require('util').promisify(setTimeout);
 		const index = Math.floor(Math.random() * eightball.length);
 		await interaction.deferReply();
-		await wait(750);
+		await delay(750);
 		await interaction.editReply({
 			content: `${eightball[index]}`,
 		});

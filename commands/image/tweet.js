@@ -34,7 +34,7 @@ module.exports = {
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? color.discord);
 
-		message.channel.send({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.user;

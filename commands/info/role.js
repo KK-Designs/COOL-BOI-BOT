@@ -30,7 +30,7 @@ module.exports = {
 			.setFooter(`Powered by the ${message.client.user.username}`, member.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.user;

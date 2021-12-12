@@ -19,6 +19,7 @@ const client = new Client({
 		Intents.FLAGS.GUILD_PRESENCES,
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.DIRECT_MESSAGES,
+		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
 	partials: [
 		'MESSAGE',

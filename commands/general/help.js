@@ -36,7 +36,7 @@ module.exports = {
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-			return message.channel.send({ embeds: [embed] });
+			return await message.reply({ embeds: [embed] });
 		}
 		const name = args[0].toLowerCase();
 		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));

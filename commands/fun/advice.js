@@ -1,3 +1,4 @@
+const { setTimeout: delay } = require('timers/promises');
 const request = require('node-superfetch');
 module.exports = {
 	name: 'advice',
@@ -5,11 +6,11 @@ module.exports = {
 	cooldown: 1,
 	category: 'fun',
 	options: {},
-	execute(message) {
-		message.channel.sendTyping();
+	async execute(message) {
+		await message.replyTyping();
 		request
 			.get('http://api.adviceslip.com/advice')
-			.end((err, res) => {
+			.end(async (err, res) => {
 				if (!err && res.status === 200) {
 					try {
 						JSON.parse(res.text);
@@ -34,9 +35,8 @@ module.exports = {
 
 		const advice = JSON.parse(res.body.toString());
 
-		const wait = require('util').promisify(setTimeout);
 		await interaction.deferReply();
-		await wait(750);
+		await delay(750);
 		await interaction.editReply({
 			content: `📜  "${advice.slip.advice}"`,
 		});

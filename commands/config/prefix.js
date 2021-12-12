@@ -11,7 +11,7 @@ module.exports = {
 	clientPermissons: 'EMBED_LINKS',
 	permissons: 'ADMINISTRATOR',
 	options: {},
-	execute(message) {
+	async execute(message) {
 		const { client } = message;
 		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
@@ -22,7 +22,7 @@ module.exports = {
 			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
-		message.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const { client } = interaction;
@@ -35,6 +35,6 @@ module.exports = {
 			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 
-		interaction.reply({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed] });
 	},
 };

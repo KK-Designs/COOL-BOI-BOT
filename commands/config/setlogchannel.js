@@ -12,29 +12,36 @@ module.exports = {
 	usage: '[channel name] or (`none` to clear)',
 	category: 'config',
 	options: {
-		channel: {
-			type: 'Channel',
-			description: 'The channel to send logs to',
-			channelTypes: ['GuildText'],
+		set: {
+			type: 'Subcommand',
+			description: 'Set the log channel',
+			options: {
+				channel: {
+					type: 'Channel',
+					description: 'The channel to send logs to',
+					channelTypes: ['GUILD_TEXT'],
+				},
+			},
 		},
 		reset: {
-			type: 'Boolean',
-			description: 'If I should reset the logging channel',
+			type: 'Subcommand',
+			description: 'Disable the log channel',
 			required: false,
+			options: {},
 		},
 	},
 	async execute(message, args) {
 		const x = message.mentions.channels.first() || message.guild.channels.cache.find(channel => channel.name === args[0]) || message.guild.channels.cache.get(args[0]);
 
 		if (!args[0] && !x) {
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> An invalid argument was provided. The only 2 valid ones are `none` to reset configuration or `[channel]` to set a logging channel.'),
 			] });
 		}
 		if (args[0].toLowerCase() === 'none' || args[0].toLowerCase() === 'disable') {
-			message.reply({ embeds: [
+			await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
@@ -43,7 +50,7 @@ module.exports = {
 			return await db.delete(`loggingchannel_${message.guild.id}`);
 		}
 		if (!x) {
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> Please specify a valid channel.'),
@@ -55,18 +62,17 @@ module.exports = {
 		});
 
 		console.log(`Created webhook ${JSON.stringify(webhook)}`);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),
 		] });
 	},
 	async executeSlash(interaction) {
-		const x = interaction.options.getChannel('channel');
-		const reset = interaction.options.getBoolean('reset');
+		const sub = interaction.options.getSubcommand(true);
 
-		if (reset) {
-			interaction.reply({ embeds: [
+		if (sub === 'reset') {
+			await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Stopped logging events'),
@@ -74,8 +80,10 @@ module.exports = {
 
 			return await db.delete(`loggingchannel_${interaction.guild.id}`);
 		}
+		const x = interaction.options.getChannel('channel', true);
+
 		if (!x) {
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.fail)
 					.setDescription('<:X_:807305490160943104> Please specify a valid channel.'),
@@ -87,7 +95,7 @@ module.exports = {
 		});
 
 		console.log(`Created webhook ${JSON.stringify(webhook)}`);
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Succesfuly set logging channel to ${x}`),

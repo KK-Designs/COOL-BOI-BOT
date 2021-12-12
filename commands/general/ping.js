@@ -11,7 +11,7 @@ module.exports = {
 			.setTitle('<a:loading:808390866367545384> Pinging...')
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.member.displayHexColor : '#FFB700');
 
-		message.reply({ embeds: [embed] }).then((msg) => {
+		await message.reply({ embeds: [embed] }).then((msg) => {
 			const pingembed = new MessageEmbed()
 				.setTitle(`${client.user.username}'s Ping\n------------------------`)
 				.addField('WS Latency:', `${Math.round(client.ws.ping)}ms`, true)
@@ -25,12 +25,12 @@ module.exports = {
 			}, Date.now() - message.createdTimestamp);
 		});
 	},
-	/** @param {CommandInteraction & { member: GuildMember }} interaction */
+	/** @param {import("discord.js").CommandInteraction<"cached">} interaction */
 	async executeSlash(interaction) {
 		const embed = new MessageEmbed()
 			.setTitle('<a:loading:808390866367545384> Pinging...')
 			.setColor(interaction.member?.displayHexColor ?? '#FFB700');
-		/** @type {Message} */
+		/** @type {import("discord.js").Message} */
 		// eslint-disable-next-line no-extra-parens
 		const reply = (await interaction.reply({ embeds: [embed], fetchReply: true }));
 		const pingEmbed = new MessageEmbed()

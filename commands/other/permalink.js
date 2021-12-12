@@ -12,23 +12,21 @@ module.exports = {
 	async execute(message) {
 		const { MessageEmbed } = require('discord.js');
 		if (message.attachments.first()) {
-			message.client.channels.fetch('891838175155208242').then(msg => {
-				msg.channel.send(message.attachments.first().url).then(m => {
-					const embed = new MessageEmbed()
-						.setTitle('Your image link:')
-						.setURL(m.attachments.first().url)
-						.addFields(
-							{ name: 'Url', value: m.attachments.first().url, inline: true },
-							{ name: 'Size', value: m.attachments.first().size, inline: true },
-							{ name: 'Dimensions', value: `${m.attachments.first().width}x${m.attachments.first().height}`, inline: true },
-						)
-						.setColor(message.member?.displayHexColor ?? '#FFB700');
-					message.reply({ embeds: [ embed ] });
-				});
-			});
+			const msg = await message.client.channels.fetch('891838175155208242');
+			const m = await msg.channel.send(message.attachments.first().url);
+			const embed = new MessageEmbed()
+				.setTitle('Your image link:')
+				.setURL(m.attachments.first().url)
+				.addFields(
+					{ name: 'Url', value: m.attachments.first().url, inline: true },
+					{ name: 'Size', value: m.attachments.first().size, inline: true },
+					{ name: 'Dimensions', value: `${m.attachments.first().width}x${m.attachments.first().height}`, inline: true },
+				)
+				.setColor(message.member?.displayHexColor ?? '#FFB700');
+			await message.reply({ embeds: [ embed ] });
 		}
 	},
 	async executeSlash(interaction) {
-		interaction.reply({ content: '<:X_:807305490160943104> Slash commands are not supported on this command' });
+		await interaction.reply({ content: '<:X_:807305490160943104> Slash commands are not supported on this command' });
 	},
 };

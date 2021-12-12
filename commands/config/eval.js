@@ -19,8 +19,8 @@ module.exports = {
    * @returns
    */
 	async execute(message, args) {
-		console.log('Eval command executed.');
-		if (message.author.id !== process.env.OWNER_ID) {return message.channel.send('You try to use the eval command? Straight to jail.');}
+		console.log('Eval command async executed.');
+		if (message.author.id !== process.env.OWNER_ID) {return await message.reply('You try to use the eval command? Straight to jail.');}
 
 		try {
 			let evaled = await eval(args.join(' '));
@@ -29,7 +29,7 @@ module.exports = {
 			await message.channel.send({ content: code(evaled.slice(0, 1990), 'js') });
 		} catch (err) {
 			console.log(err);
-			await message.channel.send(`\`ERROR\` ${code(err)}`);
+			await message.reply(`\`ERROR\` ${code(err)}`);
 		}
 	},
 	async executeSlash(interaction, client) {

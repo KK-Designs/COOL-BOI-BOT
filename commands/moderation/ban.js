@@ -27,7 +27,7 @@ module.exports = {
 		if (!user) {return sendError('Please provide a valid user for me to ban <:BAN:752937190786465894>', message.channel);}
 
 		if (user.id === message.client.user.id) {
-			return message.reply({ content: 'You can\'t ban me!' });
+			return await message.reply({ content: 'You can\'t ban me!' });
 		}
 		const reason = args.slice(1).join(' ') ?? 'No reason provided';
 		const banembeddm = new MessageEmbed()
@@ -41,10 +41,10 @@ module.exports = {
 			.setFooter('Banned at:');
 		const member = await message.guild.members.fetch(user).catch(() => null);
 
-		if (!member) {return message.reply({ content: 'That user isn\'t in this guild!' });}
+		if (!member) {return await message.reply({ content: 'That user isn\'t in this guild!' });}
 
 		if (!member.bannable) {
-			return message.reply(
+			return await message.reply(
 				'I was unable to ban that user. Check if I have the permision `BAN_MEMBERS`. If not that make sure my role is higher than the member you are tying to ban <:BAN:752937190786465894>.',
 			);
 		}
@@ -73,7 +73,7 @@ module.exports = {
 			.setFooter('Banned at:');
 
 		// We let the message author know we were able to ban the person
-		message.channel.send({ embeds: [banembed] });
+		await message.reply({ embeds: [banembed] });
 	},
 	async executeSlash(interaction) {
 		const member = interaction.options.getMember('user', true);

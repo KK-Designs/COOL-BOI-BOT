@@ -29,7 +29,7 @@ module.exports = {
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
-		await message.channel.send({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const limit = interaction.options.getInteger('limit') ?? 6;

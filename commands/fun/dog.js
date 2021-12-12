@@ -16,7 +16,7 @@ module.exports = {
 			required: false,
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {
 			fetch('https://api.thedogapi.com/v1/images/search').then(res => res.json()).then(res => {
 				const embed = new MessageEmbed()

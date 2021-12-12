@@ -40,7 +40,7 @@ module.exports = {
 			description: 'The user you want to challenge',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {return sendError('You need to specify a difficulty', message.channel);}
 
 		if (!difficulties.includes(args[0].toLowerCase())) {return sendError('Please provide a valid difficulty', message.channel);}
@@ -54,7 +54,7 @@ module.exports = {
 	},
 	async executeSlash(interaction) {
 		const difficulty = interaction.options.getString('difficulty', true);
-		if (!difficulties.includes(difficulty)) {return interaction.reply('Please provide a valid difficulty');}
+		if (!difficulties.includes(difficulty)) {return await message.reply('Please provide a valid difficulty');}
 		const user = interaction.options.getUser('user', true);
 		await interaction.deferReply();
 		const message = {

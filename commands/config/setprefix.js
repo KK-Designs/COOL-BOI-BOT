@@ -21,14 +21,14 @@ module.exports = {
 			required: false,
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		const guild = message.guild;
 		const guildPrefix = prefix.getPrefix(guild?.id ?? message.author.id) ?? config.defaultPrefix;
 
 		if (!args.length || args[0].toLowerCase() === 'disable' || args[0].toLowerCase() === 'none') {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
 
-			return message.reply({ embeds: [
+			return await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
@@ -41,7 +41,7 @@ module.exports = {
 			] });
 		}
 		prefix.setPrefix(args[0], guild.id);
-		message.reply({ embeds: [
+		await message.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${args[0]}\n\n *you can check the new prefix by running '${message.client.user} prefix'*`),
@@ -58,7 +58,7 @@ module.exports = {
 		if (reset) {
 			setTimeout(() => { prefix.setPrefix('!', guild.id); }, 700);
 
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor(color.success)
 					.setDescription('<:check:807305471282249738> Reset the bots prefix to `!`'),
@@ -71,7 +71,7 @@ module.exports = {
 			] });
 		}
 		prefix.setPrefix(newPrefix, guild.id);
-		interaction.reply({ embeds: [
+		await interaction.reply({ embeds: [
 			new MessageEmbed()
 				.setColor(color.success)
 				.setDescription(`<:check:807305471282249738> Prefix was succesfully changed to ${newPrefix}\n\n *you can check the new prefix by running '${interaction.client.user} prefix'*`),

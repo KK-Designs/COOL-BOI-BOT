@@ -31,7 +31,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter(`${message.client.user.username} Images`, `${message.client.user.displayAvatarURL({ dynamic: true })}`);
 
-		message.channel.send({ embeds: [imageEmbed], files: [attach] });
+		await message.reply({ embeds: [imageEmbed], files: [attach] });
 	},
 	async executeSlash(interaction) {
 		const wait = require('util').promisify(setTimeout);
@@ -53,6 +53,6 @@ module.exports = {
 			.setTimestamp()
 			.setFooter(`${interaction.client.user.username} Images`, `${interaction.client.user.displayAvatarURL({ dynamic: true })}`);
 
-		interaction.editReply({ embeds: [imageEmbed], files: [attach] });
+		await interaction.editReply({ embeds: [imageEmbed], files: [attach] });
 	},
 };

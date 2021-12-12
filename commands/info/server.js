@@ -25,7 +25,7 @@ module.exports = {
 			.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
 			.setFooter(serverName, serverIcon);
 
-		message.reply({ embeds: [infoembed] });
+		await message.reply({ embeds: [infoembed] });
 	},
 	async executeSlash(interaction) {
 		const { guild } = interaction;

@@ -14,7 +14,7 @@ module.exports = {
 			description: 'The number',
 		},
 	},
-	execute(message, args) {
+	async execute(message, args) {
 		if (!args[0]) {
 			return sendError('Please enter a valid number', message.channel);
 		}
@@ -25,7 +25,7 @@ module.exports = {
 		}
 		if (!fs.existsSync(`./1-${args}.txt`)) {
 			// file exists
-			return message.channel.send('You are using an unsupported number. The supported numbers are 100, 1000, 10000, 100000, 1000000.  More coming soon!');
+			return await message.reply('You are using an unsupported number. The supported numbers are 100, 1000, 10000, 100000, 1000000.  More coming soon!');
 		}
 		// Get the buffer from the 'memes.txt', assuming that the file exists
 		const buffer = fs.readFileSync(`./1-${args}.txt`);
@@ -38,7 +38,7 @@ module.exports = {
 		const attachment = new MessageAttachment(buffer, `1-${args}.txt`);
 
 		// Send the attachment in the message channel with a content
-		message.reply({ content: `${message.author}, here is the numbers 1-${args}`, files: [attachment] });
+		await message.reply({ content: `${message.author}, here is the numbers 1-${args}`, files: [attachment] });
 
 	},
 	async executeSlash(interaction) {

@@ -54,6 +54,6 @@ module.exports = {
 
 		if (invite.inviter) {inviteEmbed.setFooter(invite.inviter.username, invite.inviter.avatarURL);}
 
-		await message.channel.send({ embeds: [inviteEmbed] });
+		await message.reply({ embeds: [inviteEmbed] });
 	},
 };

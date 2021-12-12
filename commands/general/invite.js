@@ -22,7 +22,7 @@ module.exports = {
 					.setEmoji('<:join:812013459298058260>')
 					.setStyle('LINK'),
 			);
-		message.reply({ content: 'To invite the bot, please click one the buttons below (admin link recommened)', components: [ buttonInvite, buttonInviteADMIN ] });
+		await message.reply({ content: 'To invite the bot, please click one the buttons below (admin link recommened)', components: [ buttonInvite, buttonInviteADMIN ] });
 	},
 	async executeSlash(interaction, client) {
 		const { MessageActionRow, MessageButton } = require('discord.js');

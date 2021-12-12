@@ -8,11 +8,11 @@ module.exports = {
 	async execute(message) {
 		const queue = message.client.queue.get(message.guild.id);
 
-		if (!queue) {return message.reply({ content: 'There is nothing playing.' });}
+		if (!queue) {return await message.reply({ content: 'There is nothing playing.' });}
 
 		queue.loop = !queue.loop;
 		if (queue.loop) {
-			return message.reply({
+			return await message.reply({
 				embeds: [
 					new MessageEmbed()
 						.setColor('GREEN')
@@ -20,7 +20,7 @@ module.exports = {
 				] });
 		}
 
-		return message.reply({
+		return await message.reply({
 			embeds: [
 				new MessageEmbed()
 					.setColor('GREEN')
@@ -32,7 +32,7 @@ module.exports = {
 	async executeSlash(interaction) {
 		const queue = interaction.client.queue.get(interaction.guild.id);
 
-		if (!queue) {return interaction.reply({ content: 'There is nothing playing.' });}
+		if (!queue) {return await interaction.reply({ content: 'There is nothing playing.' });}
 
 		queue.loop = !queue.loop;
 		if (queue.loop) {

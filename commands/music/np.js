@@ -9,10 +9,10 @@ module.exports = {
 	category: 'music',
 	aliases: ['nowplaying'],
 	options: {},
-	execute(message) {
+	async execute(message) {
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue) {return message.channel.send('There is nothing playing.');}
+		if (!serverQueue) {return await message.reply('There is nothing playing.');}
 
 		const currentSong = serverQueue.songs[0];
 		const currentDuration = Math.round(serverQueue.player.state.resource.playbackDuration / 1000);
@@ -31,12 +31,12 @@ module.exports = {
 			.setTimestamp()
 			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
 
-		return message.reply({ embeds: [embed] });
+		return await message.reply({ embeds: [embed] });
 	},
 	async executeSlash(interaction) {
 		const serverQueue = interaction.client.queue.get(interaction.guild.id);
 
-		if (!serverQueue) {return interaction.channel.send('There is nothing playing.');}
+		if (!serverQueue) {return await interaction.channel.send('There is nothing playing.');}
 
 		const currentSong = serverQueue.songs[0];
 		const currentDuration = Math.round(serverQueue.player.state.resource.playbackDuration / 1000);

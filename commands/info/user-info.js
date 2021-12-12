@@ -38,7 +38,7 @@ module.exports = {
 			: message.member;
 
 		if (!member) {
-			return message.channel.send('Member not found');
+			return await message.reply('Member not found');
 		}
 		let commands = db.fetch(`commands_${member.guild.id}_${member.user.id}`) ?? 0;
 		let messages = db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 0;
@@ -95,7 +95,7 @@ module.exports = {
 		const user = (interaction.options.getUser('user') ?? interaction.user);
 		const member = interaction.guild.members.resolve(user);
 		if (!member) {
-			return interaction.reply('Member not found');
+			return await interaction.reply('Member not found');
 		}
 		let commands = db.fetch(`commands_${member.guild.id}_${member.user.id}`) ?? 0;
 		let messages = db.fetch(`messages_${member.guild.id}_${member.user.id}`) ?? 0;
@@ -142,7 +142,7 @@ module.exports = {
 			.addField('Badges: ', badges.join(' ') || 'None', true)
 			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
-		return await interaction.reply({ embeds: [embed] });
+		return await messinteractionage.reply({ embeds: [embed] });
 	},
 };
 

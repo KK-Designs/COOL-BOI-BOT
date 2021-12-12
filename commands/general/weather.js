@@ -17,28 +17,28 @@ module.exports = {
 		},
 	},
 	async execute(message, args) {
-		axios
+		const response = await axios
 			.get(
 				`https://api.openweathermap.org/data/2.5/weather?q=${args}&units=imperial&appid=c1ba87d2a335656425a17e4395303046`,
 			)
-			.then(response => {
-				const apiData = response;
-				const currentTemp = Math.ceil(apiData.data.main.temp);
-				const maxTemp = apiData.data.main.temp_max;
-				const minTemp = apiData.data.main.temp_min;
-				const humidity = apiData.data.main.humidity;
-				const wind = apiData.data.wind.speed;
-				const author = message.author.username;
-				const profile = message.author.displayAvatarURL;
-				const icon = apiData.data.weather[0].icon;
-				const cityName = args;
-				const country = apiData.data.sys.country;
-				const pressure = apiData.data.main.pressure;
-				const cloudness = apiData.data.weather[0].description;
-				message.reply({ embeds: [exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country, message)] });
-			}).catch(() => {
-				sendError('Enter a vailid city name', message.channel);
-			});
+			.catch(() => null);
+		if (!response) {
+			return await sendError('Enter a vailid city name', message.channel);
+		}
+		const apiData = response;
+		const currentTemp = Math.ceil(apiData.data.main.temp);
+		const maxTemp = apiData.data.main.temp_max;
+		const minTemp = apiData.data.main.temp_min;
+		const humidity = apiData.data.main.humidity;
+		const wind = apiData.data.wind.speed;
+		const author = message.author.username;
+		const profile = message.author.displayAvatarURL;
+		const icon = apiData.data.weather[0].icon;
+		const cityName = args;
+		const country = apiData.data.sys.country;
+		const pressure = apiData.data.main.pressure;
+		const cloudness = apiData.data.weather[0].description;
+		await message.reply({ embeds: [exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country, message)] });
 	},
 	async executeSlash(interaction) {
 		const url = new URL('/data/2.5/weather', 'https://api.openweathermap.org');
@@ -49,7 +49,7 @@ module.exports = {
 		url.searchParams.set('appid', 'c1ba87d2a335656425a17e4395303046');
 		const res = await fetch(url);
 
-		if (!res.ok) {return interaction.reply(`HTTP Error ${res.status}: ${res.statusText}`);}
+		if (!res.ok) {return await interaction.reply(`HTTP Error ${res.status}: ${res.statusText}`);}
 
 		const body = await res.json();
 		const currentTemp = Math.ceil(body.main.temp);

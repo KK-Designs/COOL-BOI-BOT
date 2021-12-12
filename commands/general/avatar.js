@@ -19,7 +19,7 @@ module.exports = {
 	async execute(message) {
 		const user = message.mentions.users.first() || message.author;
 		let color;
-		getColors(user.displayAvatarURL({ format: 'png' })).then(colors => {
+		getColors(user.displayAvatarURL({ format: 'png' })).then(async colors => {
 			const downloadAvatar = new MessageActionRow()
 				.addComponents(
 					new MessageButton()
@@ -29,16 +29,15 @@ module.exports = {
 						.setStyle('LINK'),
 				);
 			// eslint-disable-next-line no-shadow
-			color = colors.map(color => color.hex())[0].toString();
-			const avatarEmbed = new MessageEmbed()
-				.setColor(color)
-				.setTitle(`${user.username}'s avatar:`)
-				.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
-				.setTimestamp()
-				.setFooter(`Powered by the ${message.client.user.username}`);
+		color = colors.map(color => color.hex())[0].toString();
+		const avatarEmbed = new MessageEmbed()
+			.setColor(color)
+			.setTitle(`${user.username}'s avatar:`)
+			.setImage(`${user.displayAvatarURL({ dynamic: true, format: 'png' })}`)
+			.setTimestamp()
+			.setFooter(`Powered by the ${message.client.user.username}`);
 
-			message.channel.send({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
-		});
+		await message.reply({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
 	},
 	async executeSlash(interaction) {
 		const user = interaction.options.getUser('user') ?? interaction.user;

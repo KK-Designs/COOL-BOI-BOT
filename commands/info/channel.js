@@ -22,7 +22,7 @@ module.exports = {
 			: message.channel;
 
 		if (!channel) {
-			return message.reply({ content: 'please enter a valid channel.' });
+			return await message.reply({ content: 'please enter a valid channel.' });
 		}
 		const secondstoms = Math.floor(channel.rateLimitPerUser * 1000);
 		let slowmode = humanizeDuration(secondstoms);
@@ -40,7 +40,7 @@ module.exports = {
 			.addField(':arrow_right: Category', channel.parent ? channel.parent.name : 'None', true)
 			.addField(':arrow_right: Topic', channel.topic || 'None', true);
 
-		message.reply({ embeds: [channelEmbed] });
+		await message.reply({ embeds: [channelEmbed] });
 	},
 	async executeSlash(interaction) {
 		const channel = interaction.options.getChannel('channel') ?? interaction.channel;

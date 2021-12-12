@@ -26,7 +26,7 @@ module.exports = {
 			.setDescription(`The word, "${word}" is not in our dictionary. Please make sure there's no spelling errors`)
 			.setColor(fail);
 		if (!result?.definitions) {
-			return message.reply({ embeds: [ ErrorEmbed ] });
+			return await message.reply({ embeds: [ ErrorEmbed ] });
 		}
 		const findingEmbed = new MessageEmbed()
 			.setTitle(`<a:loading:808390866367545384> Searching ${word} amoungst 800000 words`)
@@ -53,7 +53,7 @@ module.exports = {
 			.setDescription(`The word, "${word}" is not in our dictionary. Please make sure there's no spelling errors`)
 			.setColor(fail);
 		if (!result?.definitions) {
-			return interaction.reply({
+			return await interaction.reply({
 				embeds: [ ErrorEmbed ],
 			});
 		}

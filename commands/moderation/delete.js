@@ -1,4 +1,5 @@
 /* eslint-disable max-statements-per-line */
+const { setTimeout: wait } = require('timers/promises');
 const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'delete',
@@ -24,13 +25,13 @@ module.exports = {
 				const pinned = await message.channel.messages.fetchPinned();
 				const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
 				if ((fetched.size - 1) == 0) {
-					return message.reply({ embeds: [
+					return await message.reply({ embeds: [
 						new MessageEmbed()
 							.setColor('RED')
 							.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
 					] }).then(msg => {setTimeout(function() { message.delete(); msg.delete(); }, 3000); });
 				}
-				return message.channel.bulkDelete(notPinned, message.channel.send({ embeds: [
+				return await message.channel.bulkDelete(notPinned, await message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('GREEN')
 						.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
@@ -38,7 +39,7 @@ module.exports = {
 			}
 			const amount = parseInt(args[0]) + 1;
 			if (isNaN(amount)) {
-				return message.channel.send({ embeds: [
+				return await message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
 						.setDescription('<:X_:807305490160943104> That doesn\'t seem to be a valid number.'),
@@ -54,16 +55,16 @@ module.exports = {
 			const pinned = await message.channel.messages.fetchPinned();
 			const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
 			if ((fetched.size - 1) == 0) {
-				return message.reply({ embeds: [
+				return await message.reply({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
 						.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
 				] }).then(msg => {setTimeout(function() { message.delete(); msg.delete(); }, 3000); });
 			}
-			message.channel.bulkDelete(notPinned, message.channel.send({ embeds: [
+			message.channel.bulkDelete(notPinned, await message.reply({ embeds: [
 				new MessageEmbed()
 					.setColor('GREEN')
-					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
+					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ ℹ ${pinned.size} messages ignored`}`),
 			] }).then(msg => {setTimeout(function() { msg.delete(); }, 3000); }), true);
 		} catch (err) {
 			message.channel.send({ content: `I can't delete messages older than 2 weeks. Make sure the messages you are deleting are earlier that 2 weeks.\n \nSpecific error: \`${err}\``, reply: { messageReference: message.id } });
@@ -75,7 +76,7 @@ module.exports = {
 		const amount = interaction.options.getInteger('number') ?? 100;
 
 		if (amount <= 1 || amount > 100) {
-			return interaction.reply({ embeds: [
+			return await interaction.reply({ embeds: [
 				new MessageEmbed()
 					.setColor('RED')
 					.setDescription('<:X_:807305490160943104> You need to input a number between 1 and 99.'),
@@ -83,19 +84,24 @@ module.exports = {
 		}
 		await interaction.deferReply();
 		const fetched = await interaction.channel.messages.fetch({ limit: amount });
-		const pinned = await interaction.channel.messages.fetchPinned();
 		const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
-		if ((fetched.size - 1) == 0) {
-			return interaction.editReply({ embeds: [
+		if ((fetched.size - 1) <= 0) {
+			await interaction.editReply({ embeds: [
 				new MessageEmbed()
 					.setColor('RED')
 					.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
-			] }).then(() => {setTimeout(function() { interaction.deleteReply(); }, 3000); });
+			] });
+			await wait(3000);
+			await interaction.deleteReply();
+			return;
 		}
-		interaction.channel.bulkDelete(notPinned, interaction.editReply({ embeds: [
+		await interaction.channel.bulkDelete(notPinned);
+		await interaction.editReply({ embeds: [
 			new MessageEmbed()
 				.setColor('GREEN')
-				.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
-		] }).then(() => {setTimeout(function() { interaction.deleteReply(); }, 3000); }), true);
+				.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${notPinned.size == 0 ? ' ' : `\n\n️ℹ ${notPinned.size} messages ignored`}`),
+		] });
+		await wait(3000);
+		await interaction.deleteReply();
 	},
 };

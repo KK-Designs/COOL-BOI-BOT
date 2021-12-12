@@ -8,12 +8,12 @@ module.exports = {
 	async execute(message) {
 		const serverQueue = message.client.queue.get(message.guild.id);
 
-		if (!serverQueue?.playing) {return message.reply({ content: '<:no:803069123918823454> There is nothing playing.' });}
+		if (!serverQueue?.playing) {return await message.reply({ content: '<:no:803069123918823454> There is nothing playing.' });}
 
 		serverQueue.playing = false;
 		serverQueue.player.pause();
 
-		return message.reply({ content: '<:pause:813209287881916447> Paused the music for you!' });
+		return await message.reply({ content: '<:pause:813209287881916447> Paused the music for you!' });
 
 	},
 	async executeSlash(interaction) {

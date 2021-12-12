@@ -2,7 +2,7 @@
 
 ---
 
-A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands! Built to provide a fun space for your Discord server.
+A multi-purpose, music, logging, moderation, and fun bot with almost 100 commands! Built to provide a fun space for your Discord server.
 
 ---
 
@@ -11,9 +11,9 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands
 
 # Features
 
-➡ Built-in welcoming system, configure with `!setWelcomeChannel` \
+➡ Built-in welcoming system, configure with `/setWelcomeChannel` \
 \
-➡ Built-in server-logging system, configure with `!setLogChannel` \
+➡ Built-in server-logging system, configure with `/setLogChannel` \
 \
 ➡ 90+ commands, with more coming in the future! \
 \

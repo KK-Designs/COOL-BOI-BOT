@@ -107,8 +107,8 @@ module.exports = {
 				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
 			}
 
-			return message.delete();
-			// message.channel.send('<:check:807305471282249738> Success! Giveaway rerolled!');
+			return await message.delete();
+			// await message.reply('<:check:807305471282249738> Success! Giveaway rerolled!');
 		}
 		if (args[0]?.toLowerCase() === 'edit') {
 			const messageID = args[1];
@@ -118,27 +118,28 @@ module.exports = {
 
 			if (!args.slice(3).join(' ')) {return sendError('Please provide a valid prize like `1 month nitro`', message.channel);}
 
-			return client.giveawaysManager.edit(messageID, {
-				newWinnerCount: 1,
-				newPrize: args.slice(3).join(' '),
-				setEndTimestamp: message.createdTimestamp + ms(args[2]),
-			}).then(() => {
-				// here, we can calculate the time after which we are sure that the lib will update the giveaway
-				message.channel.send({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.' });
-			}).catch(() => {
-				sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
-			});
+			try {
+				await client.giveawaysManager.edit(messageID, {
+					newWinnerCount: 1,
+					newPrize: args.slice(3).join(' '),
+					setEndTimestamp: message.createdTimestamp + ms(args[2]),
+				});
+			} catch (e) {
+				return await sendError('No giveaway found for ' + messageID + ', please check and try again', message.channel);
+			}
+			// here, we can calculate the time after which we are sure that the lib will update the giveaway
+			return await message.reply({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.' });
 		}
 		if (args[0]?.toLowerCase() === 'delete') {
 			const messageID = args[1];
 			if (!messageID) {return sendError('Please provide a valid message id', message.channel);}
 
-			return client.giveawaysManager.delete(messageID).then(() => {
-				message.channel.send({ content: '<:check:807305471282249738> Success! Giveaway deleted!' });
-			})
-				.catch(() => {
-					message.channel.send({ content: 'No giveaway found for ' + messageID + ', please check and try again' });
-				});
+			try {
+				await client.giveawaysManager.delete(messageID);
+			} catch (e) {
+				return await message.reply({ content: 'No giveaway found for ' + messageID + ', please check and try again' });
+			}
+			return await message.reply({ content: '<:check:807305471282249738> Success! Giveaway deleted!' });
 		}
 		if (!args[0]) {return sendError('Please provide a valid time. like `5m`', message.channel);}
 
@@ -171,7 +172,7 @@ module.exports = {
 			const prize = interaction.options.getString('prize', true);
 			const winnerCount = interaction.options.getInteger('winnercount') ?? 1;
 
-			await interaction.deferReply();
+			await interaction.deferReply({ ephemeral: true });
 			/** @type {import("discord.js").TextChannel) */
 			const channel = (interaction.channel);
 			await client.giveawaysManager.start(channel, {
@@ -180,7 +181,7 @@ module.exports = {
 				prize,
 				winnerCount,
 			});
-			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway created!', ephemeral: true });
+			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway created!' });
 		} break;
 		case 'edit': {
 			const messageID = interaction.options.getString('messageid', true);
@@ -188,7 +189,7 @@ module.exports = {
 			const prize = interaction.options.getString('prize', true);
 			const winnerCount = interaction.options.getInteger('winnercount') ?? 1;
 
-			await interaction.deferReply();
+			await interaction.deferReply({ ephemeral: true });
 			try {
 				await client.giveawaysManager.edit(messageID, {
 					newWinnerCount: winnerCount,
@@ -200,7 +201,7 @@ module.exports = {
 
 				return await interaction.editReply(`No giveaway found for ${messageID}, please check and try again`);
 			}
-			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.', ephemeral: true });
+			await interaction.editReply({ content: '<:check:807305471282249738> Success! Giveaway will updated soon.' });
 		} break;
 		case 'delete': {
 			const messageID = interaction.options.getString('messageid');

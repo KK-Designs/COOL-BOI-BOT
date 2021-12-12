@@ -27,7 +27,7 @@ module.exports = {
 				error = `There is no command with name or alias \`${commandName}\`, ${message.author}!`;
 			}
 
-			return message.reply({ content: error });
+			return await message.reply({ content: error });
 		}
 		const folderName = command.category;
 
@@ -39,7 +39,7 @@ module.exports = {
 			message.reply({ content: `Command \`${command.name}\` was reloaded!` });
 		} catch (error) {
 			console.error(error);
-			message.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
+			await message.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}
 	},
 	async executeSlash(interaction) {
@@ -58,7 +58,7 @@ module.exports = {
 				error = `There is no command with name or alias \`${commandName}\`, ${interaction.user}!`;
 			}
 
-			return interaction.reply({ content: error });
+			return await interaction.reply({ content: error });
 		}
 		const folderName = command.category;
 
@@ -70,7 +70,7 @@ module.exports = {
 			interaction.reply({ content: `Command \`${command.name}\` was reloaded!` });
 		} catch (error) {
 			console.error(error);
-			interaction.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
+			await interaction.reply({ content: `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\`` });
 		}
 	},
 };

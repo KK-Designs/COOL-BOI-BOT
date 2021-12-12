@@ -26,7 +26,7 @@ module.exports = {
 		if (!role) {return sendError('Please provide a valid role', message.channel);}
 
 		if (member.roles.cache.has(role.id)) {
-			return message.channel.send({
+			return await message.reply({
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
@@ -49,7 +49,7 @@ module.exports = {
 		const member = interaction.options.getMember('user') ?? interaction.member;
 
 		if (member.roles.cache.has(role.id)) {
-			return interaction.reply({
+			return await interaction.reply({
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
