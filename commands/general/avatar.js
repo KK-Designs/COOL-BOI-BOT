@@ -18,18 +18,16 @@ module.exports = {
 	},
 	async execute(message) {
 		const user = message.mentions.users.first() || message.author;
-		let color;
-		getColors(user.displayAvatarURL({ format: 'png' })).then(async colors => {
-			const downloadAvatar = new MessageActionRow()
-				.addComponents(
-					new MessageButton()
-						.setLabel('Download avatar')
-						.setEmoji('<:download:885276338347454494>')
-						.setURL(`https://download.kkdesigns.repl.co/?url=${user.displayAvatarURL({ dynamic: true, format: 'png' })}&name=${user.username}.${user.displayAvatarURL({ dynamic: true, format: 'png' }).split('.').at(-1) === 'png' ? 'png' : 'gif'}`)
-						.setStyle('LINK'),
-				);
-			// eslint-disable-next-line no-shadow
-		color = colors.map(color => color.hex())[0].toString();
+		const colors = await getColors(user.displayAvatarURL({ format: 'png' }));
+		const downloadAvatar = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setLabel('Download avatar')
+					.setEmoji('<:download:885276338347454494>')
+					.setURL(`https://download.kkdesigns.repl.co/?url=${user.displayAvatarURL({ dynamic: true, format: 'png' })}&name=${user.username}.${user.displayAvatarURL({ dynamic: true, format: 'png' }).split('.').at(-1) === 'png' ? 'png' : 'gif'}`)
+					.setStyle('LINK'),
+			);
+		const color = colors.map(c => c.hex())[0].toString();
 		const avatarEmbed = new MessageEmbed()
 			.setColor(color)
 			.setTitle(`${user.username}'s avatar:`)
