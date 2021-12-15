@@ -1,8 +1,7 @@
 const assert = require('assert/strict');
 const { Util } = require('discord.js');
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
+const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnection } = require('@discordjs/voice');
 const pdl = require('play-dl');
-const { YouTubeVideo } = require('play-dl/dist/YouTube/classes/Video');
 const sendError = require('../../error.js');
 module.exports = {
 	name: 'play',
@@ -162,7 +161,7 @@ class Song {
 		this.duration = duration;
 	}
 	static create(data) {
-		if (data instanceof YouTubeVideo) {
+		if (data instanceof pdl.YouTubeVideo) {
 			return new Song({
 				id: data.id,
 				title: data.title,
@@ -177,7 +176,7 @@ class Song {
 }
 /**
  * @param {string} query
- * @returns { Promise<{ songs: Song[], playlist?: import("play-dl/dist/YouTube/classes/Playlist").YouTubePlayList }> }
+ * @returns { Promise<{ songs: Song[], playlist?: pdl.YouTubePlayList }> }
  */
 async function getSongs(query) {
 	const type = await pdl.validate(query);
