@@ -21,7 +21,7 @@ module.exports = {
 		},
 	},
 	async execute(message, args) {
-		const user = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
+		const user = message.mentions.users.first() || await message.client.users.fetch(args[0]).catch(() => null);
 		const guild = message.guild;
 
 		if (!user) {return sendError('Please provide a valid user for me to ban <:BAN:752937190786465894>', message.channel);}
@@ -75,31 +75,37 @@ module.exports = {
 		// We let the message author know we were able to ban the person
 		await message.reply({ embeds: [banembed] });
 	},
+	/**
+   * @param {import("discord.js").CommandInteraction<"cached">} interaction
+  */
 	async executeSlash(interaction) {
-		const member = interaction.options.getMember('user', true);
+		const user = interaction.options.getUser('user', true);
+		const member = interaction.options.getMember('user');
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
 		const guild = interaction.guild;
 
-		if (member.id === interaction.client.user.id) {
+		if (user.id === interaction.client.user.id) {
 			return await interaction.reply({ content: 'You can\'t ban me!' });
 		}
-		if (!member.bannable) {
-			return await interaction.reply({
-				content: 'I was unable to ban that user. Check if I have the permision `BAN_MEMBERS`. If not that make sure my role is higher than the member you are tying to ban <:BAN:752937190786465894>.',
-			});
-		}
-		if (!member.user.bot) {
-			const banembeddm = new MessageEmbed()
-				.setColor('#ffd45c')
-				.setTitle('You were banned <:BAN:752937190786465894>')
-				.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
-				.addField('Banned by: ', `${interaction.user}`, true)
-				.addField('Reason: ', `${reason}`, true)
-				.addField('Server: ', `**${guild.name}**`, true)
-				.setTimestamp()
-				.setFooter('Banned at:');
+		if (member) {
+			if (!member.bannable) {
+				return await interaction.reply({
+					content: 'I was unable to ban that user. Check if I have the permision `BAN_MEMBERS`. If not that make sure my role is higher than the member you are tying to ban <:BAN:752937190786465894>.',
+				});
+			}
+			if (!member.user.bot) {
+				const banembeddm = new MessageEmbed()
+					.setColor('#ffd45c')
+					.setTitle('You were banned <:BAN:752937190786465894>')
+					.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+					.addField('Banned by: ', `${interaction.user}`, true)
+					.addField('Reason: ', `${reason}`, true)
+					.addField('Server: ', `**${guild.name}**`, true)
+					.setTimestamp()
+					.setFooter('Banned at:');
 
-			await member.send({ embeds: [banembeddm] }).catch(() => console.warn(`${member.user.tag} has dms disabled`));
+				await member.send({ embeds: [banembeddm] }).catch(() => console.warn(`${member.user.tag} has dms disabled`));
+			}
 		}
 		/**
        * Ban the member
@@ -108,12 +114,12 @@ module.exports = {
        * Read more about what ban options there are over at
        * https://discord.js.org/#/docs/main/master/class/GuildMember?scrollTo=ban
        */
-		await member.ban(member.id, { reason: reason });
+		await guild.bans.create(user, { reason: reason });
 		const banembed = new MessageEmbed()
 			.setColor('#940000')
 			.setTitle('Member Banned <:BAN:752937190786465894>')
 			.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
-			.addField('User banned: ', `${member.user.tag}`)
+			.addField('User banned: ', `${user.tag}`)
 			.addField('Banned by: ', `${interaction.user}`)
 			.addField('Reason: ', `${reason}`)
 			.setTimestamp()
