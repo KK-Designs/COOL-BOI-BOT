@@ -1,5 +1,7 @@
 const yuricanvas = require('yuri-canvas');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
+const randHexColor = () => '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+const hexRegex = /^#([0-9A-F]{3}){1,2}$/i;
 module.exports = {
 	name: 'color',
 	description: 'Sends a random or specified color!',
@@ -8,58 +10,41 @@ module.exports = {
 	options: {
 		color: {
 			type: 'String',
-			description: 'The color to display',
+			description: 'The color to display (in hexadecimal form)',
 			required: false,
 		},
 	},
 	async execute(message, args, client) {
-		if (args[0] && /^#([0-9A-F]{3}){1,2}$/i.test(args[0])) {
-			const color = await yuricanvas.color(args[0]);
-			const attachment = new MessageAttachment(color, 'color.png');
-			const embed = new MessageEmbed()
-				.setTitle(args[0])
-				.setColor(args[0])
-				.setImage('attachment://color.png')
-				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			await message.reply({ embeds: [ embed ], files: [ attachment ] });
+		const reqColor = args[0]?.toUpperCase() || randHexColor();
+		if (!hexRegex.test(args[0])) {
+			return await message.reply('The color must be in hexadecimal form. Try using `#FF0000`.');
 		}
-		if (!args[0]) {
-			const ranColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-			const color = await yuricanvas.color(ranColor);
-			const attachment = new MessageAttachment(color, 'color.png');
-			const embed = new MessageEmbed()
-				.setTitle(ranColor)
-				.setColor(ranColor)
-				.setImage('attachment://color.png')
-				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			await message.reply({ embeds: [ embed ], files: [ attachment ] });
-		}
+
+		const color = await yuricanvas.color(reqColor);
+		const attachment = new MessageAttachment(color, 'color.png');
+		const embed = new MessageEmbed()
+			.setTitle(reqColor)
+			.setColor(reqColor)
+			.setImage('attachment://color.png')
+			.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
+		await message.reply({ embeds: [ embed ], files: [ attachment ] });
 	},
 	async executeSlash(interaction, client) {
-		const wait = require('util').promisify(setTimeout);
+		const reqColor = interaction.options.getString('color')?.toUpperCase() ?? randHexColor();
+
+		if (!hexRegex.test(reqColor)) {
+			return await interaction.reply('The color must be in hexadecimal form. Try using `#FF0000`.');
+		}
+
 		await interaction.deferReply();
-		await wait(1);
-		const args = interaction.options.getString('color');
-		if (args && /^#([0-9A-F]{3}){1,2}$/i.test(args)) {
-			const color = await yuricanvas.color(args);
-			const attachment = new MessageAttachment(color, 'color.png');
-			const embed = new MessageEmbed()
-				.setTitle(args)
-				.setColor(args)
-				.setImage('attachment://color.png')
-				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
-		}
-		if (!args) {
-			const ranColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-			const color = await yuricanvas.color(ranColor);
-			const attachment = new MessageAttachment(color, 'color.png');
-			const embed = new MessageEmbed()
-				.setTitle(ranColor)
-				.setColor(ranColor)
-				.setImage('attachment://color.png')
-				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
-			await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
-		}
+		const color = await yuricanvas.color(reqColor);
+		const attachment = new MessageAttachment(color, 'color.png');
+		const embed = new MessageEmbed()
+			.setTitle(reqColor)
+			.setColor(reqColor)
+			.setImage('attachment://color.png')
+			.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
+
+		await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
 	},
 };
