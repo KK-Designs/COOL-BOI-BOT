@@ -24,8 +24,9 @@ module.exports = async (message) => {
 	const SpamDetected = DiscordStopSpam.checkMessageInterval(message);
 
 	if (SpamDetected) return console.log('Spam detected; ignoring messages');
-	if (await runDetector(message).crasher) {
-		const m = await runDetector(message).crasherMessage;
+	const detectorResult = await runDetector(message);
+	if (detectorResult?.crasher) {
+		const m = detectorResult.crasherMessage;
 		m.reply({ embeds: [{
 			color: color.fail,
 			description: '<:X_:807305490160943104> Please don\'t send videos that crashes the discord client.',
