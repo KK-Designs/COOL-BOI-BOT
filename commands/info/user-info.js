@@ -142,7 +142,7 @@ module.exports = {
 			.addField('Badges: ', badges.join(' ') || 'None', true)
 			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
-		return await messinteractionage.reply({ embeds: [embed] });
+		return await interaction.reply({ embeds: [embed] });
 	},
 };
 
