@@ -6,14 +6,15 @@ const DiscordStopSpam = require('discord-stop-spam-package');
 const { weirdToNormalChars } = require('weird-to-normal-chars');
 const isURI = require('@stdlib/assert-is-uri');
 const prefix = require('discord-prefix');
-const { GoogleTranslator } = require('@translate-tools/core/translators/GoogleTranslator');
-const { detect } = require('tinyld');
+// const { GoogleTranslator } = require('@translate-tools/core/translators/GoogleTranslator');
+// const { detect } = require('tinyld');
 const sendError = require('../error');
 const config = require('../config.json');
 const color = require('../color.json');
 /** @type {Collection<string, Collection<string, number>>} */
 const cooldowns = new Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// const translator = new GoogleTranslator();
 /** @type {(...args: import("discord.js").ClientEvents["messageCreate"]) => Promise<any>} */
 module.exports = async (message) => {
 	const { client } = message;
@@ -38,15 +39,15 @@ module.exports = async (message) => {
 	}
 	if (message.author.bot) return;
 
-	const translator = new GoogleTranslator();
-	if (!detect(message.content) === 'en') {
-		translator
-			.translate(message.content, detect(message.content), 'en')
-			.then((translate) => {
-				message.content = translate;
-				console.log(message.content, translate);
-			});
-	}
+	// const detectedLang = detect(message.content);
+	// if (detectedLang !== 'en') {
+	// 	translator
+	// 		.translate(message.content, detectedLang, 'en')
+	// 		.then((translate) => {
+	// 			message.content = translate;
+	// 			console.log(message.content, translate);
+	// 		});
+	// }
 
 	if (message.channel.type === 'GUILD_TEXT') {
 		await handleLevels(message);
