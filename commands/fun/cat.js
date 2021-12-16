@@ -9,7 +9,7 @@ module.exports = {
 	category: 'fun',
 	options: {},
 	async execute(message) {
-		const res = await fetch('https://cataas.com/cat?json=true').then(res => res.json());
+		const res = await fetch('https://cataas.com/cat?json=true').then(r => r.json());
 		const embed = new MessageEmbed()
 			.setColor(color.random)
 			.setTitle('Cat 🐱')
