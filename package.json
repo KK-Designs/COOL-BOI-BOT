@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/builders": "^0.6.0",
+    "@discordjs/builders": "^0.9.0",
     "@discordjs/voice": "^0.6.0",
     "@laboralphy/did-you-mean": "^2.1.0",
     "@stdlib/assert-is-uri": "^0.0.7",
