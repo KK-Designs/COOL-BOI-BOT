@@ -45,7 +45,7 @@ module.exports = {
 						.setDescription('<:X_:807305490160943104> That doesn\'t seem to be a valid number.'),
 				], reply: { messageReference: message.id } });
 			} else if (amount <= 1 || amount > 100) {
-				return message.channel.send({ embeds: [
+				return await message.channel.send({ embeds: [
 					new MessageEmbed()
 						.setColor('RED')
 						.setDescription('<:X_:807305490160943104> You need to input a number between 1 and 99.'),
@@ -71,6 +71,7 @@ module.exports = {
 		}
 
 	},
+	/** @param {import("discord.js").CommandInteraction<"cached">} interaction */
 	async executeSlash(interaction) {
 		// Can you convert the top function to slash_command?
 		const amount = interaction.options.getInteger('number') ?? 100;
@@ -83,7 +84,10 @@ module.exports = {
 			] });
 		}
 		await interaction.deferReply();
-		const fetched = await interaction.channel.messages.fetch({ limit: amount });
+		const fetched = await interaction.channel.messages.fetch({
+			limit: amount,
+			before: interaction.id,
+		});
 		const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
 		if ((fetched.size - 1) <= 0) {
 			await interaction.editReply({ embeds: [
