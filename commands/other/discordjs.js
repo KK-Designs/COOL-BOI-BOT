@@ -89,13 +89,12 @@ module.exports = {
 					await i.reply({ content: '<:check:807305471282249738> I have deleted the message', ephemeral: true });
 					await m.delete();
 				}
-			}
-			else {
+			} else {
 				await i.reply({ content: '<:X_:807305490160943104> These aren\'t your buttons to play around with', ephemeral: true });
 			}
 		});
 		collector.on('end', async (_, reason) => {
-			if (reason !== 'time') {return;};
+			if (reason !== 'time') {return;}
 			const deletemsg1 = new MessageActionRow()
 				.addComponents(
 					new MessageButton()

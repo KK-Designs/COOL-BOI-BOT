@@ -62,8 +62,7 @@ module.exports = {
 			for (let i = 0; i < number - 2; i++) {
 				queue.songs.push(queue.songs.shift());
 			}
-		}
-		else {
+		} else {
 			queue.songs = queue.songs.slice(number - 2);
 		}
 		queue.player.stop();
