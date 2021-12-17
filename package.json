@@ -20,7 +20,7 @@
     "@discordjs/voice": "^0.7.5",
     "@laboralphy/did-you-mean": "^2.1.0",
     "@stdlib/assert-is-uri": "^0.0.7",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "blague.xyz": "^2.0.4",
     "canvas": "^2.8.0",
     "canvas-extras": "^1.0.7",
