@@ -55,7 +55,7 @@
     "string-progressbar": "^1.0.4",
     "update-notifier": "^5.1.0",
     "yt-search": "^2.10.2",
-    "ytdl-core": "^4.9.1"
+    "ytdl-core": "^4.9.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0"
