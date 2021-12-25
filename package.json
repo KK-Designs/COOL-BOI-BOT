@@ -33,7 +33,7 @@
     "discord-inv": "^1.1.0",
     "discord-prefix": "^3.0.0",
     "discord-stop-spam-package": "^1.0.1",
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.4.0",
     "dotenv": "^10.0.0",
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.4.0",
