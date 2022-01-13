@@ -9,9 +9,19 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('Ascii face')
 			.setDescription(`\`${cool().toString()}\``)
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setFooter(
+				message.author.username,
+				message.author.displayAvatarURL({ dynamic: true }),
+			)
 			.setTimestamp()
-			.setColor(message.channel.type === 'GUILD_TEXT' ? message.member.displayHexColor : '#FFB700');
-		   message.channel.send({ embeds: [ embed ], reply: { messageReference: message.id } });
+			.setColor(
+				message.channel.type === 'GUILD_TEXT'
+					? message.member.displayHexColor
+					: '#FFB700',
+			);
+		message.channel.send({
+			embeds: [embed],
+			reply: { messageReference: message.id },
+		});
 	},
 };

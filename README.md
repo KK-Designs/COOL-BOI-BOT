@@ -7,7 +7,8 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands
 ---
 
 # Commands
-![Commands](commands.png?raw=true "COOL BOI BOT Commands")
+
+![Commands](commands.png?raw=true 'COOL BOI BOT Commands')
 
 # Features
 
@@ -26,5 +27,5 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 90 commands
 ➡ And many, many more! \
 \
 \
-So what are you waiting for? Invite [COOL BOI BOT](https://discord.com/oauth2/authorize?client_id=811024409863258172&permissions=4294442967&scope=bot%20applications.commands "Invite COOL BOI BOT")
- now!
+So what are you waiting for? Invite [COOL BOI BOT](https://discord.com/oauth2/authorize?client_id=811024409863258172&permissions=4294442967&scope=bot%20applications.commands 'Invite COOL BOI BOT')
+now!

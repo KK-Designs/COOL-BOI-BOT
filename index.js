@@ -1,11 +1,15 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const client = new Discord.Client({ intents: 32767, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'], ws: { properties: { $browser: 'Discord iOS' } } });
+const client = new Discord.Client({
+	intents: 32767,
+	partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'],
+	ws: { properties: { $browser: 'Discord iOS' } },
+});
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
 const prefix = require('discord-prefix');
 const DiscordStopSpam = require('discord-stop-spam-package');
-const commands = client.commands = new Discord.Collection();
+const commands = (client.commands = new Discord.Collection());
 const cooldowns = new Discord.Collection();
 const reqEvent = (event) => require(`./events/${event}`);
 const Detector = require('discord-crasher-detector');
@@ -21,7 +25,7 @@ updateNotifier({ pkg }).notify();
 try {
 	startup(client, Discord);
 
-	client.once('ready', (...args) => reqEvent('ready') (client, ...args));
+	client.once('ready', (...args) => reqEvent('ready')(client, ...args));
 
 	client.on('interactionCreate', async (interaction) => {
 		if (!interaction.isButton()) return;
@@ -270,14 +274,16 @@ if (args[0].value === "644054016476577812") {
 	});
 
 	client.on('disconnect', function(event) {
-		console.log(`The WebSocket has closed and will no longer attempt to reconnect - ${event}`);
+		console.log(
+			`The WebSocket has closed and will no longer attempt to reconnect - ${event}`,
+		);
 	});
 
 	client.on('warn', function(info) {
 		console.log(`warn: ${info}`);
 	});
 
-	client.on('messageCreate', async message => {
+	client.on('messageCreate', async (message) => {
 		const SpamDetected = await DiscordStopSpam.checkMessageInterval(message);
 		if (SpamDetected) {
 			return;
@@ -285,39 +291,61 @@ if (args[0].value === "644054016476577812") {
 
 		async function runDetector(videoUrl) {
 			if (!isURI(videoUrl)) return;
-			const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(() => {return;});
+			const analysis = await Detector.AnalyzeVideo(videoUrl, true).catch(() => {
+				return;
+			});
 			if (analysis && analysis.crasher == true) {
 				message.delete();
-				message.channel.send({ content: 'Please don\'t send videos that crashes the discord client.', reply: { messageReference: message.id } });
+				message.channel.send({
+					content: 'Please don\'t send videos that crashes the discord client.',
+					reply: { messageReference: message.id },
+				});
 			}
-
 		}
 		runDetector(message.content);
 
 		// setTimeout(async function(){
-		if (message.channel.type === 'GUILD_TEXT' && !message.author.bot && !message.guild.id === '110373943822540800') {
-
+		if (
+			message.channel.type === 'GUILD_TEXT' &&
+			!message.author.bot &&
+			!message.guild.id === '110373943822540800'
+		) {
 			// if (api.hasVoted(message.author.id)) {
 			// db.add(`messages_${message.guild.id}_${message.author.id}`, 3)
 			// } else {
 			await db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
 			// }
-			const messagefetch = db.fetch(`messages_${message.guild.id}_${message.author.id}`);
+			const messagefetch = db.fetch(
+				`messages_${message.guild.id}_${message.author.id}`,
+			);
 
-			const levelfetch = db.fetch(`level_${message.guild.id}_${message.author.id}`);
+			const levelfetch = db.fetch(
+				`level_${message.guild.id}_${message.author.id}`,
+			);
 			let messages;
 
-			if (messagefetch == 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25) messages = messagefetch;
+			if (
+				messagefetch ==
+				25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25
+			) {messages = messagefetch;}
 
 			if (!isNaN(messages)) {
 				await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
 
-
 				const levelembed = new MessageEmbed()
-					.setAuthor(message.author.username, message.author.displayAvatarURL({ dymamic: true }))
-					.setDescription(`${message.author}, You have leveled up to level ${(levelfetch + 1)}!`)
+					.setAuthor(
+						message.author.username,
+						message.author.displayAvatarURL({ dymamic: true }),
+					)
+					.setDescription(
+						`${message.author}, You have leveled up to level ${levelfetch + 1}!`,
+					)
 					.setTimestamp()
-					.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
+					.setColor(
+						message.channel.type === 'GUILD_TEXT'
+							? message.guild.me.displayHexColor
+							: '#FFB700',
+					);
 				if (db.get('blockcmds_' + message.guild.id) === 'level') {
 					// ...
 				}
@@ -358,26 +386,40 @@ if (args[0].value === "644054016476577812") {
 		}
 
 		const defaultPrefix = '!';
-		let guildPrefix = prefix.getPrefix(message.channel.type === 'GUILD_TEXT' ? message.guild.id : message.author.id);
+		let guildPrefix = prefix.getPrefix(
+			message.channel.type === 'GUILD_TEXT'
+				? message.guild.id
+				: message.author.id,
+		);
 		if (!guildPrefix) guildPrefix = defaultPrefix;
-		const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(guildPrefix)})\\s*`);
+		const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const prefixRegex = new RegExp(
+			`^(<@!?${client.user.id}>|${escapeRegex(guildPrefix)})\\s*`,
+		);
 		if (!prefixRegex.test(message.content)) return;
 
 		const [, matchedPrefix] = message.content.match(prefixRegex);
-		if (!message.content.startsWith(matchedPrefix) || message.author.bot) return;
+		if (!message.content.startsWith(matchedPrefix) || message.author.bot) {return;}
 
 		const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
 
-		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		const command =
+			client.commands.get(commandName) ||
+			client.commands.find(
+				(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+			);
 
 		if (command && blockedUsers.includes(message.author.id)) {
-			return message.reply({ embeds: [
-				new MessageEmbed()
-					.setColor('RED')
-					.setDescription('<:X_:807305490160943104> You are blocked from using commands'),
-			] });
+			return message.reply({
+				embeds: [
+					new MessageEmbed()
+						.setColor('RED')
+						.setDescription(
+							'<:X_:807305490160943104> You are blocked from using commands',
+						),
+				],
+			});
 		}
 
 		if (message.guild) {
@@ -395,7 +437,6 @@ if (args[0].value === "644054016476577812") {
 		if (!command) return;
 
 		if (commands) {
-
 			if (!cooldowns.has(command.name)) {
 				cooldowns.set(command.name, new Discord.Collection());
 			}
@@ -405,18 +446,30 @@ if (args[0].value === "644054016476577812") {
 			var cooldownAmount = (command.cooldown || 3) * 1000;
 
 			if (timestamps.has(message.author.id)) {
-				const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+				const expirationTime =
+					timestamps.get(message.author.id) + cooldownAmount;
 
 				if (now < expirationTime) {
 					const timeLeft = (expirationTime - now) / 1000;
 					const embed = new MessageEmbed()
 						.setTitle('Slow down there')
-						.setDescription(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-						.setFooter(message.author.username, message.author.displayAvatarURL({
-							dynamic: true,
-						}))
+						.setDescription(
+							`please wait ${timeLeft.toFixed(
+								1,
+							)} more second(s) before reusing the \`${command.name}\` command.`,
+						)
+						.setFooter(
+							message.author.username,
+							message.author.displayAvatarURL({
+								dynamic: true,
+							}),
+						)
 						.setTimestamp()
-						.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
+						.setColor(
+							message.channel.type === 'GUILD_TEXT'
+								? message.guild.me.displayHexColor
+								: '#FFB700',
+						);
 					return message.channel.send({ embeds: [embed] });
 				}
 			}
@@ -424,21 +477,36 @@ if (args[0].value === "644054016476577812") {
 
 		if (message.guild) {
 			if (db.get('blockcmds_' + message.guild.id) === '0') {
-
 			}
-			else if (db.get('blockcmds_' + message.guild.id) && db.get('blockcmds_' + message.guild.id)[1].includes(commandName) == false && commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`) {
-				return message.reply({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> That is a blacklisted command!'),
-				] });
+			else if (
+				db.get('blockcmds_' + message.guild.id) &&
+				db.get('blockcmds_' + message.guild.id)[1].includes(commandName) ==
+					false &&
+				commandName === `${db.get('blockcmds_' + message.guild.id)[0]}`
+			) {
+				return message.reply({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								'<:X_:807305490160943104> That is a blacklisted command!',
+							),
+					],
+				});
 			}
-			else if (db.get('blockcmds_' + message.guild.id) && db.get('blockcmds_' + message.guild.id)[1].includes(commandName)) {
-				return message.reply({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> That is a blacklisted command!'),
-				] });
+			else if (
+				db.get('blockcmds_' + message.guild.id) &&
+				db.get('blockcmds_' + message.guild.id)[1].includes(commandName)
+			) {
+				return message.reply({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								'<:X_:807305490160943104> That is a blacklisted command!',
+							),
+					],
+				});
 			}
 		}
 
@@ -449,31 +517,43 @@ if (args[0].value === "644054016476577812") {
 		if (command.permissions && message.channel.type === 'GUILD_TEXT') {
 			const authorPerms = message.channel.permissionsFor(message.author);
 			if (!authorPerms || !authorPerms.has(command.permissions)) {
-				return message.reply({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> You do not have permission to use this command.'),
-				] });
+				return message.reply({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								'<:X_:807305490160943104> You do not have permission to use this command.',
+							),
+					],
+				});
 			}
 		}
 
 		if (command.clientPermissons && message.channel.type === 'GUILD_TEXT') {
 			const clientPerms = message.channel.permissionsFor(guild.me);
 			if (!clientPerms || !clientPerms.has(command.clientPermissons)) {
-				return message.reply({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later. I need the following permissions: ${command.clientPermissons}`),
-				] });
+				return message.reply({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								`<:X_:807305490160943104> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later. I need the following permissions: ${command.clientPermissons}`,
+							),
+					],
+				});
 			}
 		}
 
 		if (command.guildOnly && message.channel.type === 'DM') {
-			return message.reply({ embeds: [
-				new MessageEmbed()
-					.setColor('RED')
-					.setDescription('That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.'),
-			] });
+			return message.reply({
+				embeds: [
+					new MessageEmbed()
+						.setColor('RED')
+						.setDescription(
+							'That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.',
+						),
+				],
+			});
 		}
 
 		prefixViewCommand1(args, command);
@@ -489,7 +569,7 @@ if (args[0].value === "644054016476577812") {
 		}
 
 		if (!prefixViewCommand1()) {
-		  command.execute(message, args, client);
+			command.execute(message, args, client);
 		}
 
 		// the user can type the command ... your command code goes here :)
@@ -497,10 +577,11 @@ if (args[0].value === "644054016476577812") {
 		// Adds the user to the set so that they can't talk for a minute
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
 	});
 
 	client.on('guildCreate', reqEvent('guildCreate'));
+
+	client.on('guildDelete', reqEvent('guildDelete'));
 
 	client.on('guildBanRemove', reqEvent('guildBanRemove'));
 
@@ -530,15 +611,20 @@ if (args[0].value === "644054016476577812") {
 
 	client.on('guildMemberRemove', reqEvent('guildMemberRemove'));
 
-	process.on('unhandledRejection', async error => {
+	process.on('unhandledRejection', async (error) => {
 		const user = await client.users.fetch('776848090564657153');
-		user.send({ embeds: [new MessageEmbed()
-			.setColor(color.fail)
-			.setDescription(`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``),
-		] });
+		user.send({
+			embeds: [
+				new MessageEmbed()
+					.setColor(color.fail)
+					.setDescription(
+						`<:X_:807305490160943104> Your bad at coding and messed something up here\n\n\`${error}\``,
+					),
+			],
+		});
 	});
 
-	  client.login(process.env.BOT_TOKEN);
+	client.login(process.env.BOT_TOKEN);
 }
 catch (err) {
 	return console.error(err);

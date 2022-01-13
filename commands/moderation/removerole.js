@@ -9,9 +9,13 @@ module.exports = {
 	async execute(message, args, client) {
 		const { MessageEmbed } = require('discord.js');
 		const sendError = require('../../error.js');
-		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
+		const role =
+			message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 
-		const member = message.mentions.members.last() || await client.users.fetch(args[1]) || message.member;
+		const member =
+			message.mentions.members.last() ||
+			(await client.users.fetch(args[1])) ||
+			message.member;
 
 		if (!role) return sendError('Please provide a valid role', message.channel);
 
@@ -20,7 +24,9 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> ${member} doesn\'t have the role ${role}`),
+						.setDescription(
+							`<:X_:807305490160943104> ${member} doesn\'t have the role ${role}`,
+						),
 				],
 			});
 		}
@@ -30,9 +36,11 @@ module.exports = {
 			embeds: [
 				new MessageEmbed()
 					.setColor('GREEN')
-					.setDescription(`<:check:807305471282249738> Removed the role ${role} from ${member}`),
-			], reply: { messageReference: message.id },
+					.setDescription(
+						`<:check:807305471282249738> Removed the role ${role} from ${member}`,
+					),
+			],
+			reply: { messageReference: message.id },
 		});
-
 	},
 };

@@ -12,16 +12,15 @@ module.exports = {
 		const getColors = require('get-image-colors');
 		const user = message.mentions.users.first() || message.author;
 		let color;
-		getColors(user.displayAvatarURL({ format: 'png' })).then(colors => {
-			const downloadAvatar = new MessageActionRow()
-			        .addComponents(
-				        new MessageButton()
-					      .setLabel('Download avatar')
-						  .setEmoji('<:download:885276338347454494>')
-						  .setURL(user.displayAvatarURL({ dynamic: true, format: 'png' }))
-					      .setStyle('LINK'),
-			        );
-			color = colors.map(color => color.hex())[0].toString();
+		getColors(user.displayAvatarURL({ format: 'png' })).then((colors) => {
+			const downloadAvatar = new MessageActionRow().addComponents(
+				new MessageButton()
+					.setLabel('Download avatar')
+					.setEmoji('<:download:885276338347454494>')
+					.setURL(user.displayAvatarURL({ dynamic: true, format: 'png' }))
+					.setStyle('LINK'),
+			);
+			color = colors.map((color) => color.hex())[0].toString();
 			const avatarEmbed = new MessageEmbed()
 				.setColor(color)
 				.setTitle(`${user.username}'s avatar:`)
@@ -29,7 +28,10 @@ module.exports = {
 				.setTimestamp()
 				.setFooter('Powered by the COOL BOI BOT');
 
-			message.channel.send({ embeds: [ avatarEmbed ], components: [ downloadAvatar ] });
+			message.channel.send({
+				embeds: [avatarEmbed],
+				components: [downloadAvatar],
+			});
 		});
 	},
 };

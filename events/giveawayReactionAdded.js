@@ -4,6 +4,9 @@ module.exports = (giveaway, member, reaction) => {
 		embeds: [
 			new MessageEmbed()
 				.setColor('GREEN')
-				.setDescription(`<:check:807305471282249738> Succesfuly entered the giveway for ${giveaway.prize}`),
-		] });
+				.setDescription(
+					`<:check:807305471282249738> Succesfuly entered the giveway for ${giveaway.prize}`,
+				),
+		],
+	});
 };

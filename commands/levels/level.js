@@ -8,15 +8,24 @@ module.exports = {
 	aliases: ['rank'],
 	clientPermissons: 'ATTACH_FILES',
 	async execute(message, args) {
-		let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+		let member =
+			message.mentions.members.first() ||
+			message.guild.members.cache.get(args[0]);
 		if (!args[0]) {
 			member = message.member || message.author;
 		}
-		else if (member.user.bot) {return message.channel.send({ content: 'I don\'t track bots activity', reply: { messageReference: message.id } });}
+		else if (member.user.bot) {
+			return message.channel.send({
+				content: 'I don\'t track bots activity',
+				reply: { messageReference: message.id },
+			});
+		}
 		const Discord = require('discord.js');
 		const db = require('quick.db');
 		const { progressBar } = require('canvas-extras');
-		let messagefetch = db.fetch(`messages_${message.guild.id}_${member.user.id}`);
+		let messagefetch = db.fetch(
+			`messages_${message.guild.id}_${member.user.id}`,
+		);
 		let levelfetch = db.fetch(`level_${message.guild.id}_${member.user.id}`);
 
 		if (messagefetch == null) messagefetch = '0';
@@ -49,7 +58,7 @@ module.exports = {
 
 			do {
 				// Assign the font to the context and decrement it so it can be measured again
-				ctx.font = `${fontSize -= 2}px sans-serif`;
+				ctx.font = `${(fontSize -= 2)}px sans-serif`;
 				// Compare pixel width of the text to the canvas minus the approximate avatar size
 			} while (ctx.measureText(text).width > canvas.width - 300);
 
@@ -59,8 +68,8 @@ module.exports = {
 
 		const canvas = Canvas.createCanvas(700, 250);
 		const ctx = canvas.getContext('2d');
-		const totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
-
+		const totalmessages =
+			25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
 
 		const background = await Canvas.loadImage('./cool-boi.png');
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -74,11 +83,19 @@ module.exports = {
 
 		ctx.font = '38px sans-serif';
 		ctx.fillStyle = '#000133';
-		ctx.fillText(`${levelfetch}                            ${messagefetch}`, canvas.width / 1.9, canvas.height / 3.6);
+		ctx.fillText(
+			`${levelfetch}                            ${messagefetch}`,
+			canvas.width / 1.9,
+			canvas.height / 3.6,
+		);
 
 		ctx.font = '30px sans-serif';
 		ctx.fillStyle = '#13185c';
-		ctx.fillText(' LEVEL                 MESSAGES', canvas.width / 2.6, canvas.height / 3.6);
+		ctx.fillText(
+			' LEVEL                 MESSAGES',
+			canvas.width / 2.6,
+			canvas.height / 3.6,
+		);
 
 		// Add an exclamation point here and below
 		// ctx.font = '48px sans-serif';
@@ -88,7 +105,11 @@ module.exports = {
 
 		ctx.font = '32px sans-serif';
 		ctx.fillStyle = '#13185c';
-		ctx.fillText(`          #${member.user.discriminator}`, canvas.width / 2.0, canvas.height / 1.4);
+		ctx.fillText(
+			`          #${member.user.discriminator}`,
+			canvas.width / 2.0,
+			canvas.height / 1.4,
+		);
 
 		ctx.beginPath();
 		ctx.strokeStyle = '#000133';
@@ -108,14 +129,18 @@ module.exports = {
 		ctx.shadowColor = '#000133';
 		// ctx.fill();
 
-		const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
+		const avatar = await Canvas.loadImage(
+			member.user.displayAvatarURL({ format: 'png' }),
+		);
 		ctx.drawImage(avatar, 25, 25, 200, 200);
 		const gradient = await Canvas.loadImage('./gradient.png');
 		ctx.drawImage(gradient, 256, 256, 256, 256);
 
-		const rankAttachment = new Discord.MessageAttachment(canvas.toBuffer(), 'rank-card.png');
+		const rankAttachment = new Discord.MessageAttachment(
+			canvas.toBuffer(),
+			'rank-card.png',
+		);
 
-		message.reply({ files: [ rankAttachment ] });
-
+		message.reply({ files: [rankAttachment] });
 	},
 };

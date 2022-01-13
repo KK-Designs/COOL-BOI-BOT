@@ -6,7 +6,10 @@ module.exports = {
 	cooldown: 3,
 	execute(message, args) {
 		if (!args[0]) {
-			return message.channel.send({ content: 'Please ask me a question.', reply: { messageReference: message.id } });
+			return message.channel.send({
+				content: 'Please ask me a question.',
+				reply: { messageReference: message.id },
+			});
 		}
 		else {
 			message.channel.sendTyping();
@@ -44,7 +47,7 @@ module.exports = {
 				'It\'s just the beginning',
 				'Good Luck',
 			];
-			const index = (Math.floor(Math.random() * Math.floor(eightball.length)));
+			const index = Math.floor(Math.random() * Math.floor(eightball.length));
 			setTimeout(() => {
 				message.channel.send({ content: `${eightball[index]}` });
 			}, 750);

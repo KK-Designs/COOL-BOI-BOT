@@ -16,7 +16,9 @@ module.exports = {
 					new MessageEmbed()
 						.setColor('GREEN')
 						.setDescription('🔁 Queue is now being looped'),
-				], reply: { messageReference: message.id } });
+				],
+				reply: { messageReference: message.id },
+			});
 		}
 		else if (serverQueue.loop == false) {
 			return message.channel.send({
@@ -24,8 +26,9 @@ module.exports = {
 					new MessageEmbed()
 						.setColor('GREEN')
 						.setDescription('Queue is now not being looped'),
-				], reply: { messageReference: message.id } });
+				],
+				reply: { messageReference: message.id },
+			});
 		}
-
 	},
 };

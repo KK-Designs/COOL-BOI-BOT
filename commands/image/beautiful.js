@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'beautiful',
-	description: 'Self-praise yourself but if you hate yourself that much then do it to a friend (or just cuz ur nice lol)',
+	description:
+		'Self-praise yourself but if you hate yourself that much then do it to a friend (or just cuz ur nice lol)',
 	usage: '(user)',
 	cooldown: 3,
 	category: 'image',
@@ -9,15 +10,24 @@ module.exports = {
 		const Discord = require('discord.js');
 		const DIG = require('discord-image-generation');
 		const user = message.mentions.users.first() || message.author;
-		const img = await new DIG.Beautiful().getImage(user.displayAvatarURL({ format: 'png' }));
+		const img = await new DIG.Beautiful().getImage(
+			user.displayAvatarURL({ format: 'png' }),
+		);
 		const attach = new Discord.MessageAttachment(img, 'beautiful.png');
 		const { MessageAttachment, MessageEmbed } = require('discord.js');
 		const imageEmbed = new MessageEmbed()
-	    .setTitle('Beautiful')
-	    .setImage('attachment://beautiful.png')
-			.setColor(message.channel.type === 'dm' ? '#FFB700' : message.guild.me.displayHexColor)
+			.setTitle('Beautiful')
+			.setImage('attachment://beautiful.png')
+			.setColor(
+				message.channel.type === 'dm'
+					? '#FFB700'
+					: message.guild.me.displayHexColor,
+			)
 			.setTimestamp()
-			.setFooter('COOL BOI BOT Images', `${message.client.user.displayAvatarURL({ dynamic: true })}`);
+			.setFooter(
+				'COOL BOI BOT Images',
+				`${message.client.user.displayAvatarURL({ dynamic: true })}`,
+			);
 		message.channel.send({ embeds: [imageEmbed], files: [attach] });
 	},
 };

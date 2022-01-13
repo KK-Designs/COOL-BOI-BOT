@@ -5,8 +5,11 @@ module.exports = async (text, channel) => {
 		.setColor('RED')
 		.setTitle('<:error_x:815780013256343582> Error: ')
 		.setDescription(text)
-		.setFooter(channel.client.user.username, channel.client.user.displayAvatarURL({ dynamic: true }));
-	await channel.send({ embeds: [ embed ] }).then(m => {
+		.setFooter(
+			channel.client.user.username,
+			channel.client.user.displayAvatarURL({ dynamic: true }),
+		);
+	await channel.send({ embeds: [embed] }).then((m) => {
 		message = m;
 	});
 

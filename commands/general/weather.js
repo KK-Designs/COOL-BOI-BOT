@@ -5,7 +5,7 @@ module.exports = {
 	cooldown: 5,
 	category: 'general',
 	clientPermissons: 'EMBED_LINKS',
-	async	execute(message, args) {
+	async execute(message, args) {
 		require('dotenv').config();
 		const axios = require('axios');
 		const { MessageEmbed } = require('discord.js');
@@ -25,7 +25,11 @@ module.exports = {
 			country,
 		) =>
 			new MessageEmbed()
-				.setColor(message.channel.type === 'dm' ? color.discord : message.guild.me.displayHexColor)
+				.setColor(
+					message.channel.type === 'dm'
+						? color.discord
+						: message.guild.me.displayHexColor,
+				)
 				.setAuthor(`Hello, ${author}`, profile)
 				.setTitle(`${temp}\u00B0 F in ${cityName}, ${country}`)
 				.addField('Maximum Temperature:', `${maxTemp}\u00B0 F`, true)
@@ -41,7 +45,7 @@ module.exports = {
 			.get(
 				`https://api.openweathermap.org/data/2.5/weather?q=${args}&units=imperial&appid=${process.env.WEATHER_API}`,
 			)
-			.then(response => {
+			.then((response) => {
 				const apiData = response;
 				const currentTemp = Math.ceil(apiData.data.main.temp);
 				const maxTemp = apiData.data.main.temp_max;
@@ -55,10 +59,28 @@ module.exports = {
 				const country = apiData.data.sys.country;
 				const pressure = apiData.data.main.pressure;
 				const cloudness = apiData.data.weather[0].description;
-				message.channel.send({ embeds: [ exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country) ], reply: { messageReference: message.id } });
-			}).catch(err => {
+				message.channel.send({
+					embeds: [
+						exampleEmbed(
+							currentTemp,
+							maxTemp,
+							minTemp,
+							pressure,
+							humidity,
+							wind,
+							cloudness,
+							icon,
+							author,
+							profile,
+							cityName,
+							country,
+						),
+					],
+					reply: { messageReference: message.id },
+				});
+			})
+			.catch((err) => {
 				sendError('Enter a vailid city name', message.channel);
 			});
-
 	},
 };

@@ -1,8 +1,8 @@
 module.exports = {
 	name: 'connect4',
 	description: 'Play a game of connect four!',
-  	cooldown: 5,
-  	category: 'games',
+	cooldown: 5,
+	category: 'games',
 	execute(message, args) {
 		const color = require('../../color.json');
 		const { Connect4 } = require('discord-gamecord');
@@ -21,8 +21,9 @@ module.exports = {
 			winMessage: '{emoji} | **{winner}** won the game!',
 			gameEndMessage: 'The game went unfinished :(',
 			drawMessage: 'It was a draw!',
-			askMessage: 'Hey {opponent}, {challenger} challenged you for a game of Connect 4!',
-			cancelMessage: 'Looks like they refused to have a game of Connect4. \:(',
+			askMessage:
+				'Hey {opponent}, {challenger} challenged you for a game of Connect 4!',
+			cancelMessage: 'Looks like they refused to have a game of Connect4. :(',
 			timeEndMessage: 'Since the opponent didnt answer, i dropped the game!',
 		}).startGame();
 	},

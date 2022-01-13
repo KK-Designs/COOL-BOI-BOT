@@ -1,9 +1,7 @@
-module.exports = async client => {
+module.exports = async (client) => {
 	const db = require('quick.db');
 	// Requires Manager from discord-giveaways
-	const {
-		GiveawaysManager,
-	} = require('discord-giveaways');
+	const { GiveawaysManager } = require('discord-giveaways');
 	// Starts updating currents giveaways
 	// Load quick.db - it's an example of custom database, you can use MySQL, PostgreSQL, etc...
 	if (!db.get('giveaways')) db.set('giveaways', []);
@@ -27,7 +25,9 @@ module.exports = async client => {
 			// Gets all the current giveaways
 			const giveaways = db.get('giveaways');
 			// Remove the old giveaway from the current giveaways ID
-			const newGiveawaysArray = giveaways.filter((giveaway) => giveaway.messageID !== messageID);
+			const newGiveawaysArray = giveaways.filter(
+				(giveaway) => giveaway.messageID !== messageID,
+			);
 			// Push the new giveaway to the array
 			newGiveawaysArray.push(giveawayData);
 			// Save the updated array
@@ -39,7 +39,9 @@ module.exports = async client => {
 		// This function is called when a giveaway needs to be deleted from the database.
 		async deleteGiveaway(messageID) {
 			// Remove the giveaway from the array
-			const newGiveawaysArray = db.get('giveaways').filter((giveaway) => giveaway.messageID !== messageID);
+			const newGiveawaysArray = db
+				.get('giveaways')
+				.filter((giveaway) => giveaway.messageID !== messageID);
 			// Save the updated array
 			db.set('giveaways', newGiveawaysArray);
 			// Don't forget to return something!
@@ -56,7 +58,6 @@ module.exports = async client => {
 		exemptPermissions: ['MANAGE_MESSAGES', 'ADMINISTRATOR'],
 		embedColor: '#FF0000',
 		reaction: '🎉',
-
 	});
 	// We now have a giveawaysManager property to access the manager everywhere!
 	client.giveawaysManager = manager;
@@ -66,6 +67,4 @@ module.exports = async client => {
 	manager.on('giveawayEnded', reqEvent('giveawayEnded'));
 
 	manager.on('giveawayReactionAdded', reqEvent('giveawayReactionAdded'));
-
-
 };

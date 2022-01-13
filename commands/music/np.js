@@ -13,10 +13,24 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setColor(message.guild.me.displayHexColor)
 			.setTitle('Current Song playing')
-			.addField('<:playing:813209288100151366> Now playing:', `${serverQueue.songs[0].title} • ${serverQueue.songs[0].author}`, true) // .addField(`Duration:`, serverQueue.songs.map(song => `${humanizeDuration(song.duration * 1000)}`), true)
-			.addField('Duration:', `${humanizeDuration(serverQueue.songs[0].duration * 1000)}`, true)
+			.addField(
+				'<:playing:813209288100151366> Now playing:',
+				`${serverQueue.songs[0].title} • ${serverQueue.songs[0].author}`,
+				true,
+			) // .addField(`Duration:`, serverQueue.songs.map(song => `${humanizeDuration(song.duration * 1000)}`), true)
+			.addField(
+				'Duration:',
+				`${humanizeDuration(serverQueue.songs[0].duration * 1000)}`,
+				true,
+			)
 			.setTimestamp()
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
-		return message.channel.send({ embeds: [embed], reply: { messageReference: message.id } });
+			.setFooter(
+				message.author.username,
+				message.author.displayAvatarURL({ dynamic: true }),
+			);
+		return message.channel.send({
+			embeds: [embed],
+			reply: { messageReference: message.id },
+		});
 	},
 };

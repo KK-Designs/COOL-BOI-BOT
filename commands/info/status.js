@@ -17,24 +17,40 @@ module.exports = {
 		cpuu(function(error, sample) {
 			// returns after 1000ms with the cpu usage of that time interval
 
-
 			// const duration = moment.duration(client.uptime).format(` D ${days}, H ${hrs}, m ${mins}, s ${secs}`);
 			const uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
 			const statusembed = new MessageEmbed()
-				.setTitle('<:CoolEpicface:740705001298460763> COOL BOT BOT Status <:CoolEpicface:740705001298460763>')
+				.setTitle(
+					'<:CoolEpicface:740705001298460763> COOL BOT BOT Status <:CoolEpicface:740705001298460763>',
+				)
 				.addField('Hosted:', 'Yes')
-				.addField('Mem Usage:', `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`)
+				.addField(
+					'Mem Usage:',
+					`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+				)
 				.addField('CPU (%):', `${Math.round(sample.percentageBusy() * 100)}%`)
 				.addField('Uptime', `${uptime}`)
 				.addField('Guilds', `${client.guilds.cache.size}`)
 				.addField('Total Users', `${client.users.cache.size}`)
 				.addField('Total Commands', `${client.commands.size}`)
-				.addField('More Statistics', '[Click here](https://coolboibot.statuspage.io "See bot status on the web")')
-				.setFooter(`© COOL BOI BOT 2021 | v${version}`, client.user.displayAvatarURL({ dynamic: true }))
+				.addField(
+					'More Statistics',
+					'[Click here](https://coolboibot.statuspage.io "See bot status on the web")',
+				)
+				.setFooter(
+					`© COOL BOI BOT 2021 | v${version}`,
+					client.user.displayAvatarURL({ dynamic: true }),
+				)
 				.setTimestamp()
-				.setColor(message.channel.type === 'dm' ? color.discord : message.guild.me.displayHexColor,
+				.setColor(
+					message.channel.type === 'dm'
+						? color.discord
+						: message.guild.me.displayHexColor,
 				);
-			message.channel.send({ embeds: [ statusembed ], reply: { messageReference: message.id } });
+			message.channel.send({
+				embeds: [statusembed],
+				reply: { messageReference: message.id },
+			});
 		});
 	},
 };

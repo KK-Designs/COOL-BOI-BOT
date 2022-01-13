@@ -10,11 +10,22 @@ module.exports = {
 		const { MessageEmbed } = require('discord.js');
 		const sendError = require('../../error.js');
 		const serverQueue = message.client.queue.get(message.guild.id);
-		if (!serverQueue) return message.channel.send({ content: 'There is nothing playing that I could skip for you.', reply: { messageReference: message.id } });
+		if (!serverQueue) {
+			return message.channel.send({
+				content: 'There is nothing playing that I could skip for you.',
+				reply: { messageReference: message.id },
+			});
+		}
 		const queue = message.client.queue.get(message.guild.id);
-		if (args[0] > queue.songs.length) {return message.channel.send({ content: `The queue has only ${queue.songs.length} songs long!` }).catch(console.error);}
+		if (args[0] > queue.songs.length) {
+			return message.channel
+				.send({
+					content: `The queue has only ${queue.songs.length} songs long!`,
+				})
+				.catch(console.error);
+		}
 
-		    queue.playing = true;
+		queue.playing = true;
 
 		if (queue.loop) {
 			for (let i = 0; i < args[0] - 2; i++) {
@@ -31,16 +42,23 @@ module.exports = {
 		catch (error) {
 			queue.voiceChannel.leave();
 			message.client.queue.delete(message.guild.id);
-			return sendError(`:notes: The player has stopped and the queue has been cleared.: ${error}`, message.channel);
+			return sendError(
+				`:notes: The player has stopped and the queue has been cleared.: ${error}`,
+				message.channel,
+			);
 		}
 
-		queue.textChannel.send({
-			embeds: [
-				new MessageEmbed()
-					.setColor('GREEN')
-					.setDescription(`${message.author} ⏭ skipped \`${args[0] - 1}\` songs`),
-			], reply: { messageReference: message.id },
-		}).catch(console.error);
-
+		queue.textChannel
+			.send({
+				embeds: [
+					new MessageEmbed()
+						.setColor('GREEN')
+						.setDescription(
+							`${message.author} ⏭ skipped \`${args[0] - 1}\` songs`,
+						),
+				],
+				reply: { messageReference: message.id },
+			})
+			.catch(console.error);
 	},
 };

@@ -4,7 +4,8 @@ const yts = require('yt-search');
 
 module.exports = {
 	name: 'play',
-	description: '<:music:813204224456261632> Play a song with the given youtube url',
+	description:
+		'<:music:813204224456261632> Play a song with the given youtube url',
 	usage: '[song url or name]',
 	aliases: ['p'],
 	guildOnly: true,
@@ -12,17 +13,40 @@ module.exports = {
 	cooldown: 10,
 	async execute(message, args) {
 		const sendError = require('../../error.js');
-		if (!args.length) return message.channel.send({ content: 'Please provide a youtube URL for me to play, or just put the name of the song', reply: { messageReference: message.id } });
+		if (!args.length) {
+			return message.channel.send({
+				content:
+					'Please provide a youtube URL for me to play, or just put the name of the song',
+				reply: { messageReference: message.id },
+			});
+		}
 		const { channel } = message.member.voice;
-		if (!channel) return message.channel.send({ content: 'You need to join a a voice channel to use this command.', reply: { messageReference: message.id } });
+		if (!channel) {
+			return message.channel.send({
+				content: 'You need to join a a voice channel to use this command.',
+				reply: { messageReference: message.id },
+			});
+		}
 		const permissions = channel.permissionsFor(message.client.user);
-		if (!permissions.has('CONNECT')) return message.channel.send({ content: 'I cannot connect to your voice channel, make sure I have the proper permissions!', reply: { messageReference: message.id } });
-		if (!permissions.has('SPEAK')) return message.channel.send({ content: 'I cannot speak in this voice channel, make sure I have the proper permissions!', reply: { messageReference: message.id } });
+		if (!permissions.has('CONNECT')) {
+			return message.channel.send({
+				content:
+					'I cannot connect to your voice channel, make sure I have the proper permissions!',
+				reply: { messageReference: message.id },
+			});
+		}
+		if (!permissions.has('SPEAK')) {
+			return message.channel.send({
+				content:
+					'I cannot speak in this voice channel, make sure I have the proper permissions!',
+				reply: { messageReference: message.id },
+			});
+		}
 		const searchString = args.join(' ');
-		const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+		const videoPattern =
+			/^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
 		const regex = new RegExp(videoPattern);
 		if (args[0].match(regex)) {
-
 			var songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
 			var song = {
 				id: songInfo.videoDetails.video_id,
@@ -31,12 +55,16 @@ module.exports = {
 				author: songInfo.videoDetails.ownerChannelName,
 				url: songInfo.videoDetails.video_url,
 			};
-
 		}
 		else {
 			// message.reply('Please pass a valid youtube URL.');
 			const searched = await yts.search(searchString);
-			if (searched.videos.length === 0) return message.channel.send({ content: 'Looks like i was unable to find the song on YouTube', reply: { messageReference: message.id } });
+			if (searched.videos.length === 0) {
+				return message.channel.send({
+					content: 'Looks like i was unable to find the song on YouTube',
+					reply: { messageReference: message.id },
+				});
+			}
 
 			songInfo = searched.videos[0];
 			song = {
@@ -46,7 +74,6 @@ module.exports = {
 				url: songInfo.url,
 				duration: songInfo.duration.seconds,
 			};
-
 		}
 
 		const serverQueue = message.client.queue.get(message.guild.id);
@@ -54,7 +81,10 @@ module.exports = {
 		if (serverQueue) {
 			serverQueue.songs.push(song);
 			console.log(serverQueue.songs);
-			return message.channel.send({ content: `<:check:807305471282249738> **${song.title}** has been added to the queue!`, reply: { messageReference: message.id } });
+			return message.channel.send({
+				content: `<:check:807305471282249738> **${song.title}** has been added to the queue!`,
+				reply: { messageReference: message.id },
+			});
 		}
 
 		console.log(songInfo);
@@ -71,7 +101,7 @@ module.exports = {
 		message.client.queue.set(message.guild.id, queueConstruct);
 		queueConstruct.songs.push(song);
 
-		const play = async song => {
+		const play = async (song) => {
 			const queue = message.client.queue.get(message.guild.id);
 			if (!song) {
 				queue.voiceChannel.leave();
@@ -79,7 +109,8 @@ module.exports = {
 				return;
 			}
 
-			const dispatcher = queue.connection.play(ytdl(song.url, { quality: 'highestaudio', type: 'opus' }))
+			const dispatcher = queue.connection
+				.play(ytdl(song.url, { quality: 'highestaudio', type: 'opus' }))
 				.on('finish', () => {
 					if (queue.loop == true) {
 						queue.songs.push(queue.songs.shift());
@@ -89,15 +120,20 @@ module.exports = {
 					}
 					play(queue.songs[0]);
 				})
-				.on('error', async error => {
+				.on('error', async (error) => {
 					message.client.queue.delete(message.guild.id);
 					await channel.leave();
-					return sendError(`<:no:803069123918823454> I could not join the voice channel: ${error}`, message.channel);
+					return sendError(
+						`<:no:803069123918823454> I could not join the voice channel: ${error}`,
+						message.channel,
+					);
 					console.error(error);
 				});
 			dispatcher.setVolumeLogarithmic(queue.volume / 5);
 			if (queue.loop == true) return;
-			queue.textChannel.send({ content: `<:music:813204224456261632> Start playing: **${song.title}**` });
+			queue.textChannel.send({
+				content: `<:music:813204224456261632> Start playing: **${song.title}**`,
+			});
 		};
 
 		// IF my dumbass code doesn't work run this and recomment after run.
@@ -109,10 +145,15 @@ module.exports = {
 			play(queueConstruct.songs[0]);
 		}
 		catch (error) {
-			console.error(`<:no:803069123918823454> I could not join the voice channel: ${error}`);
+			console.error(
+				`<:no:803069123918823454> I could not join the voice channel: ${error}`,
+			);
 			message.client.queue.delete(message.guild.id);
 			await channel.leave();
-			return sendError(`<:no:803069123918823454> I could not join the voice channel: ${error}`, message.channel);
+			return sendError(
+				`<:no:803069123918823454> I could not join the voice channel: ${error}`,
+				message.channel,
+			);
 		}
 	},
 };

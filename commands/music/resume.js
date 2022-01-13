@@ -12,16 +12,20 @@ module.exports = {
 			serverQueue.connection.dispatcher.resume();
 			return message.channel.send({
 				embeds: [
-				  new MessageEmbed()
-				  .setColor('GREEN')
-				  .setDescription('▶ Resumed the music for you!'),
-			  ], reply: { messageReference: message.id } });
+					new MessageEmbed()
+						.setColor('GREEN')
+						.setDescription('▶ Resumed the music for you!'),
+				],
+				reply: { messageReference: message.id },
+			});
 		}
 		return message.channel.send({
 			embeds: [
-			  new MessageEmbed()
-			  .setColor('BLUE')
-			  .setDescription('There is nothing playing.'),
-		  ], reply: { messageReference: message.id } });
+				new MessageEmbed()
+					.setColor('BLUE')
+					.setDescription('There is nothing playing.'),
+			],
+			reply: { messageReference: message.id },
+		});
 	},
 };

@@ -14,7 +14,6 @@ module.exports = (interaction, client) => {
 					},
 				},
 			});
-
 		}
 
 		if (command === 'invite') {

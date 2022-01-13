@@ -1,10 +1,16 @@
 module.exports = {
 	name: 'kill',
-	description: 'Kills the mentioned user <a:Enchanted_Diamond_Sword:802774727093256192>',
+	description:
+		'Kills the mentioned user <a:Enchanted_Diamond_Sword:802774727093256192>',
 	cooldown: 1.5,
 	category: 'fun',
 	execute(message, args) {
-		const user = message.channel.type === 'dm' ? message.mentions.users.first() || message.author : message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author;
+		const user =
+			message.channel.type === 'dm'
+				? message.mentions.users.first() || message.author
+				: message.mentions.users.first() ||
+				  message.guild.members.cache.get(args[0]) ||
+				  message.author;
 
 		const killnotes = [
 			'died',
@@ -19,7 +25,7 @@ module.exports = {
 			'died from playing fortnite',
 			`was posioned, but he had a bucket of milk and ${user} murdered ${message.author}`,
 		];
-		const index = (Math.floor(Math.random() * Math.floor(killnotes.length)));
+		const index = Math.floor(Math.random() * Math.floor(killnotes.length));
 		message.channel.send({ content: `${user} ${killnotes[index]}` });
 	},
 };

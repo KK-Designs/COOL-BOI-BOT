@@ -13,6 +13,8 @@ module.exports = {
 		try {
 			if (!args[0]) {
 				const fetched = await message.channel.messages.fetch({ limit: 100 });
+				const pinned = await message.channel.messages.fetchPinned();
+				const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
 				if ((fetched.size - 1) == 0) {
 					return message.reply({ embeds: [
 						new MessageEmbed()
@@ -20,10 +22,10 @@ module.exports = {
 							.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
 					] }).then(msg => {setTimeout(function() { message.delete(); msg.delete(); }, 3000); });
 				}
-				return message.channel.bulkDelete(fetched, message.channel.send({ embeds: [
+				return message.channel.bulkDelete(notPinned, message.channel.send({ embeds: [
 					new MessageEmbed()
 						.setColor('GREEN')
-						.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted`),
+						.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
 				] }).then(msg => {setTimeout(function() { msg.delete(); }, 3000); }), true);
 			}
 			const amount = parseInt(args[0]) + 1;
@@ -42,6 +44,8 @@ module.exports = {
 				], reply: { messageReference: message.id } });
 			}
 			const fetched = await message.channel.messages.fetch({ limit: amount });
+			const pinned = await message.channel.messages.fetchPinned();
+			const notPinned = fetched.filter(fetchedMsg => !fetchedMsg.pinned);
 			if ((fetched.size - 1) == 0) {
 				return message.reply({ embeds: [
 					new MessageEmbed()
@@ -49,10 +53,10 @@ module.exports = {
 						.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
 				] }).then(msg => {setTimeout(function() { message.delete(); msg.delete(); }, 3000); });
 			}
-			message.channel.bulkDelete(amount, message.channel.send({ embeds: [
+			message.channel.bulkDelete(notPinned, message.channel.send({ embeds: [
 				new MessageEmbed()
 					.setColor('GREEN')
-					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted`),
+					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
 			] }).then(msg => {setTimeout(function() { msg.delete(); }, 3000); }), true);
 		}
 		catch (err) {

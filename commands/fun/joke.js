@@ -3,8 +3,8 @@ module.exports = {
 	description: 'Gives a funny joke 😆',
 	aliases: ['pun'],
 	usage: '(joke id)',
-  	cooldown: 3,
-  	category: 'fun',
+	cooldown: 3,
+	category: 'fun',
 	execute(message, args) {
 		require('dotenv').config();
 		const { MessageEmbed } = require('discord.js');
@@ -19,38 +19,54 @@ module.exports = {
 			joker.randomJoke().then((joke) => {
 				const embed = new MessageEmbed()
 					.setTitle(`😆 ${joke.question}`)
-					.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
+					.setAuthor(
+						`${message.author.username}`,
+						`${message.author.displayAvatarURL({ dynamic: true })}`,
+					)
 					.setColor(color.bot_theme)
 					.setDescription(`${spoiler(joke.answer)}`)
 					.setFooter(`ID: ${joke.id} | The COOL BOI BOT`)
 					.setTimestamp();
-				return message.reply({ embeds: [ embed ] });
+				return message.reply({ embeds: [embed] });
 			});
 		}
 		else {
 			if (isNaN(id)) {
-				return message.channel.send({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> That doesn\'t seem to be a valid number.'),
-				], reply: { messageReference: message.id } });
+				return message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								'<:X_:807305490160943104> That doesn\'t seem to be a valid number.',
+							),
+					],
+					reply: { messageReference: message.id },
+				});
 			}
 			else if (id < 0 || id > 100) {
-				return message.channel.send({ embeds: [
-					new MessageEmbed()
-						.setColor('RED')
-						.setDescription('<:X_:807305490160943104> You need to input a number between 0 and 100.'),
-				], reply: { messageReference: message.id } });
+				return message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor('RED')
+							.setDescription(
+								'<:X_:807305490160943104> You need to input a number between 0 and 100.',
+							),
+					],
+					reply: { messageReference: message.id },
+				});
 			}
 			joker.getJoke(id, 'en').then((joke) => {
 				const embed = new MessageEmbed()
 					.setTitle(`😆 ${joke.question}`)
-					.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
+					.setAuthor(
+						`${message.author.username}`,
+						`${message.author.displayAvatarURL({ dynamic: true })}`,
+					)
 					.setColor(color.bot_theme)
 					.setDescription(`${spoiler(joke.answer)}`)
 					.setFooter(`ID: ${id} | The COOL BOI BOT`)
 					.setTimestamp();
-				message.reply({ embeds: [ embed ] });
+				message.reply({ embeds: [embed] });
 			});
 		}
 	},

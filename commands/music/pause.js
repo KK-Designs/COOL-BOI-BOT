@@ -10,8 +10,14 @@ module.exports = {
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
-			return message.channel.send({ content: '<:pause:813209287881916447> Paused the music for you!', reply: { messageReference: message.id } });
+			return message.channel.send({
+				content: '<:pause:813209287881916447> Paused the music for you!',
+				reply: { messageReference: message.id },
+			});
 		}
-		return message.channel.send({ content: '<:no:803069123918823454> There is nothing playing.', reply: { messageReference: message.id } });
+		return message.channel.send({
+			content: '<:no:803069123918823454> There is nothing playing.',
+			reply: { messageReference: message.id },
+		});
 	},
 };

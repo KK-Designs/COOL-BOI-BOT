@@ -1,4 +1,4 @@
-module.exports = async message => {
+module.exports = async (message) => {
 	const { getLogChannel } = require('../utils.js');
 	const { MessageEmbed } = require('discord.js');
 	const color = require('../color.json');
@@ -20,7 +20,11 @@ module.exports = async message => {
 	const deletionLog = fetchedLogs.entries.first();
 
 	// Let's perform a coherence check here and make sure we got *something*
-	if (!deletionLog) return console.log(`A message by ${message.author.tag} was deleted, but no relevant audit logs were found.`);
+	if (!deletionLog) {
+		return console.log(
+			`A message by ${message.author.tag} was deleted, but no relevant audit logs were found.`,
+		);
+	}
 
 	// We now grab the user object of the person who deleted the message
 	// Let us also grab the target of this action to double check things
@@ -29,15 +33,19 @@ module.exports = async message => {
 	const delembed = new MessageEmbed()
 		.setColor(color.bot_theme)
 		.setAuthor(executor.tag, executor.displayAvatarURL({ dynamic: true }))
-		.setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}, by ${executor.tag}`)
+		.setTitle(
+			`Message by ${message.author.tag} was deleted in #${messageChannel}, by ${executor.tag}`,
+		)
 		.setDescription(message.content)
 		.setFooter('COOL BOI BOT MESSAGE LOGGING')
 		.setTimestamp();
 
 	const delembed1 = new MessageEmbed()
 		.setColor(color.bot_theme)
-	// .setAuthor(executor.tag,  executor.displayAvatarURL({ dynamic: true }))
-		.setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}`)
+		// .setAuthor(executor.tag,  executor.displayAvatarURL({ dynamic: true }))
+		.setTitle(
+			`Message by ${message.author.tag} was deleted in #${messageChannel}`,
+		)
 		.setDescription(message.content)
 		.setFooter('COOL BOI BOT MESSAGE LOGGING')
 		.setTimestamp();
@@ -52,7 +60,8 @@ module.exports = async message => {
 
 		await webhook.send({
 			username: 'COOL BOI BOT Logging',
-			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			avatarURL:
+				'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
 			embeds: [delembed1],
 		});
 	}
@@ -63,9 +72,9 @@ module.exports = async message => {
 
 		await webhook.send({
 			username: 'COOL BOI BOT Logging',
-			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+			avatarURL:
+				'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
 			embeds: [delembed],
 		});
 	}
-
 };
