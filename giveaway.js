@@ -67,6 +67,4 @@ module.exports = async client => {
 
 	manager.on('giveawayEnded', reqEvent('giveawayEnded'));
 	manager.on('giveawayReactionAdded', reqEvent('giveawayReactionAdded'));
-
-
 };

@@ -23,21 +23,20 @@ module.exports = async (client) => {
 			client.user.setPresence({
 				activities: [
 					{
-						name: ` !help | ${client.user.username}`,
+						name: ` !help | Serving since ${client.user.createdAt.toLocaleString('en-US', { timeZone: 'America/los_angeles' })}`,
 						type: 'LISTENING',
 					},
 				],
-				status: 'dnd',
 			});
-		} else {
+		}
+		else {
 			client.user.setPresence({
 				activities: [
 					{
-						name: ' !help | Almost done with experimental features!',
+						name: ` !help | Serving ${client.guilds.cache.size} servers`,
 						type: 'LISTENING',
 					},
 				],
-				status: 'dnd',
 			});
 		}
 	}, 15000);

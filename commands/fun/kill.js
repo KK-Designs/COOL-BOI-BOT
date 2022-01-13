@@ -13,7 +13,8 @@ const killnotes = [
 ];
 module.exports = {
 	name: 'kill',
-	description: 'Kills the mentioned user <a:Enchanted_Diamond_Sword:802774727093256192>',
+	description:
+		'Kills the mentioned user <a:Enchanted_Diamond_Sword:802774727093256192>',
 	cooldown: 1.5,
 	category: 'fun',
 	options: {

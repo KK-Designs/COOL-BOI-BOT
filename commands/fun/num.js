@@ -21,7 +21,10 @@ module.exports = {
 		const numamount = parseInt(args[0]) + 1;
 
 		if (isNaN(numamount)) {
-			return sendError('that doesn\'t seem to be a valid number.', message.channel);
+			return sendError(
+				'that doesn\'t seem to be a valid number.',
+				message.channel,
+			);
 		}
 		if (!fs.existsSync(`./1-${args}.txt`)) {
 			// file exists

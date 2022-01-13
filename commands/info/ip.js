@@ -3,7 +3,8 @@ const color = require('../../color.json');
 const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'ip',
-	description: 'Get your ip\'s info. YOU INFORMATION OR IP IS NEVER DISTRIBUTED ANYWHERE.  YOUR THINGS ARE SAFE',
+	description:
+		'Get your ip\'s info. YOU INFORMATION OR IP IS NEVER DISTRIBUTED ANYWHERE.  YOUR THINGS ARE SAFE',
 	cooldown: 3,
 	usage: '[your ip]',
 	category: 'info',

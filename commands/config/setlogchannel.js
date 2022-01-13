@@ -5,7 +5,8 @@ const { getLogChannel } = require('../../utils.js');
 const config = require('../../config.json');
 module.exports = {
 	name: 'setlogchannel',
-	description: 'Set the bots audit logging channel. Do `setlogChannel none` to reset this config',
+	description:
+		'Set the bots audit logging channel. Do `setlogChannel none` to reset this config',
 	cooldown: 5,
 	guildOnly: true,
 	permissions: 'ADMINISTRATOR',

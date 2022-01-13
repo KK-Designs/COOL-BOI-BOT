@@ -74,5 +74,4 @@ module.exports = async (oldMember, newMember) => {
 			embeds: [embed],
 		});
 	}
-
 };

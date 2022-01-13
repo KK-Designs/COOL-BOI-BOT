@@ -9,7 +9,11 @@ module.exports = {
 		const { client } = message;
 		const embed = new MessageEmbed()
 			.setTitle('<a:loading:808390866367545384> Pinging...')
-			.setColor(message.channel.type === 'GUILD_TEXT' ? message.member.displayHexColor : '#FFB700');
+			.setColor(
+				message.channel.type === 'GUILD_TEXT'
+					? message.member.displayHexColor
+					: '#FFB700',
+			);
 
 		await message.reply({ embeds: [embed] }).then((msg) => {
 			const pingembed = new MessageEmbed()

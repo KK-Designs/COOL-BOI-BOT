@@ -3,7 +3,7 @@ const db = require('quick.db');
 const color = require('../../color.json');
 module.exports = {
 	name: 'setwelcomechannel',
-	description: 'Set the bots member logging channel. Do `setWelcomeChannel none` to reset this config',
+	description: 'Set the bots member logging channel. Do `/setWelcomeChannel none` to reset this config',
 	cooldown: 5,
 	guildOnly: true,
 	permissions: 'ADMINISTRATOR',

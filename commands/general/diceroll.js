@@ -23,7 +23,9 @@ module.exports = {
 		if (!n || limit <= 0) {return this.sendErrorMessage(message, 0, 'Please provide a valid number of dice sides');}
 
 		const embed = new MessageEmbed()
-			.setTitle('<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>')
+			.setTitle(
+				'<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>',
+			)
 			.setDescription(`${user}, you rolled a **${n}**!`)
 			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()

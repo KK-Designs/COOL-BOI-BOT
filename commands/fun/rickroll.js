@@ -11,7 +11,8 @@ const {
 const pdl = require('play-dl');
 module.exports = {
 	name: 'rickroll',
-	description: 'Rickroll the voice channel you\'re in! <a:rickroll:805174355797082132>',
+	description:
+		'Rickroll the voice channel you\'re in! <a:rickroll:805174355797082132>',
 	guildOnly: true,
 	cooldown: 10,
 	category: 'fun',

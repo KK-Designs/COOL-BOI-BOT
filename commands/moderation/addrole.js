@@ -30,7 +30,9 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor('RED')
-						.setDescription(`<:X_:807305490160943104> ${member} already has the role ${role}`),
+						.setDescription(
+							`<:X_:807305490160943104> ${member} already has the role ${role}`,
+						),
 				],
 			});
 		}

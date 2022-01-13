@@ -37,7 +37,11 @@ module.exports = {
 			.addField(':arrow_right: Creation Date', `<t:${Math.round(channel.createdTimestamp / 1000)}:f>`, true)
 			.addField(':arrow_right: NSFW', channel.nsfw ? 'Yes' : 'No', true)
 			.addField(':arrow_right: Slowmode', `${slowmode}`, true)
-			.addField(':arrow_right: Category', channel.parent ? channel.parent.name : 'None', true)
+			.addField(
+				':arrow_right: Category',
+				channel.parent ? channel.parent.name : 'None',
+				true,
+			)
 			.addField(':arrow_right: Topic', channel.topic || 'None', true);
 
 		await message.reply({ embeds: [channelEmbed] });

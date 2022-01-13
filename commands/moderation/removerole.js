@@ -43,7 +43,6 @@ module.exports = {
 					.setDescription(`<:check:807305471282249738> Removed the role ${role} from ${member}`),
 			],
 		});
-
 	},
 	async executeSlash(interaction) {
 		const role = interaction.options.getRole('role', true);

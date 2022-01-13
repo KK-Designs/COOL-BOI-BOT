@@ -32,7 +32,6 @@ module.exports = {
 		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing.' });}
 
 		if (args[0]) {
-
 			if (args[0].toLowerCase() === 'raw_json') {
 				message.client.queue.delete(message.guild.id);
 				await message.reply({
@@ -54,7 +53,6 @@ module.exports = {
 
 				return await message.client.queue.delete(message.guild.id);
 			}
-
 		}
 		const embed = new MessageEmbed()
 			.setColor(message.guild.me.displayHexColor)

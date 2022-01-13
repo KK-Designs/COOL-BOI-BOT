@@ -2,7 +2,8 @@ const { MessageEmbed } = require('discord.js');
 const sendError = require('../../error.js');
 module.exports = {
 	name: 'ban',
-	description: 'Bans the specified user with spcified reason! <:BAN:752937190786465894>',
+	description:
+		'Bans the specified user with spcified reason! <:BAN:752937190786465894>',
 	guildOnly: true,
 	usage: '[@user] (reason)',
 	cooldown: 5,

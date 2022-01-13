@@ -61,10 +61,10 @@ module.exports = {
 						.setDescription('<:X_:807305490160943104> There are no new messages to delete'),
 				] }).then(msg => {setTimeout(function() { message.delete(); msg.delete(); }, 3000); });
 			}
-			message.channel.bulkDelete(notPinned, await message.reply({ embeds: [
+			message.channel.bulkDelete(notPinned, message.channel.send({ embeds: [
 				new MessageEmbed()
 					.setColor('GREEN')
-					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ ℹ ${pinned.size} messages ignored`}`),
+					.setDescription(`<:check:807305471282249738> ${fetched.size - 1} messages deleted${pinned.size == 0 ? ' ' : `\n\n️ℹ ${pinned.size} messages ignored`}`),
 			] }).then(msg => {setTimeout(function() { msg.delete(); }, 3000); }), true);
 		} catch (err) {
 			message.channel.send({ content: `I can't delete messages older than 2 weeks. Make sure the messages you are deleting are earlier that 2 weeks.\n \nSpecific error: \`${err}\``, reply: { messageReference: message.id } });

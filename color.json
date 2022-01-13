@@ -1,7 +1,7 @@
 {
-  "success" : "GREEN",
-  "fail" : "RED",
-  "discord" : "#0099ff",
-  "bot_theme" : "#ffa930",
-  "random" : "RANDOM"
+	"success": "GREEN",
+	"fail": "RED",
+	"discord": "#0099ff",
+	"bot_theme": "#ffa930",
+	"random": "RANDOM"
 }
