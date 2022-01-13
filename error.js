@@ -1,17 +1,12 @@
 const { MessageEmbed } = require('discord.js');
+const { inlineCode } = require('@discordjs/builders');
+const trim = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
 module.exports = async (text, channel) => {
-	let message;
 	const embed = new MessageEmbed()
 		.setColor('RED')
 		.setTitle('<:error_x:815780013256343582> Error: ')
-		.setDescription(text)
-		.setFooter(
-			channel.client.user.username,
-			channel.client.user.displayAvatarURL({ dynamic: true }),
-		);
-	await channel.send({ embeds: [embed] }).then((m) => {
-		message = m;
-	});
+		.setDescription(inlineCode(trim(text, 4096)))
+		.setFooter({ text: channel.client.user.username, iconURL: channel.client.user.displayAvatarURL({ dynamic: true }) });
 
-	console.log(message);
+	await channel.send({ embeds: [embed] });
 };

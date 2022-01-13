@@ -1,89 +1,47 @@
+const { getLogChannel } = require('../utils.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const db = require('quick.db');
+const color = require('../color.json');
+const config = require('../config.json');
+/** @type {(...args: import("discord.js").ClientEvents["messageUpdate"]) => Promise<any>} */
 module.exports = async (message, messageNew) => {
-	const { getLogChannel } = require('../utils.js');
-	const {
-		MessageEmbed,
-		MessageActionRow,
-		MessageButton,
-	} = require('discord.js');
-	const color = require('../color.json');
-	const db = require('quick.db');
+	if (!message.partial && message.content === messageNew.content) return;
 
-	if (message.partial) {
-		message
-			.fetch()
-			.then(async (fullMessage) => {
-				if (fullMessage.author.bot) return;
-				if (!getLogChannel(fullMessage.guild, db)) return;
-				const jumpToMsg = new MessageActionRow().addComponents(
-					new MessageButton()
-						.setURL(
-							`https://discord.com/channels/${fullMessage.guild.id}/${fullMessage.channel.id}/${fullMessage.id}`,
-						)
-						.setLabel('Jump to message')
-						.setEmoji('⬆️')
-						.setStyle('LINK'),
-				);
-				const embed = new MessageEmbed()
-					.setAuthor('📝 Message updated')
-					.setColor(color.bot_theme)
-					.setDescription(
-						`${fullMessage.author} edited a message in ${fullMessage.channel}`,
-					)
-					.setFooter('COOL BOI BOT MESSAGE LOGGING')
-					.setTimestamp();
+	if (messageNew.partial) messageNew = await messageNew.fetch();
 
-				const webhooks = await getLogChannel(
-					fullMessage.guild,
-					db,
-				).fetchWebhooks();
-				const webhook = webhooks.first();
+	if (messageNew.author.bot) return;
 
-				await webhook.send({
-					username: 'COOL BOI BOT Logging',
-					avatarURL:
-						'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
-					embeds: [embed],
-					components: [jumpToMsg],
-				});
-			})
-			.catch((error) => {
-				console.log('Something went wrong when fetching the message: ', error);
-			});
-	}
-	else {
-		if (message.content === messageNew.content) return;
-		if (message.author.bot) return;
+	const { client } = messageNew;
+	const logChannel = getLogChannel(message.guild, db);
 
-		if (!getLogChannel(message.guild, db)) return;
-		const jumpToMsg = new MessageActionRow().addComponents(
+	if (!logChannel) return;
+
+	const jumpToMsg = new MessageActionRow()
+		.addComponents(
 			new MessageButton()
-				.setURL(
-					`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`,
-				)
+				.setURL(`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`)
 				.setLabel('Jump to message')
 				.setEmoji('⬆️')
 				.setStyle('LINK'),
 		);
-		const embed = new MessageEmbed()
-			.setAuthor('📝 Message updated')
-			.setColor(color.bot_theme)
-			.setDescription(
-				`${message.author} edited a message in ${message.channel}`,
-			)
-			.addField('Old message:', `${message}`, true)
-			.addField('New message:', `${messageNew}`, true)
-			.setFooter('COOL BOI BOT MESSAGE LOGGING')
-			.setTimestamp();
+	const embed = new MessageEmbed()
+		.setAuthor({ name: '📝 Message updated' })
+		.setColor(color.bot_theme)
+		.setDescription(`${messageNew.author} edited a message in ${message.channel}`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
+		.setTimestamp();
 
-		const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
-		const webhook = webhooks.first();
+	if (!message.partial && message.content) {embed.addField('Old message:', `${message}`, true);}
 
-		await webhook.send({
-			username: 'COOL BOI BOT Logging',
-			avatarURL:
-				'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
-			embeds: [embed],
-			components: [jumpToMsg],
-		});
-	}
+	if (messageNew.content) {embed.addField('New message:', `${messageNew}`, true);}
+
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.find(wh => wh.token);
+
+	await webhook.send({
+		username: `${client.user.username} Logging`,
+		avatarURL: config.webhookAvatarURL,
+		embeds: [embed],
+		components: [jumpToMsg],
+	});
 };

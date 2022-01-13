@@ -4,27 +4,29 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 3,
 	category: 'music',
-	execute(message) {
-		const { MessageEmbed } = require('discord.js');
+	options: {},
+	async execute(message) {
 		const { channel } = message.member.voice;
-		if (!channel) {
-			return message.channel.send({
-				content:
-					'I\'m sorry but you need to be in a voice channel to play music!',
-				reply: { messageReference: message.id },
-			});
-		}
+
+		if (!channel) {return await message.reply({ content: 'I\'m sorry but you need to be in a voice channel to play music!' });}
+
 		const serverQueue = message.client.queue.get(message.guild.id);
-		if (!serverQueue) {
-			return message.channel.send({
-				content: 'There is nothing playing that I could skip for you.',
-				reply: { messageReference: message.id },
-			});
-		}
-		serverQueue.connection.dispatcher.end('Skip command has been used!');
-		message.channel.send({
-			content: 'Skiped to the next song in queue!',
-			reply: { messageReference: message.id },
-		});
+
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could skip for you.' });}
+
+		serverQueue.player.stop();
+		await message.reply({ content: 'Skiped to the next song in queue!' });
+	},
+	async executeSlash(interaction) {
+		const { channel } = interaction.member.voice;
+
+		if (!channel) {return await interaction.reply({ content: 'I\'m sorry but you need to be in a voice channel to play music!' });}
+
+		const serverQueue = interaction.client.queue.get(interaction.guild.id);
+
+		if (!serverQueue) {return await interaction.reply({ content: 'There is nothing playing that I could skip for you.' });}
+
+		serverQueue.player.stop();
+		await interaction.reply({ content: 'Skiped to the next song in queue!' });
 	},
 };
