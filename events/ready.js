@@ -28,8 +28,7 @@ module.exports = async (client) => {
 					},
 				],
 			});
-		}
-		else {
+		} else {
 			client.user.setPresence({
 				activities: [
 					{
