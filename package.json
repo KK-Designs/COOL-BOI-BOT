@@ -51,7 +51,7 @@
         "dotenv": "^11.0.0",
         "ffmpeg-static": "^4.4.1",
         "figlet": "^1.5.2",
-        "get-image-colors": "^2.0.1",
+        "get-image-colors": "^4.0.0",
         "googlethis": "^1.2.6",
         "humanize-duration": "^3.27.1",
         "libsodium-wrappers": "^0.7.9",
