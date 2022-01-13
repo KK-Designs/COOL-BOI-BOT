@@ -1,76 +1,47 @@
+const { getLogChannel } = require('../utils.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const db = require('quick.db');
+const color = require('../color.json');
+const config = require('../config.json');
+/** @type {(...args: import("discord.js").ClientEvents["messageUpdate"]) => Promise<any>} */
 module.exports = async (message, messageNew) => {
-	const { getLogChannel } = require('../utils.js');
-	const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-	const color = require('../color.json');
-	const db = require('quick.db');
+	if (!message.partial && message.content === messageNew.content) return;
 
-	if (message.partial) {
-		console.log('is partial');
-		message.fetch()
-			.then(async fullMessage => {
-				if (fullMessage.author.bot) return;
-				if (!getLogChannel(fullMessage.guild, db)) return;
-				const jumpToMsg = new MessageActionRow()
-					.addComponents(
-						new MessageButton()
-							.setURL(`https://discord.com/channels/${fullMessage.guild.id}/${fullMessage.channel.id}/${fullMessage.id}`)
-							.setLabel('Jump to message')
-							.setEmoji('⬆️')
-							.setStyle('LINK'),
-					);
-				const embed = new MessageEmbed()
-					.setAuthor('📝 Message updated')
-					.setColor(color.bot_theme)
-					.setDescription(`${fullMessage.author} edited a message in ${fullMessage.channel}`)
-					.setFooter('COOL BOI BOT MESSAGE LOGGING')
-					.setTimestamp();
+	if (messageNew.partial) messageNew = await messageNew.fetch();
 
+	if (messageNew.author.bot) return;
 
-				const webhooks = await getLogChannel(fullMessage.guild, db).fetchWebhooks();
-				const webhook = webhooks.first();
+	const { client } = messageNew;
+	const logChannel = getLogChannel(message.guild, db);
 
-				await webhook.send({
-					username: 'COOL BOI BOT Logging',
-					avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-					embeds: [embed],
-					components: [jumpToMsg],
-				});
-			})
-			.catch(error => {
-				console.log('Something went wrong when fetching the message: ', error);
-			});
-	}
-	else {
-		if (message.content === messageNew.content) return;
-		if (message.author.bot) return;
+	if (!logChannel) return;
 
-		if (!getLogChannel(message.guild, db)) return;
-		const jumpToMsg = new MessageActionRow()
-			.addComponents(
-				new MessageButton()
-					.setURL(`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`)
-					.setLabel('Jump to message')
-					.setEmoji('⬆️')
-					.setStyle('LINK'),
-			);
-		const embed = new MessageEmbed()
-			.setAuthor('📝 Message updated')
-			.setColor(color.bot_theme)
-			.setDescription(`${message.author} edited a message in ${message.channel}`)
-			.addField('Old message:', `${message}`, true)
-			.addField('New message:', `${messageNew}`, true)
-			.setFooter('COOL BOI BOT MESSAGE LOGGING')
-			.setTimestamp();
+	const jumpToMsg = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setURL(`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`)
+				.setLabel('Jump to message')
+				.setEmoji('⬆️')
+				.setStyle('LINK'),
+		);
+	const embed = new MessageEmbed()
+		.setAuthor({ name: '📝 Message updated' })
+		.setColor(color.bot_theme)
+		.setDescription(`${messageNew.author} edited a message in ${message.channel}`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
+		.setTimestamp();
 
+	if (!message.partial && message.content) {embed.addField('Old message:', `${message}`, true);}
 
-		const webhooks = await getLogChannel(message.guild, db).fetchWebhooks();
-		const webhook = webhooks.first();
+	if (messageNew.content) {embed.addField('New message:', `${messageNew}`, true);}
 
-		await webhook.send({
-			username: 'COOL BOI BOT Logging',
-			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-			embeds: [embed],
-			components: [jumpToMsg],
-		});
-	}
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.find(wh => wh.token);
+
+	await webhook.send({
+		username: `${client.user.username} Logging`,
+		avatarURL: config.webhookAvatarURL,
+		embeds: [embed],
+		components: [jumpToMsg],
+	});
 };

@@ -1,3 +1,4 @@
+const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'diceroll',
 	description: 'Rolls a dice!  <:dice:800843897261260830>',
@@ -5,20 +6,49 @@ module.exports = {
 	category: 'general',
 	aliases: ['dr'],
 	clientPermissons: 'EMBED_LINKS',
-	execute(message, args) {
+	options: {
+		limit: {
+			type: 'Integer',
+			description: 'The highest possible number',
+			required: false,
+		},
+	},
+	async execute(message, args) {
 		const user = message.author;
-		const { MessageEmbed } = require('discord.js');
 		let limit = args[0];
-		if (!limit) limit = 6;
+		if (!limit) {limit = 6;}
+
 		const n = Math.floor(Math.random() * limit + 1);
+
 		if (!n || limit <= 0) {return this.sendErrorMessage(message, 0, 'Please provide a valid number of dice sides');}
+
 		const embed = new MessageEmbed()
 			.setTitle('<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>')
 			.setDescription(`${user}, you rolled a **${n}**!`)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
-			.setColor(message.channel.type === 'dm' ? '#FFB700' : message.guild.me.displayHexColor,
-			);
-		message.channel.send({ embeds: [ embed ] });
+			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
+
+		await message.reply({ embeds: [embed] });
+	},
+	async executeSlash(interaction) {
+		const limit = interaction.options.getInteger('limit') ?? 6;
+
+		if (limit <= 0) {return await interaction.reply({ content: 'Please provide a valid number of dice sides', ephemeral: true });}
+
+		const n = Math.floor(Math.random() * limit) + 1;
+		const user = interaction.user;
+		const embed = new MessageEmbed()
+			.setTitle('<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>')
+			.setDescription(`${user}, you rolled a **${n}**!`)
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
+			.setTimestamp()
+			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait(750);
+		await interaction.editReply({
+			embeds: [embed],
+		});
 	},
 };

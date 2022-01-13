@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js');
-
 module.exports = {
 	name: 'volume',
 	description: '🔈 Change the server song queue volume',
@@ -8,22 +7,66 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 3,
 	category: 'music',
+	options: {
+		volume: {
+			type: 'Integer',
+			description: 'The volume to set the player to',
+			required: false,
+		},
+	},
 	async execute(message, args) {
 		const channel = message.member.voice.channel;
-		if (!channel) return message.channel.send({ content: 'I\'m sorry but you need to be in a voice channel to play music!', reply: { messageReference: message.id } });
-		const serverQueue = message.client.queue.get(message.guild.id);
-		if (!serverQueue) return message.channel.send({ content: 'There is nothing playing in this server.', reply: { messageReference: message.id } });
-		if (!serverQueue.connection) return message.channel.send({ content: 'There is nothing playing in this server.', reply: { messageReference: message.id } });
-		if (!args[0]) return message.channel.send({ content: `The current volume is: **${serverQueue.volume}**`, reply: { messageReference: message.id } });
-		if (isNaN(args[0])) return message.channel.send({ content: ':notes: Numbers only!', reply: { messageReference: message.id } }).catch(err => console.log(err));
-		if (parseInt(args[0]) > 150 || (args[0]) < 0) return message.channel.send({ content: 'You can\'t set the volume more than 150. or lower than 0', reply: { messageReference: message.id } }).catch(err => console.log(err));
-		serverQueue.volume = args[0];
-		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
-		const xd = new MessageEmbed()
-			.setDescription(`I have set the volume to: **${args[0] / 1}/100**`)
-			.setAuthor('Server Volume Manager', 'https://raw.githubusercontent.com/SudhanPlayz/Discord-MusicBot/master/assets/Music.gif')
-			.setColor('BLUE');
-		return message.channel.send({ embeds: [xd], reply: { messageReference: message.id } });
 
+		if (!channel) {return await message.reply({ content: 'I\'m sorry but you need to be in a voice channel to play music!' });}
+
+		const serverQueue = message.client.queue.get(message.guild.id);
+
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing in this server.' });}
+
+		if (!serverQueue.playing) {return await message.reply({ content: 'There is nothing playing in this server.' });}
+
+		if (!args[0]) {return await message.reply({ content: `The current volume is: **${serverQueue.volume}**` });}
+
+		const volume = Number.parseInt(args[0]);
+
+		if (!volume) {return await message.reply({ content: ':notes: Numbers only!' });}
+
+		if (volume > 150 || volume < 0) {return await message.reply({ content: 'You can\'t set the volume more than 150. or lower than 0' });}
+
+		serverQueue.volume = volume;
+		serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
+		const xd = new MessageEmbed()
+			.setDescription(`I have set the volume to: **${args[0]}/100**`)
+			.setAuthor({ name: 'Server Volume Manager', iconURL: 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif' })
+			.setColor('BLUE');
+
+		return await message.reply({ embeds: [xd] });
+	},
+	async executeSlash(interaction) {
+		const channel = interaction.member.voice.channel;
+
+		if (!channel) {return await interaction.reply({ content: 'I\'m sorry but you need to be in a voice channel to play music!' });}
+
+		const serverQueue = interaction.client.queue.get(interaction.guild.id);
+
+		if (!serverQueue) {return await interaction.reply({ content: 'There is nothing playing in this server.' });}
+
+		if (!serverQueue.playing) {return await interaction.reply({ content: 'There is nothing playing in this server.' });}
+
+		const volume = interaction.options.getInteger('volume');
+		if (typeof volume !== 'number') {return await interaction.reply({ content: `The current volume is: **${serverQueue.volume}**` });}
+
+		if (!volume) {return await interaction.reply({ content: ':notes: Numbers only!' });}
+
+		if (volume > 150 || volume < 0) {return await interaction.reply({ content: 'You can\'t set the volume more than 150. or lower than 0' });}
+
+		serverQueue.volume = volume;
+		serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
+		const xd = new MessageEmbed()
+			.setDescription(`I have set the volume to: **${volume}/100**`)
+			.setAuthor({ name: 'Server Volume Manager', iconURL: 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif' })
+			.setColor('BLUE');
+
+		return await interaction.reply({ embeds: [xd] });
 	},
 };

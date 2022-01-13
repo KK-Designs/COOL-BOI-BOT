@@ -1,36 +1,39 @@
-module.exports = async message => {
-	const { getLogChannel } = require('../utils.js');
-	const { MessageEmbed } = require('discord.js');
-	const color = require('../color.json');
-	if (message.partial) return;
-	if (message.first().channel.name == 'server-logs') return;
-	const messageChannel = message.first().channel.name;
-	const db = require('quick.db');
+/* eslint-disable no-inline-comments */
+const { MessageEmbed } = require('discord.js');
+const db = require('quick.db');
+const color = require('../color.json');
+const { getLogChannel } = require('../utils.js');
+const config = require('../config.json');
+module.exports = async messages => {
+	if (messages.partial) return;
 
-	if (getLogChannel(message.first().guild, db)) {
-		const messageArray = [...message.values()];
-		messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
-		let stringedArray = messageArray.join('\n'); // We join the array using \n to separate the lines
-		if (stringedArray.length > 2048) {
-			stringedArray.slice(2048, stringedArray.length);
-			stringedArray += '...';
-		}
-		const embed = new MessageEmbed()
-			.setColor(color.bot_theme)
-			.setAuthor(`Messages Purged in #${messageChannel}`)
-			.setTitle(`Message Bulk delete by ${message.first().author.tag} deleted ${message.size - 1} messages`)
-			.setDescription(`${stringedArray}`)
-			.setFooter('COOL BOI BOT MESSAGE LOGGING')
-			.setTimestamp();
+	if (messages.first().channel.name === 'server-logs') return;
 
-		const webhooks = await getLogChannel(message.first().guild, db).fetchWebhooks();
-		const webhook = webhooks.first();
+	const messageChannel = messages.first().channel.name;
+	const { client } = messages.first();
+	const logChannel = getLogChannel(messages.first().guild, db);
 
-		await webhook.send({
-			username: 'COOL BOI BOT Logging',
-			avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
-			embeds: [embed],
-		});
-	}
+	if (!logChannel) return;
 
+	const messageArray = [...messages.values()];
+	messageArray.slice(10, messageArray.length); // Slice removes all ements from the first number to the second number in an array. We use this to cut off the length of the array
+	let stringedArray = messageArray.join('\n'); // We join the array using \n to separate the lines
+	if (stringedArray.length > 2048) {stringedArray = stringedArray.slice(0, 2045) + '...';}
+
+	const embed = new MessageEmbed()
+		.setColor(color.bot_theme)
+		.setAuthor({ name: `Messages Purged in #${messageChannel}` })
+		.setTitle(`Message Bulk delete by ${messages.first().author.tag} deleted ${messages.size - 1} messages`)
+		.setDescription(`${stringedArray}`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
+		.setTimestamp();
+	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.find(wh => wh.token);
+
+	await webhook.send({
+		username: `${client.user.username} Logging`,
+		avatarURL: config.webhookAvatarURL,
+		embeds: [embed],
+	});
 };

@@ -1,3 +1,12 @@
+// @ts-nocheck
+const { MessageAttachment } = require('discord.js');
+const db = require('quick.db');
+const yuricanvas = require('yuri-canvas');
+const getColors = require('get-image-colors');
+const { weirdToNormalChars } = require('weird-to-normal-chars');
+/**
+ * @param {import("discord.js").GuildMember} member
+ */
 module.exports = {
 	name: 'level',
 	description: 'Gets your server rank card',
@@ -7,115 +16,126 @@ module.exports = {
 	usage: '(@user or id)',
 	aliases: ['rank'],
 	clientPermissons: 'ATTACH_FILES',
+	options: {
+		user: {
+			type: 'User',
+			description: 'The user to check the levels of',
+			required: false,
+		},
+	},
+	/**
+	 * @param {{ mentions: { members: { first: () => any; }; }; guild: { members: { cache: { get: (arg0: any) => any; }; }; id: any; bannerURL: (arg0: { format: string; }) => any; }; member: any; reply: (arg0: { content?: string; files?: Discord.MessageAttachment[]; }) => any; }} message
+	 * @param {any[]} args
+	 */
 	async execute(message, args) {
-		let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-		if (!args[0]) {
-			member = message.member || message.author;
-		}
-		else if (member.user.bot) {return message.channel.send({ content: 'I don\'t track bots activity', reply: { messageReference: message.id } });}
-		const Discord = require('discord.js');
-		const db = require('quick.db');
-		const { progressBar } = require('canvas-extras');
-		let messagefetch = db.fetch(`messages_${message.guild.id}_${member.user.id}`);
-		let levelfetch = db.fetch(`level_${message.guild.id}_${member.user.id}`);
+		const member = args[0]
+			? message.mentions.members.first() ?? message.guild.members.cache.get(args[0])
+			: message.member;
 
-		if (messagefetch == null) messagefetch = '0';
-		if (levelfetch == null) levelfetch = '0';
+		if (member.user.bot) {return await message.reply({ content: 'I don\'t track bots activity' });}
+		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
+			const levelfetch = await db.fetch(`level_${member.guild.id}_${member.user.id}`) ?? 1;
+			const totalmessages = 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25;
+			let messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
+			if (messagesNeeded == 0) {
+				messagesNeeded = 1;
+			}
+			const rankMemberData = [];
+			member.guild.members.fetch().then(async members => {
+				members.array().map(async m => {
+					if (m.user.bot) return;
+					const level = await db.fetch(`level_${m.guild.id}_${m.user.id}`) ?? 0;
+					rankMemberData.push({
+						userid: m.id,
+						level: level,
+					});
+					rankMemberData.sort((a, b) => b.level - a.level);
+					return rankMemberData.findIndex(array => array.userid === member.user.id) + 1;
+				});
+			}).then(async () => {
+				rankMemberData.sort((a, b) => b.level - a.level);
+				const image = await yuricanvas.rank({
+					username: weirdToNormalChars(member.user.username),
+					discrim: member.user.discriminator,
+					status: member.presence?.status ?? 'offline',
+					level: levelfetch,
+					rank: `#${rankMemberData.findIndex(array => array.userid === member.user.id) + 1}  `,
+					neededXP: totalmessages,
+					currentXP: messagesNeeded,
+					avatarURL: member.user.displayAvatarURL({ format: 'png' }),
+					color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
+					background: member.guild.bannerURL({ format: 'png' }) ?? undefined,
+				});
+				const attachment = new MessageAttachment(image, `${member.user.username}'s_rankcard'.png`);
+				await message.reply({ files: [ attachment ] });
+			});
+		});
+	},
+	/**
+	 * @param {{ deferReply: () => any; options: { getMember: (arg0: string) => any; }; member: any; reply: (arg0: { content: string; }) => any; guild: { id: any; bannerURL: (arg0: { format: string; }) => any; }; editReply: (arg0: { files: Discord.MessageAttachment[]; }) => any; }} interaction
+	 */
+	async executeSlash(interaction) {
+		await interaction.deferReply();
+		const member = interaction.options.getMember('user') ?? interaction.member;
 
-		let status;
-		if (!member.presence) {
-			status = '#454545';
-		}
-		else if (member.presence.status === 'online') {
-			status = '#00ff5e';
-		}
-		else if (member.presence.status === 'dnd') {
-			status = '#bf000d';
-		}
-		else if (member.presence.status === 'idle') {
-			status = '#ff9d00';
-		}
+		if (member.user.bot) {return await interaction.editReply({ content: 'I don\'t track bots activity' });}
 
-		const Canvas = require('canvas');
-		const { registerFont } = require('canvas');
-
-		registerFont('./BalooTammudu2-Regular.ttf', { family: 'sans-serif' });
-
-		const applyText = (canvas, text) => {
-			const ctx = canvas.getContext('2d');
-
-			// Declare a base size of the font
-			let fontSize = 50;
-
-			do {
-				// Assign the font to the context and decrement it so it can be measured again
-				ctx.font = `${fontSize -= 2}px sans-serif`;
-				// Compare pixel width of the text to the canvas minus the approximate avatar size
-			} while (ctx.measureText(text).width > canvas.width - 300);
-
-			// Return the result to use in the actual canvas
-			return ctx.font;
-		};
-
-		const canvas = Canvas.createCanvas(700, 250);
-		const ctx = canvas.getContext('2d');
-		const totalmessages = 25 + 25 * levelfetch + Math.floor(levelfetch / 3) * 25;
-
-
-		const background = await Canvas.loadImage('./cool-boi.png');
-		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-		ctx.beginPath();
-		ctx.progressBar(messagefetch, totalmessages, 269, 192, 400, 25, '#000387');
-		ctx.closePath();
-
-		ctx.strokeStyle = '#74037b';
-		ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-		ctx.font = '38px sans-serif';
-		ctx.fillStyle = '#000133';
-		ctx.fillText(`${levelfetch}                            ${messagefetch}`, canvas.width / 1.9, canvas.height / 3.6);
-
-		ctx.font = '30px sans-serif';
-		ctx.fillStyle = '#13185c';
-		ctx.fillText(' LEVEL                 MESSAGES', canvas.width / 2.6, canvas.height / 3.6);
-
-		// Add an exclamation point here and below
-		// ctx.font = '48px sans-serif';
-		ctx.font = applyText(canvas, member.user.username);
-		ctx.fillStyle = '#000133';
-		ctx.fillText(`${member.user.username}`, 355, canvas.height / 1.9);
-
-		ctx.font = '32px sans-serif';
-		ctx.fillStyle = '#13185c';
-		ctx.fillText(`          #${member.user.discriminator}`, canvas.width / 2.0, canvas.height / 1.4);
-
-		ctx.beginPath();
-		ctx.strokeStyle = '#000133';
-		ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
-		ctx.closePath();
-		ctx.stroke();
-		ctx.lineWidth = 7;
-		ctx.clip();
-
-		// Fill with gradient
-		ctx.strokeStyle = status;
-		ctx.beginPath();
-		ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
-		ctx.stroke();
-		ctx.lineWidth = 99;
-		ctx.shadowBlur = 15;
-		ctx.shadowColor = '#000133';
-		// ctx.fill();
-
-		const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
-		ctx.drawImage(avatar, 25, 25, 200, 200);
-		const gradient = await Canvas.loadImage('./gradient.png');
-		ctx.drawImage(gradient, 256, 256, 256, 256);
-
-		const rankAttachment = new Discord.MessageAttachment(canvas.toBuffer(), 'rank-card.png');
-
-		message.reply({ files: [ rankAttachment ] });
-
+		getColors(member.user.displayAvatarURL({ format: 'png' })).then(async colors => {
+			const levelfetch = await db.fetch(`level_${interaction.guild.id}_${member.user.id}`) ?? 1;
+			const totalmessages = 50 + 50 * (levelfetch - 1) + Math.floor((levelfetch - 1) / 3) * 25;
+			let messagesNeeded = db.fetch(`messagesneeded_${member.guild.id}_${member.user.id}`) ?? 1;
+			if (messagesNeeded == 0) {
+				messagesNeeded = 1;
+			}
+			const rankMemberData = [];
+			interaction.guild.members.fetch().then(async members => {
+				members.array().map(async m => {
+					if (m.user.bot) return;
+					const level = await db.fetch(`level_${m.guild.id}_${m.user.id}`) ?? 0;
+					rankMemberData.push({
+						userid: m.id,
+						level: level,
+					});
+					rankMemberData.sort((a, b) => b.level - a.level);
+					return rankMemberData.findIndex(array => array.userid === member.user.id) + 1;
+				});
+			}).then(async () => {
+				rankMemberData.sort((a, b) => b.level - a.level);
+				const image = await yuricanvas.rank({
+					username: weirdToNormalChars(member.user.username),
+					discrim: member.user.discriminator,
+					status: member.presence?.status ?? 'offline',
+					level: levelfetch,
+					rank: `#${rankMemberData.findIndex(array => array.userid === member.user.id) + 1}  `,
+					neededXP: totalmessages,
+					currentXP: messagesNeeded,
+					avatarURL: member.user.displayAvatarURL({ format: 'png' }),
+					color: shadeColor(colors.map(color1 => color1.hex())[0].toString(), 50),
+					background: interaction.guild.bannerURL({ format: 'png' }) ?? undefined,
+				});
+				const attachment = new MessageAttachment(image, `${member.user.username}'s_rankcard'.png`);
+				await interaction.editReply({ files: [ attachment ] });
+			});
+		});
 	},
 };
+
+/**
+ * @param {string} color1
+ * @param {number} percent
+ */
+function shadeColor(color1, percent) {
+	let R = parseInt(color1.substring(1, 3), 16);
+	let G = parseInt(color1.substring(3, 5), 16);
+	let B = parseInt(color1.substring(5, 7), 16);
+	R = parseInt(R * (100 + percent) / 100);
+	G = parseInt(G * (100 + percent) / 100);
+	B = parseInt(B * (100 + percent) / 100);
+	R = (R < 255) ? R : 255;
+	G = (G < 255) ? G : 255;
+	B = (B < 255) ? B : 255;
+	const RR = ((R.toString(16).length == 1) ? '0' + R.toString(16) : R.toString(16));
+	const GG = ((G.toString(16).length == 1) ? '0' + G.toString(16) : G.toString(16));
+	const BB = ((B.toString(16).length == 1) ? '0' + B.toString(16) : B.toString(16));
+	return '#' + RR + GG + BB;
+}

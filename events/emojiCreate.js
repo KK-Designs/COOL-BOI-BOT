@@ -1,27 +1,28 @@
+const { MessageEmbed } = require('discord.js');
+const db = require('quick.db');
+const color = require('../color.json');
+const { getLogChannel } = require('../utils.js');
+const config = require('../config.json');
+/** @type {(...args: import("discord.js").ClientEvents["emojiCreate"]) => Promise<any>} */
 module.exports = async emoji => {
-	const { getLogChannel } = require('../utils.js');
-	const { MessageEmbed } = require('discord.js');
-	const color = require('../color.json');
-	const db = require('quick.db');
+	const logChannel = getLogChannel(emoji.guild, db);
+	const { client } = emoji;
+	if (!logChannel) return;
 
-	if (!getLogChannel(emoji.guild, db)) return;
-
+	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.find(wh => wh.token);
 	const embed = new MessageEmbed()
 		.setTitle('➕ Emoji Create')
 		.setColor(color.bot_theme)
-		.setDescription(emoji.animated ? `Name: <a:${emoji.name}:${emoji.id}> ${emoji.name}\nID: ${emoji.id}` : `Name: <:${emoji.name}:${emoji.id}> ${emoji.name}\nID: ${emoji.id}`)
+		.setDescription(`Name: ${emoji} ${emoji.name}\nID: ${emoji.id}`)
 		.addField('Emoji URL', emoji.url)
-		.setFooter('COOL BOI BOT SERVER LOGGING')
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
 		.setTimestamp();
 
-	const webhooks = await getLogChannel(emoji.guild, db).fetchWebhooks();
-	const webhook = webhooks.first();
-
 	await webhook.send({
-		username: 'COOL BOI BOT Logging',
-		avatarURL: 'https://images-ext-1.discordapp.net/external/IRCkcws2ACaLh7lfNgQgZkwMtAPRQvML2XV1JNugLvM/https/cdn.discordapp.com/avatars/811024409863258172/699aa52d1dd597538fc33ceef502b1e6.png',
+		username: `${client.user.username} Logging`,
+		avatarURL: config.webhookAvatarURL,
 		embeds: [embed],
 	});
-
-
 };

@@ -3,13 +3,23 @@ module.exports = {
 	description: 'Flips a coin!',
 	cooldown: 2,
 	category: 'general',
-	execute(message, args) {
-		const random = (Math.floor(Math.random() * Math.floor(2)));
+	options: {},
+	async execute(message) {
+		const random = Math.floor(Math.random() * Math.floor(2));
 		if (random === 0) {
-			message.channel.send({ content: 'I flipped heads!', reply: { messageReference: message.id } });
+			message.reply({ content: 'I flipped heads!' });
+		} else {
+			message.reply({ content: 'I flipped tails!' });
 		}
-		else {
-			message.channel.send({ content: 'I flipped tails!', reply: { messageReference: message.id } });
-		}
+	},
+	async executeSlash(interaction) {
+		const number = Math.floor(Math.random() * 2);
+		const result = number === 0 ? 'heads' : 'tails';
+		const wait = require('util').promisify(setTimeout);
+		await interaction.deferReply();
+		await wait(750);
+		await interaction.editReply({
+			content: `I flipped ${result}!`,
+		});
 	},
 };
