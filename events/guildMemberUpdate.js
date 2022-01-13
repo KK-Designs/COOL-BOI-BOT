@@ -12,16 +12,16 @@ module.exports = async (oldMember, newMember) => {
 
 	if (oldMember.nickname !== newMember.nickname) {
 		const embed = new MessageEmbed()
-			.setAuthor('👤 Nickname changed')
+			.setAuthor({ name: '👤 Nickname changed' })
 			.setColor(color.bot_theme)
 			.setDescription(`<@${newMember.id}> changed their nickname`)
 			.addField('Old nickname:', `${oldMember.displayName}`, true)
 			.addField('New nickname:', `${newMember.displayName}`, true)
-			.setFooter(`${client.user.username} MEMBER LOGGING`)
+			.setFooter({ text: `${client.user.username} MEMBER LOGGING` })
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
-		const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+		const webhook = webhooks.find(wh => wh.token);
 
 		await webhook.send({
 			username: `${client.user.username} Logging`,
@@ -37,17 +37,17 @@ module.exports = async (oldMember, newMember) => {
 
 
 		const embed = new MessageEmbed()
-			.setAuthor('👤 Member roles updated')
+			.setAuthor({ name: '👤 Member roles updated' })
 			.setColor(color.bot_theme)
 			.setDescription(`Roles updated for <@${newMember.id}>`)
 			.addField('Old roles:', `${output}`, true)
 			.addField('New roles:', `឵${outputNew}`, true)
 			.setThumbnail(`${oldMember.user.displayAvatarURL({ dynamic: true })}`)
-			.setFooter(`${client.user.username} MEMBER LOGGING`)
+			.setFooter({ text: `${client.user.username} MEMBER LOGGING` })
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
-		const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+		const webhook = webhooks.find(wh => wh.token);
 
 		await webhook.send({
 			username: `${client.user.username} Logging`,
@@ -57,16 +57,16 @@ module.exports = async (oldMember, newMember) => {
 	}
 	if (oldMember.user.avatar !== newMember.user.avatar) {
 		const embed = new MessageEmbed()
-			.setAuthor('👤 Member avatar updated')
+			.setAuthor({ name: '👤 Member avatar updated' })
 			.setColor(color.bot_theme)
 			.setDescription(`Avatar updated for <@${newMember.id}>`)
 			.addField('Old avatar:', `${oldMember.user.displayAvatarURL({ dynamic: true })}`, true)
 			.addField('New avatar:', `឵${newMember.user.displayAvatarURL({ dynamic: true })}`, true)
-			.setFooter(`${client.user.username} MEMBER LOGGING`)
+			.setFooter({ text: `${client.user.username} MEMBER LOGGING` })
 			.setTimestamp();
 		// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 		const webhooks = await logChannel.fetchWebhooks();
-		const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+		const webhook = webhooks.find(wh => wh.token);
 
 		await webhook.send({
 			username: `${client.user.username} Logging`,

@@ -13,7 +13,7 @@ module.exports = {
 	async execute(message, args) {
 		const asciitext = args.slice(0).join(' ');
 		if (!asciitext) {
-			return await message.reply({ content: 'You didn\'t give me the text! please use the command like so; `!ascii bacon`' });
+			return await message.reply({ content: 'You didn\'t give me the text! please use the command like so: `/ascii bacon`' });
 		}
 		figlet(asciitext, async (err, data) => {
 			if (err) {

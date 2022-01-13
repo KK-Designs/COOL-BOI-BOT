@@ -19,7 +19,7 @@ module.exports = {
 			.setColor(message.guild?.me.displayHexColor ?? color.discord)
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription('This command prefix is always `!` or a @mention')
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });
@@ -32,7 +32,7 @@ module.exports = {
 			.setColor(interaction.guild?.me.displayHexColor ?? color.discord)
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription('This command prefix is always `!` or a @mention')
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [embed] });

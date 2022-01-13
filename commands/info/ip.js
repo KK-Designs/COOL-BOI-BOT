@@ -51,7 +51,7 @@ module.exports = {
 				.addField('Location:', location)
 				.addField('Postal code:', postal)
 				.addField('Timezone:', timezone)
-				.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+				.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 				.setTimestamp();
 		}
 		await message.reply({ embeds: [embed] });
@@ -88,7 +88,7 @@ module.exports = {
 				.addField('Location:', location)
 				.addField('Postal code:', postal)
 				.addField('Timezone:', timezone)
-				.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+				.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 				.setTimestamp();
 		}
 		await interaction.reply({ embeds: [embed], ephemeral: true });

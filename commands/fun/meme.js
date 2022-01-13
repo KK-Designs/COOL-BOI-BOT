@@ -17,7 +17,7 @@ module.exports = {
 			.setTitle(res.title)
 			.setURL(res.postLink)
 			.setImage(res.url)
-			.setFooter('By ' + res.author + ` | 👍 ${res.ups}`)
+			.setFooter({ text: `By ${res.author}  | 👍 ${res.ups}` })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? '#41C3DC');
 
@@ -37,7 +37,7 @@ module.exports = {
 			.setTitle(body.title)
 			.setURL(body.postLink)
 			.setImage(res.url)
-			.setFooter('By ' + body.author + ` | 👍 ${body.ups}`)
+			.setFooter({ text: `By ${body.author}  | 👍 ${body.ups}` })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? '#41C3DC');
 

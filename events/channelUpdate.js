@@ -30,15 +30,15 @@ module.exports = async (oldchannel, newchannel) => {
 				.setStyle('LINK'),
 		);
 	const embed = new MessageEmbed()
-		.setAuthor('📝 Channel updated')
+		.setAuthor({ name: '📝 Channel updated' })
 		.setColor(color.bot_theme)
 		.setDescription(`Channel Updated ${oldchannel}`)
 		.addField('Old channel:', `${oldchannel.name}`, true)
 		.addField('New channel:', `${newchannel.name}`, true)
-		.setFooter(`${client.user.username} SERVER LOGGING`)
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

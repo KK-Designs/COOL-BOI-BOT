@@ -19,7 +19,7 @@ module.exports = {
 					.addField('**Type: **', activity.type, true)
 					.addField('**Participants: **', activity.participants.toString(), true)
 					.addField('**Accessibility: **', activity.accessibility.toString(), true)
-					.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+					.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 					.setTimestamp();
 
 				await message.reply({ embeds: [embed] });
@@ -38,7 +38,7 @@ module.exports = {
 					.addField('**Type: **', activity.type, true)
 					.addField('**Participants: **', activity.participants.toString(), true)
 					.addField('**Accessibility: **', activity.accessibility.toString(), true)
-					.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+					.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 					.setTimestamp();
 
 				await interaction.reply({ embeds: [embed] });

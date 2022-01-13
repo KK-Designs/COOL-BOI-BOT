@@ -36,7 +36,7 @@ module.exports = async message => {
 		.setColor(color.bot_theme)
 		.setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}`)
 		.setDescription(message.content)
-		.setFooter(`${client.user.username} MESSAGE LOGGING`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
 		.setTimestamp();
 
 
@@ -44,12 +44,12 @@ module.exports = async message => {
 	// We will also run a check to make sure the log we got was for the same author's message
 	if (target.id !== message.author.id) {
 		embed
-			.setAuthor(executor.tag, executor.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: executor.tag, iconURL: executor.displayAvatarURL({ dynamic: true }) })
 			.setTitle(`Message by ${message.author.tag} was deleted in #${messageChannel}, by ${executor.tag}`);
 	}
 	// modLogChannel.send({ embeds: [ delembed ] });
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

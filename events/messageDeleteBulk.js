@@ -22,14 +22,14 @@ module.exports = async messages => {
 
 	const embed = new MessageEmbed()
 		.setColor(color.bot_theme)
-		.setAuthor(`Messages Purged in #${messageChannel}`)
+		.setAuthor({ name: `Messages Purged in #${messageChannel}` })
 		.setTitle(`Message Bulk delete by ${messages.first().author.tag} deleted ${messages.size - 1} messages`)
 		.setDescription(`${stringedArray}`)
-		.setFooter(`${client.user.username} MESSAGE LOGGING`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
 		.setTimestamp();
 	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

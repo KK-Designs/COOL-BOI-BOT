@@ -30,7 +30,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle(':flag_us:  Trump Tweet  :flag_us: ')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? color.discord);
 
@@ -50,7 +50,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle(':flag_us:  Trump Tweet  :flag_us: ')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? color.discord);
 

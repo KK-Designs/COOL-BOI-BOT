@@ -28,7 +28,7 @@ module.exports = {
 				.addField('Url: ', emoji.url, true)
 				.addField('Animated: ', emoji.animated ? 'Emoji is animated' : 'Emoji is not animated', true)
 				.setThumbnail(emoji.url)
-				.setFooter(emoji.name, emoji.url)
+				.setFooter({ text: emoji.name, iconURL: emoji.url })
 				.setTimestamp()
 				.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 
@@ -37,7 +37,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle(`${guild.name}'s emoji's:\n`)
 			.setDescription(`${guild.emojis.cache.map(emojis => emojis.toString()).join(` ${bold('|')} `)}`)
-			.setFooter(guild.name, guild.iconURL({ dymamic: true }))
+			.setFooter({ text: guild.name, iconURL: guild.iconURL({ dymamic: true }) })
 			.setTimestamp()
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 

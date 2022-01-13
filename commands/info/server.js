@@ -23,7 +23,7 @@ module.exports = {
 			.addField('Member Count', `This server has ${guild.memberCount} members`)
 			.addField('Emoji Count', `This server has ${guild.emojis.cache.size} emojis`)
 			.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
-			.setFooter(serverName, serverIcon);
+			.setFooter({ text: serverName, iconURL: serverIcon });
 
 		await message.reply({ embeds: [infoembed] });
 	},
@@ -46,7 +46,7 @@ module.exports = {
 			.addField('Member Count', `This server has ${guild.memberCount} members`)
 			.addField('Emoji Count', `This server has ${guild.emojis.cache.size} emojis`)
 			.addField('Roles Count', `This server has ${guild.roles.cache.size} roles`)
-			.setFooter(serverName, serverIcon);
+			.setFooter({ text: serverName, iconURL: serverIcon });
 
 		await interaction.reply({ embeds: [infoembed] });
 	},

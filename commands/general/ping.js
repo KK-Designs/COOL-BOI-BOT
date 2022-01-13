@@ -16,7 +16,7 @@ module.exports = {
 				.setTitle(`${client.user.username}'s Ping\n------------------------`)
 				.addField('WS Latency:', `${Math.round(client.ws.ping)}ms`, true)
 				.addField('API Latency (Round-trip):', `${msg.createdTimestamp - message.createdTimestamp}ms`)
-				.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+				.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 				.setTimestamp()
 				.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 
@@ -37,7 +37,7 @@ module.exports = {
 			.setTitle(`${interaction.client.user.username}'s Ping\n------------------------`)
 			.addField('WS Latency:', `${Math.round(interaction.client.ws.ping)}ms`, true)
 			.addField('API Latency (Round-trip):', `${reply.createdTimestamp - interaction.createdTimestamp}ms`)
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 

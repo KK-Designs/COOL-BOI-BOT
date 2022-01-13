@@ -23,10 +23,10 @@ module.exports = {
 			const joke = await getRandomJoke();
 			const embed = new MessageEmbed()
 				.setTitle(`😆 ${joke.question}`)
-				.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
+				.setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL({ dynamic: true })}` })
 				.setColor(color.bot_theme)
 				.setDescription(`${spoiler(joke.answer)}`)
-				.setFooter(`ID: ${joke.id} | The ${message.client.user.username}`)
+				.setFooter({ text: `ID: ${joke.id} | The ${message.client.user.username}` })
 				.setTimestamp();
 
 			return await message.reply({ embeds: [embed] });
@@ -47,10 +47,10 @@ module.exports = {
 		const joke = await getJokeByID(id);
 		const embed = new MessageEmbed()
 			.setTitle(`😆 ${joke.question}`)
-			.setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL({ dynamic: true })}`)
+			.setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL({ dynamic: true })}` })
 			.setColor(color.bot_theme)
 			.setDescription(`${spoiler(joke.answer)}`)
-			.setFooter(`ID: ${id} | The ${message.client.user.username}`)
+			.setFooter({ text: `ID: ${id} | The ${message.client.user.username}` })
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });
@@ -65,10 +65,10 @@ module.exports = {
 			const joke = await getRandomJoke();
 			const embed = new MessageEmbed()
 				.setTitle(`😆 ${joke.question}`)
-				.setAuthor(`${user.username}`, `${user.displayAvatarURL({ dynamic: true })}`)
+				.setAuthor({ name: `${user.username}`, iconURL: `${user.displayAvatarURL({ dynamic: true })}` })
 				.setColor(color.bot_theme)
 				.setDescription(`${spoiler(joke.answer)}`)
-				.setFooter(`ID: ${joke.id} | The ${interaction.client.user.username}`)
+				.setFooter({ text: `ID: ${joke.id} | The ${interaction.client.user.username}` })
 				.setTimestamp();
 
 			return await interaction.editReply({ embeds: [embed] });
@@ -82,10 +82,10 @@ module.exports = {
 		const joke = await getJokeByID(id);
 		const embed = new MessageEmbed()
 			.setTitle(`😆 ${joke.question}`)
-			.setAuthor(`${user.username}`, `${user.displayAvatarURL({ dynamic: true })}`)
+			.setAuthor({ name: `${user.username}`, iconURL: `${user.displayAvatarURL({ dynamic: true })}` })
 			.setColor(color.bot_theme)
 			.setDescription(`${spoiler(joke.answer)}`)
-			.setFooter(`ID: ${id} | The ${interaction.client.user.username}`)
+			.setFooter({ text: `ID: ${id} | The ${interaction.client.user.username}` })
 			.setTimestamp();
 
 		await interaction.editReply({ embeds: [embed] });

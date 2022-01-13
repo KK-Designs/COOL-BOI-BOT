@@ -28,13 +28,13 @@ module.exports = {
 			message.reply('⚠ Warning: This lyrics contains swears. We removed most of them from the lyrics');
 		}
 		const lyricsEmbed = new MessageEmbed()
-			.setAuthor(`${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', queue.songs[0].url)
+			.setAuthor({ name: `${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, iconURL: 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', url: queue.songs[0].url })
 			.setThumbnail(lyricsinfo?.thumbnail ?? 'https://thumbs.dreamstime.com/b/music-note-icon-element-simple-web-name-mobile-concept-apps-thin-line-can-be-used-white-background-170192321.jpg')
 			.setURL(lyricsinfo?.link ?? queue.songs[0].url)
 			.setColor(message.channel.type === 'DM' ? color.bot_theme : message.guild.me.displayHexColor)
 			.setDescription(filter.clean(lyricsinfo.lyrics))
 			.setTimestamp()
-			.setFooter(`Song by ${lyricsinfo?.author ?? 'Unknown'}`);
+			.setFooter({ text: `Song by ${lyricsinfo?.author ?? 'Unknown'}` });
 		if (lyricsEmbed.description.length >= 4093) {
 			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 	4093)}...`;
 		} else {
@@ -60,13 +60,13 @@ module.exports = {
 			interaction.editReply('⚠ Warning: This lyrics contains swears. We removed most of them from the lyrics');
 		}
 		const lyricsEmbed = new MessageEmbed()
-			.setAuthor(`${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', queue.songs[0].url)
+			.setAuthor({ name: `${lyricsinfo?.title ?? 'Unknown'} — Lyrics`, iconURL: 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif', url: queue.songs[0].url })
 			.setThumbnail(lyricsinfo?.thumbnail ?? 'https://thumbs.dreamstime.com/b/music-note-icon-element-simple-web-name-mobile-concept-apps-thin-line-can-be-used-white-background-170192321.jpg')
 			.setURL(lyricsinfo?.link ?? queue.songs[0].url)
 			.setColor(interaction.channel.type === 'DM' ? color.bot_theme : interaction.guild.me.displayHexColor)
 			.setDescription(filter.clean(lyricsinfo.lyrics))
 			.setTimestamp()
-			.setFooter(`Song by ${lyricsinfo?.author ?? 'Unknown'}`);
+			.setFooter({ text: `Song by ${lyricsinfo?.author ?? 'Unknown'}` });
 		if (lyricsEmbed.description.length >= 4093) {
 			lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 	4093)}...`;
 		}

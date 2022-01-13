@@ -21,9 +21,9 @@ module.exports = {
 
 		const reply = await chatbot.chat({ message: query, name: client.user.username, owner: 'NotBacon#4259', user: message.author.id, language: 'en' });
 		const embed = new MessageEmbed()
-			.setAuthor(client.user.username, client.user.displayAvatarURL({ dymamic: true }))
+			.setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dymamic: true }) })
 			.setDescription(`${reply}`)
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dymamic: true }))
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dymamic: true }) })
 			.setTimestamp()
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.guild.me.displayHexColor : '#FFB700');
 
@@ -37,9 +37,9 @@ module.exports = {
 		await wait(1);
 		const reply = await chatbot.chat({ message: query, name: client.user.username, owner: 'NotBacon#4259', user: interaction.user.id, language: 'en' });
 		const embed = new MessageEmbed()
-			.setAuthor(client.user.username, client.user.displayAvatarURL({ dymamic: true }))
+			.setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dymamic: true }) })
 			.setDescription(`${reply}`)
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dymamic: true }))
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dymamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.channel.type === 'GUILD_TEXT' ? interaction.guild.me.displayHexColor : '#FFB700');
 		await interaction.editReply({ embeds: [embed] });

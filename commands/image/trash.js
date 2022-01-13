@@ -25,7 +25,7 @@ module.exports = {
 			.setImage('attachment://trash.png')
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700')
 			.setTimestamp()
-			.setFooter(`${message.client.user.username} Images`, `${message.client.user.displayAvatarURL({ dynamic: true })}`);
+			.setFooter({ text: `${message.client.user.username} Images`, iconURL: `${message.client.user.displayAvatarURL({ dynamic: true })}` });
 
 		await message.reply({ embeds: [imageEmbed], files: [attach] });
 	},
@@ -44,7 +44,7 @@ module.exports = {
 			.setImage('attachment://trash.png')
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700')
 			.setTimestamp()
-			.setFooter(`${interaction.client.user.username} Images`, `${interaction.client.user.displayAvatarURL({ dynamic: true })}`);
+			.setFooter({ text: `${interaction.client.user.username} Images`, iconURL: `${interaction.client.user.displayAvatarURL({ dynamic: true })}` });
 
 		await interaction.editReply({ embeds: [imageEmbed], files: [attach] });
 	},

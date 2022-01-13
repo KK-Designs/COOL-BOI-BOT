@@ -33,12 +33,12 @@ module.exports = {
 		const banembeddm = new MessageEmbed()
 			.setColor('#ffd45c')
 			.setTitle('You were banned <:BAN:752937190786465894>')
-			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.addField('Banned by: ', `${message.author.tag}`, true)
 			.addField('Reason: ', `${reason}`, true)
 			.addField('Server: ', `**${guild.name}**`, true)
 			.setTimestamp()
-			.setFooter('Banned at:');
+			.setFooter({ text: 'Banned at:' });
 		const member = await message.guild.members.fetch(user).catch(() => null);
 
 		if (!member) {return await message.reply({ content: 'That user isn\'t in this guild!' });}
@@ -65,12 +65,12 @@ module.exports = {
 		const banembed = new MessageEmbed()
 			.setColor('#940000')
 			.setTitle('Member Banned <:BAN:752937190786465894>')
-			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.addField('User banned: ', `${user.tag}`)
 			.addField('Banned by: ', `${message.author}`)
 			.addField('Reason: ', `${reason}`)
 			.setTimestamp()
-			.setFooter('Banned at:');
+			.setFooter({ text: 'Banned at:' });
 
 		// We let the message author know we were able to ban the person
 		await message.reply({ embeds: [banembed] });
@@ -97,12 +97,12 @@ module.exports = {
 				const banembeddm = new MessageEmbed()
 					.setColor('#ffd45c')
 					.setTitle('You were banned <:BAN:752937190786465894>')
-					.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+					.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 					.addField('Banned by: ', `${interaction.user}`, true)
 					.addField('Reason: ', `${reason}`, true)
 					.addField('Server: ', `**${guild.name}**`, true)
 					.setTimestamp()
-					.setFooter('Banned at:');
+					.setFooter({ text: 'Banned at:' });
 
 				await member.send({ embeds: [banembeddm] }).catch(() => console.warn(`${member.user.tag} has dms disabled`));
 			}
@@ -118,12 +118,12 @@ module.exports = {
 		const banembed = new MessageEmbed()
 			.setColor('#940000')
 			.setTitle('Member Banned <:BAN:752937190786465894>')
-			.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.addField('User banned: ', `${user.tag}`)
 			.addField('Banned by: ', `${interaction.user}`)
 			.addField('Reason: ', `${reason}`)
 			.setTimestamp()
-			.setFooter('Banned at:');
+			.setFooter({ text: 'Banned at:' });
 
 		// We let the message author know we were able to ban the person
 		await interaction.reply({ embeds: [banembed] });

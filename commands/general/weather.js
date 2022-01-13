@@ -86,7 +86,7 @@ function exampleEmbed(
 ) {
 	return new MessageEmbed()
 		.setColor(message.guild?.me.displayHexColor ?? color.discord)
-		.setAuthor(`Hello, ${author}`, profile)
+		.setAuthor({ name: `Hello, ${author}`, iconURL: profile })
 		.setTitle(`${temp}\u00B0 F in ${cityName}, ${country}`)
 		.addField('Maximum Temperature:', `${maxTemp}\u00B0 F`, true)
 		.addField('Minimum Temperature:', `${minTemp}\u00B0 F`, true)
@@ -95,5 +95,5 @@ function exampleEmbed(
 		.addField('Pressure:', `${pressure} hpa`, true)
 		.addField('Cloudiness:', `${cloudness}`, true)
 		.setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
-		.setFooter(`Powered by the ${message.client.user.username}`);
+		.setFooter({ text: `Powered by the ${message.client.user.username}` });
 }

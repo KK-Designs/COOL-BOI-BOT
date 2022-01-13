@@ -32,7 +32,7 @@ module.exports = {
 			const embed = new MessageEmbed()
 				.setTitle('Commands')
 				.setDescription(data.toString())
-				.setFooter(`The ${message.client.user.username}`, message.client.user.displayAvatarURL({ dynamic: true }))
+				.setFooter({ text: `The ${message.client.user.username}`, iconURL: message.client.user.displayAvatarURL({ dynamic: true }) })
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -103,7 +103,7 @@ module.exports = {
 			const categoryEmbed = new MessageEmbed()
 				.setTitle('All categories')
 				.setDescription(`\`${categorynames.join('` | `')}\``)
-				.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter({ text: `The ${message.client.user.username}`, iconURL: `${message.client.user.displayAvatarURL({ dynamic: true })}` })
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -122,7 +122,7 @@ module.exports = {
 							const categoryEmbed1 = new MessageEmbed()
 								.setTitle(`Commands in ${i.values[0]}`)
 								.setDescription(`${cmds}`)
-								.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+								.setFooter({ text: `The ${message.client.user.username}`, iconURL: `${message.client.user.displayAvatarURL({ dynamic: true })}` })
 								.setTimestamp()
 								.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -207,7 +207,7 @@ module.exports = {
 			const embed1 = new MessageEmbed()
 				.setTitle(`Commands in ${name}`)
 				.setDescription(`${cmds}`)
-				.setFooter(`The ${message.client.user.username}`, `${message.client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter({ text: `The ${message.client.user.username}`, iconURL: `${message.client.user.displayAvatarURL({ dynamic: true })}` })
 				.setTimestamp()
 				.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -265,7 +265,7 @@ module.exports = {
 			)
 			.addField(data1.toString(), '** **')
 			.setDescription('[] arguments mean required, and () arguments mean optional. If theres none it means the there are no arguments nedded to run the command')
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -284,7 +284,7 @@ module.exports = {
 			const embed = new MessageEmbed()
 				.setTitle('Commands')
 				.setDescription(data.toString())
-				.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+				.setFooter({ text: `The ${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
 				.setTimestamp()
 				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -353,7 +353,7 @@ module.exports = {
 			const categoryEmbed = new MessageEmbed()
 				.setTitle('All categories')
 				.setDescription(`\`${categorynames.join('` | `')}\``)
-				.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter({ text: `The ${client.user.username}`, iconURL: `${client.user.displayAvatarURL({ dynamic: true })}` })
 				.setTimestamp()
 				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -372,7 +372,7 @@ module.exports = {
 							const categoryEmbed1 = new MessageEmbed()
 								.setTitle(`Commands in ${i.values[0]}`)
 								.setDescription(`${cmds}`)
-								.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+								.setFooter({ text: `The ${client.user.username}`, iconURL: `${client.user.displayAvatarURL({ dynamic: true })}` })
 								.setTimestamp()
 								.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -457,7 +457,7 @@ module.exports = {
 			const embed1 = new MessageEmbed()
 				.setTitle(`Commands in ${name}`)
 				.setDescription(`${cmds}`)
-				.setFooter(`The ${client.user.username}`, `${client.user.displayAvatarURL({ dynamic: true })}`)
+				.setFooter({ text: `The ${client.user.username}`, iconURL: `${client.user.displayAvatarURL({ dynamic: true })}` })
 				.setTimestamp()
 				.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -515,7 +515,7 @@ module.exports = {
 			)
 			.addField(data1.toString(), '** **')
 			.setDescription('[] arguments mean required, and () arguments mean optional. If theres none it means the there are no arguments nedded to run the command')
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 

@@ -13,10 +13,10 @@ module.exports = async (ban) => {
 		.setTitle('🔓 Member Unban')
 		.setColor(color.bot_theme)
 		.setDescription(`Name: ${ban.user.username}\n \nID: ${ban.user.id}`)
-		.setFooter(`${client.user.username} MEMBER LOGGING`);
+		.setFooter({ text: `${client.user.username} MEMBER LOGGING` });
 	// modLogChannel.send({ embeds: [embed] }).catch(console.error);
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

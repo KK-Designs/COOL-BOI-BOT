@@ -22,12 +22,12 @@ module.exports = async channel => {
 	if (!botPerms.has('SEND_MESSAGES')) return;
 
 	const webhooks = await getLogChannel(channel.guild, db).fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 	const embed = new MessageEmbed()
-		.setAuthor('⛔ Channel deleted')
+		.setAuthor({ name: '⛔ Channel deleted' })
 		.setColor(color.fail)
 		.setDescription(`Deleted channel #${channel.name}`)
-		.setFooter(`${client.user.username} SERVER LOGGING`)
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
 		.setTimestamp();
 
 	await webhook.send({

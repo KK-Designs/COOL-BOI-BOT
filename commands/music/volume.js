@@ -37,7 +37,7 @@ module.exports = {
 		serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
 		const xd = new MessageEmbed()
 			.setDescription(`I have set the volume to: **${args[0]}/100**`)
-			.setAuthor('Server Volume Manager', 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif')
+			.setAuthor({ name: 'Server Volume Manager', iconURL: 'https://github.com/SudhanPlayz/Discord-MusicBot/raw/master/assets/logo.gif' })
 			.setColor('BLUE');
 
 		return await message.reply({ embeds: [xd] });
@@ -64,7 +64,7 @@ module.exports = {
 		serverQueue.player.state.resource.volume.setVolumeLogarithmic(volume / 100);
 		const xd = new MessageEmbed()
 			.setDescription(`I have set the volume to: **${volume}/100**`)
-			.setAuthor('Server Volume Manager', 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif')
+			.setAuthor({ name: 'Server Volume Manager', iconURL: 'https://thumbs.gfycat.com/BlushingBrownLamb-max-1mb.gif' })
 			.setColor('BLUE');
 
 		return await interaction.reply({ embeds: [xd] });

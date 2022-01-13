@@ -10,7 +10,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('Ascii face')
 			.setDescription(`\`\`${cool().toString()}\`\``)
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.member?.displayHexColor ?? '#FFB700');
 
@@ -20,7 +20,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('Ascii face')
 			.setDescription(`\`\`${cool().toString()}\`\``)
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.member?.displayHexColor ?? '#FFB700');
 

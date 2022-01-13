@@ -19,16 +19,16 @@ module.exports = async (channel) => {
 				.setStyle('LINK'),
 		);
 	const embed = new MessageEmbed()
-		.setAuthor('🧵 Thread created')
+		.setAuthor({ name: '🧵 Thread created' })
 		.setColor(color.bot_theme)
 		.setDescription(`${owner.user.tag} created thread at ${channel}`)
 		.addField('Thread Created:', `<t:${Math.floor(channel.createdTimestamp / 1000)}:f>`, true)
 		.addField('Archive time:', humanizeDuration(channel.autoArchiveDuration * 60000, { delimiter: ' and ' }), true)
-		.setFooter(`${client.user.username} SERVER LOGGING`)
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
 		.setTimestamp();
 	const logChannel = getLogChannel(channel.guild, db);
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

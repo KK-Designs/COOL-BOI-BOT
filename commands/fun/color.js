@@ -26,7 +26,7 @@ module.exports = {
 			.setTitle(reqColor)
 			.setColor(reqColor)
 			.setImage('attachment://color.png')
-			.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
+			.setFooter({ text: `The ${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) });
 		await message.reply({ embeds: [ embed ], files: [ attachment ] });
 	},
 	async executeSlash(interaction, client) {
@@ -43,7 +43,7 @@ module.exports = {
 			.setTitle(reqColor)
 			.setColor(reqColor)
 			.setImage('attachment://color.png')
-			.setFooter(`The ${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }));
+			.setFooter({ text: `The ${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) });
 
 		await interaction.editReply({ embeds: [ embed ], files: [ attachment ] });
 	},

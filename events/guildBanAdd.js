@@ -12,12 +12,12 @@ module.exports = async (ban) => {
 	if (!modLogChannel) return;
 
 	const webhooks = await getLogChannel(ban.guild, db).fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 	const embed = new MessageEmbed()
 		.setTitle('🔒 Member ban')
 		.setColor(color.bot_theme)
 		.setDescription(`Name: ${ban.user.username}\n \nID: ${ban.user.id}`)
-		.setFooter(`${client.user.username} MEMBER LOGGING`);
+		.setFooter({ text: `${client.user.username} MEMBER LOGGING` });
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

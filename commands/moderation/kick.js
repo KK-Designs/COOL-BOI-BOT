@@ -37,12 +37,12 @@ module.exports = {
 			const kickembeddm = new MessageEmbed()
 				.setColor('#ffd45c')
 				.setTitle('You were kicked')
-				.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+				.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 				.addField('Kicked by: ', message.author.tag)
 				.addField('Reason: ', `${reason}`)
 				.addField('Server: ', `**${guild.name}**`)
 				.setTimestamp()
-				.setFooter('Kicked at:');
+				.setFooter({ text: 'Kicked at:' });
 
 			user.send({ embeds: [kickembeddm] }).catch(console.error);
 		}
@@ -73,12 +73,12 @@ module.exports = {
 			const kickembed = new MessageEmbed()
 				.setColor('#940000')
 				.setTitle('Member Kicked')
-				.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+				.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 				.addField('User kicked: ', '<@' + message.mentions.users.first().id + '>')
 				.addField('Kicked by: ', '<@' + message.author.id + '>')
 				.addField('Reason: ', `${reason}`)
 				.setTimestamp()
-				.setFooter('Kicked at:');
+				.setFooter({ text: 'Kicked at:' });
 
 			// We let the message author know we were able to kick the person
 			message.channel.send({ embeds: [kickembed] });
@@ -99,12 +99,12 @@ module.exports = {
 			const kickembeddm = new MessageEmbed()
 				.setColor('#ffd45c')
 				.setTitle('You were kicked')
-				.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+				.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 				.addField('Kicked by: ', '<@' + interaction.user.id.toString() + '>')
 				.addField('Reason: ', `${reason.toString()}`)
 				.addField('Server: ', `**${guild.name.toString()}**`)
 				.setTimestamp()
-				.setFooter('Kicked at:');
+				.setFooter({ text: 'Kicked at:' });
 
 			await member.send({ embeds: [kickembeddm] }).catch(console.error);
 		}
@@ -125,12 +125,12 @@ module.exports = {
 		const kickembed = new MessageEmbed()
 			.setColor('#940000')
 			.setTitle('Member Kicked')
-			.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.addField('User kicked: ', '<@' + interaction.mentions.users.first().id + '>')
 			.addField('Kicked by: ', '<@' + interaction.user.id + '>')
 			.addField('Reason: ', `${reason}`)
 			.setTimestamp()
-			.setFooter('Kicked at:');
+			.setFooter({ text: 'Kicked at:' });
 
 		// We let the message author know we were able to kick the person
 		await interaction.reply({ embeds: [kickembed] });

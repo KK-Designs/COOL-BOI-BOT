@@ -38,7 +38,7 @@ module.exports = {
 	},
 	async execute(message, args) {
 		if (!args[0]) {
-			return sendError('Please provide text for me to emojify (i.e. `!emojify hello`)', message.channel);
+			return sendError('Please provide text for me to emojify (i.e. `/emojify hello`)', message.channel);
 		}
 		const user = message.author;
 		let msg = message.cleanContent.slice(message.content.indexOf(args[0]), message.content.length);
@@ -59,7 +59,7 @@ module.exports = {
 		const emojiembed = new MessageEmbed()
 			.setTitle('Emojified Text:')
 			.setDescription(msg)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? color.discord);
 
@@ -85,7 +85,7 @@ module.exports = {
 		const emojiembed = new MessageEmbed()
 			.setTitle('Emojified Text:')
 			.setDescription(msg)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? color.discord);
 

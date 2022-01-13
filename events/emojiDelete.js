@@ -10,13 +10,13 @@ module.exports = async emoji => {
 	if (!logChannel) return;
 
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 	const embed = new MessageEmbed()
 		.setTitle('⛔ Emoji Delete')
 		.setColor(color.bot_theme)
 		.setDescription(`Name: ${emoji.name}\nID: ${emoji.id}`)
 		.addField('Emoji URL', emoji.url)
-		.setFooter(`${client.user.username} SERVER LOGGING`)
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
 		.setTimestamp();
 
 	await webhook.send({

@@ -32,7 +32,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('<:clyde:772958152214839307>  Clyde  <:clyde:772958152214839307>')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor('#CFF6FF');
 
@@ -55,7 +55,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('<:clyde:772958152214839307>  Clyde  <:clyde:772958152214839307>')
 			.setImage(img)
-			.setFooter(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor('#CFF6FF');
 

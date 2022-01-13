@@ -62,7 +62,7 @@ module.exports = {
 			.setDescription(`${serverQueue.songs.map(song => `<:line:812833164103778344> **${song.title} | ${humanizeDuration(song.duration * 1000)}**`).join('\n')}`)
 			.addField('Now playing:', `${serverQueue.songs[0].title} • ${serverQueue.songs[0].author}`, true)
 			.setTimestamp()
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) });
 
 		if (embed.description.length >= 4096) {
 			embed.description = `${embed.description.substr(0, 4093)}...`;
@@ -97,7 +97,7 @@ module.exports = {
 				.setDescription(`${serverQueue.songs.map(song => `<:line:812833164103778344> **${song.title} | ${humanizeDuration(song.duration * 1000)}**`).join('\n')}`)
 				.addField('Now playing:', `${serverQueue.songs[0].title} • ${serverQueue.songs[0].author}`, true)
 				.setTimestamp()
-				.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }));
+				.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			if (embed.description.length >= 4096) {
 				embed.description = `${embed.description.substr(0, 4093)}...`;

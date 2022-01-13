@@ -51,7 +51,7 @@ module.exports = {
 				.addField(`${response.results[3].title}\n${response.results[3].url}`, `\n${response.results[3].description}`)
 				.addField(`${response.results[4].title}\n${response.results[4].url}`, `\n${response.results[4].description}`)
 				.setTimestamp()
-				.setFooter('Powered by Google®', 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png');
+				.setFooter({ text: 'Powered by Google®', iconURL: 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png' });
 
 			setTimeout(() => {
 				msg.edit({ embeds: [googleEmbed] });
@@ -77,7 +77,7 @@ module.exports = {
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700')
 			.setTitle(`Search results for "${query}"\n━━━━━━━━━━━━━━━━━━━━━━`)
 			.setTimestamp()
-			.setFooter('Powered by Google®', 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png');
+			.setFooter({ text: 'Powered by Google®', iconURL: 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png' });
 
 		for (let i = 0, max = Math.min(5, response.results.length); i < max; i++) {
 			const result = response.results[i];

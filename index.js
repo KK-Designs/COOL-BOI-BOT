@@ -3,12 +3,11 @@ const { Client, WebhookClient, MessageEmbed, Collection, Intents } = require('di
 const db = require('quick.db');
 const fs = require('fs');
 const path = require('path');
-const updateNotifier = require('update-notifier');
 const chalk = require('chalk');
 const startup = require('./startup.js');
 const color = require('./color.json');
 const config = require('./config.json');
-const pkg = require('./package.json');
+require('pretty-error').start();
 const client = new Client({
 	intents: [
 		Intents.FLAGS.GUILDS,
@@ -30,7 +29,6 @@ const client = new Client({
 	],
 });
 
-updateNotifier({ pkg }).notify();
 client.commands = new Collection();
 const reqEvent = (event) => {
 	// eslint-disable-next-line global-require
@@ -45,19 +43,24 @@ const reqEvent = (event) => {
 	};
 };
 startup(client);
+
 // client.once('ready', reqEvent('ready').bind(null, client));
+
 client.on('disconnect', (event) => {
 	console.log('The WebSocket has closed and will no longer attempt to reconnect', event);
 });
+
 client.on('warn', (info) => {
 	console.log(`Warn: ${info}`);
 });
+
 // Delete the value "_slashCommandsMS" incase the script wasn't ran
 db.delete('_slashCommandsMS');
+
 try {
 	const files = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 	for (const events of files) {
-		if (!path.parse(events).name === 'ready') {
+		if (path.parse(events).name !== 'ready') {
 			client.on(path.parse(events).name, reqEvent(path.parse(events).name));
 		} else {
 			client.once(path.parse(events).name, reqEvent(path.parse(events).name));

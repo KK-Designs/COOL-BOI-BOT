@@ -21,15 +21,15 @@ module.exports = async member => {
 	if (member.user.bot) return;
 
 	const embed = new MessageEmbed()
-		.setAuthor('Member left', 'https://cdn.discordapp.com/emojis/812013459398983690.png')
+		.setAuthor({ name: 'Member left', iconURL: 'https://cdn.discordapp.com/emojis/812013459398983690.png' })
 		.setColor(color.bot_theme)
 		.setDescription(`${member.user.tag} left ${member.guild.name}`)
 		.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
 		.addField('Joined Server', `<t:${Math.floor(member.joinedTimestamp / 1000)}:f>`, true)
-		.setFooter(`${client.user.username} MEMBER LOGGING`)
+		.setFooter({ text: `${client.user.username} MEMBER LOGGING` })
 		.setTimestamp();
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,

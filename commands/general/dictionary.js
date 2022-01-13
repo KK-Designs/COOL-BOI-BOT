@@ -42,7 +42,7 @@ module.exports = {
 			.addField('Example: ', result.definitions[0].example || 'Not avavible')
 			.addField('Type: ', result.definitions[0].type || 'Not avavible')
 			.addField('Pronunciation: ', result.pronunciation || 'Not avavible')
-			.setFooter('Powered by OwlBot')
+			.setFooter({ text: 'Powered by OwlBot' })
 			.setTimestamp()
 			.setColor(message.channel.type === 'GUILD_TEXT' ? message.member.displayHexColor : '#FFB700');
 	},
@@ -63,7 +63,7 @@ module.exports = {
 			.addField('Example: ', result.definitions[0].example || 'Not avavible')
 			.addField('Type: ', result.definitions[0].type || 'Not avavible')
 			.addField('Pronunciation: ', result.pronunciation || 'Not avavible')
-			.setFooter('Powered by OwlBot')
+			.setFooter({ text: 'Powered by OwlBot' })
 			.setTimestamp()
 			.setColor(interaction.member?.displayHexColor ?? '#FFB700');
 

@@ -29,7 +29,7 @@ module.exports = {
 			.addField('Duration:', `${humanizeDuration(totalDuration * 1000)}`, true)
 			.addField('\u200b', bar)
 			.setTimestamp()
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) });
 
 		return await message.reply({ embeds: [embed] });
 	},
@@ -53,7 +53,7 @@ module.exports = {
 			.addField('Duration:', `${humanizeDuration(totalDuration * 1000)}`, true)
 			.addField('\u200b', bar)
 			.setTimestamp()
-			.setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }));
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 		return await interaction.reply({ embeds: [embed] });
 	},

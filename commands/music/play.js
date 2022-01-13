@@ -1,6 +1,6 @@
 const assert = require('assert/strict');
 const { Util } = require('discord.js');
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnection } = require('@discordjs/voice');
+const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioPlayer, AudioPlayerStatus, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 const pdl = require('play-dl');
 const sendError = require('../../error.js');
 module.exports = {

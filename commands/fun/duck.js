@@ -16,7 +16,7 @@ module.exports = {
 			.setColor(color.bot_theme)
 			.setTitle('<:duck:800843897219711016> Duck <:duck:800843897219711016>')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });
@@ -32,7 +32,7 @@ module.exports = {
 			.setColor(color.bot_theme)
 			.setTitle('<:duck:800843897219711016> Duck <:duck:800843897219711016>')
 			.setImage(img)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [embed] });

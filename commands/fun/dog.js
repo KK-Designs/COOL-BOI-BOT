@@ -31,7 +31,7 @@ module.exports = {
 					)
 					.setImage(`https://cdn2.thedogapi.com/images/${res[0].breeds[0].reference_image_id ? res[0].breeds[0].reference_image_id : 'Name not availible'}.jpg`)
 					.setTimestamp()
-					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
+					.setFooter({ text: 'Powered by https://thedogapi.com', iconURL: 'https://www.thedogapi.com/favicon.ico' });
 				message.reply({ embeds: [ embed ] });
 			});
 		} else {
@@ -56,7 +56,7 @@ module.exports = {
 					)
 					.setImage(URL)
 					.setTimestamp()
-					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
+					.setFooter({ text: 'Powered by https://thedogapi.com', iconURL: 'https://www.thedogapi.com/favicon.ico' });
 				message.reply({ embeds: [ embed ] });
 			});
 		}
@@ -80,7 +80,7 @@ module.exports = {
 					)
 					.setImage(`https://cdn2.thedogapi.com/images/${res[0].breeds[0]?.reference_image_id == undefined ? 'https://cdn2.iconfinder.com/data/icons/documents-and-files-v-2/100/doc-03-512' : res[0].breeds[0].reference_image_id}.jpg`)
 					.setTimestamp()
-					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
+					.setFooter({ text: 'Powered by https://thedogapi.com', iconURL: 'https://www.thedogapi.com/favicon.ico' });
 				interaction.editReply({ embeds: [ embed ] });
 			});
 		} else {
@@ -105,7 +105,7 @@ module.exports = {
 					)
 					.setImage(URL)
 					.setTimestamp()
-					.setFooter('Powered by https://thedogapi.com', 'https://www.thedogapi.com/favicon.ico');
+					.setFooter({ text: 'Powered by https://thedogapi.com', iconURL: 'https://www.thedogapi.com/favicon.ico' });
 				interaction.editReply({ embeds: [ embed ] });
 			});
 		}

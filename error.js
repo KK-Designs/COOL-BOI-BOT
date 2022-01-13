@@ -6,7 +6,7 @@ module.exports = async (text, channel) => {
 		.setColor('RED')
 		.setTitle('<:error_x:815780013256343582> Error: ')
 		.setDescription(inlineCode(trim(text, 4096)))
-		.setFooter(channel.client.user.username, channel.client.user.displayAvatarURL({ dynamic: true }));
+		.setFooter({ text: channel.client.user.username, iconURL: channel.client.user.displayAvatarURL({ dynamic: true }) });
 
 	await channel.send({ embeds: [embed] });
 };

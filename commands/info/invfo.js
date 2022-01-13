@@ -52,7 +52,7 @@ module.exports = {
 			.addField('⚫ ', invite.approximate_member_count.toString(), true)
 			.setTimestamp();
 
-		if (invite.inviter) {inviteEmbed.setFooter(invite.inviter.username, invite.inviter.avatarURL);}
+		if (invite.inviter) {inviteEmbed.setFooter({ text: invite.inviter.username, iconURL: invite.inviter.avatarURL });}
 
 		await message.reply({ embeds: [inviteEmbed] });
 	},

@@ -51,15 +51,15 @@ module.exports = async member => {
 		if (!getLogChannel(member.guild, db)) return;
 
 		const embed = new MessageEmbed()
-			.setAuthor('Member joined', 'https://cdn.discordapp.com/emojis/812013459298058260.png')
+			.setAuthor({ name: 'Member joined', iconURL: 'https://cdn.discordapp.com/emojis/812013459298058260.png' })
 			.setColor(color.bot_theme)
 			.setDescription(`${member.user.tag} joined ${member.guild.name}`)
 			.addField('Account Created', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:f>`, true)
-			.setFooter(`${client.user.username} MEMBER LOGGING`)
+			.setFooter({ text: `${client.user.username} MEMBER LOGGING` })
 			.setTimestamp();
 		const logChannel = getLogChannel(member.guild, db);
 		const webhooks = await logChannel.fetchWebhooks();
-		const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+		const webhook = webhooks.find(wh => wh.token);
 
 		await webhook.send({
 			username: `${client.user.username} Logging`,

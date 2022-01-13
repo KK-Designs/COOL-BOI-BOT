@@ -15,7 +15,7 @@ module.exports = {
 			.setTitle('Random fact')
 			.setURL(fact.source_url.toString())
 			.setDescription(fact.text.toString())
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });

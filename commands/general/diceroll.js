@@ -25,7 +25,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>')
 			.setDescription(`${user}, you rolled a **${n}**!`)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
@@ -41,7 +41,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('<:dice:800843897261260830>  Dice Roll  <:dice:800843897261260830>')
 			.setDescription(`${user}, you rolled a **${n}**!`)
-			.setFooter(user.username, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: user.username, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 		const wait = require('util').promisify(setTimeout);

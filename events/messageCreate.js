@@ -77,7 +77,7 @@ module.exports = async (message) => {
 		const embed = new MessageEmbed()
 			.setTitle('Slow down there')
 			.setDescription(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-			.setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.member?.displayHexColor ?? '#FFB700');
 		return void await message.channel.send({ embeds: [embed] });
@@ -89,7 +89,7 @@ module.exports = async (message) => {
 
 		if (!checkPermissions(message.member, message.channel, command.clientPermissions)) {return void await message.reply({ content: '<:no:803069123918823454> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.' });}
 	} else if (command.guildOnly) {
-		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.' });
+		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `/help [command name]` to if it is server only command.' });
 	}
 	addUserToCooldown(message.author, command);
 	console.log('Running command...');
@@ -124,7 +124,7 @@ async function handleLevels(message) {
 		await db.add(`commands_${message.guild.id}_${message.author.id}`, 1);
 	}
 	let res = await fetch(`https://top.gg/api/bots/${message.client.user.id}/check?userId=${message.author.id}`);
-	res = res.json();
+	res = await res.json();
 	// Check if the user voted
 	if (res.voted > 0 && !res?.error) {
 		await db.add(`messages_${message.guild.id}_${message.author.id}`, 3);
@@ -146,7 +146,7 @@ async function handleLevels(message) {
 		await db.add(`level_${message.guild.id}_${message.author.id}`, 1);
 		await db.set(`messagesneeded_${message.guild.id}_${message.author.id}`, 0);
 		const levelembed = new MessageEmbed()
-			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setDescription(`${message.author}, You have leveled up to level ${levelfetch}! <:LevelUp:899397460991033374>`)
 			.setImage('https://i.imgur.com/USBv4U1.gif?noredirect=true')
 			.setTimestamp()

@@ -21,7 +21,7 @@ module.exports = {
 				{ name: '**Welcome channel**', value: `${db.get('welcomechannel_' + message.guild.id) === '0' ? `None, do \`${guildPrefix}setwelcomeChannel [#channel]\` to configure this.` : '<#' + db.get('welcomechannel_' + message.guild.id) + '>'}`, inline: true },
 			)
 			.setTimestamp()
-			.setFooter(message.guild.name, message.guild.iconURL())
+			.setFooter({ text: message.guild.name, iconURL: message.guild.iconURL() })
 			.setColor(message.guild?.me.displayHexColor ?? '#FFB700');
 
 		await message.reply({ embeds: [embed] });
@@ -37,7 +37,7 @@ module.exports = {
 				{ name: '**Welcome channel**', value: `${db.get('welcomechannel_' + interaction.guild.id) === '0' ? `None, do \`${guildPrefix}setwelcomeChannel [#channel]\` to configure this.` : '<#' + db.get('welcomechannel_' + interaction.guild.id) + '>'}`, inline: true },
 			)
 			.setTimestamp()
-			.setFooter(interaction.guild.name, interaction.guild.iconURL())
+			.setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
 			.setColor(interaction.guild?.me.displayHexColor ?? '#FFB700');
 
 		await interaction.reply({ embeds: [embed] });

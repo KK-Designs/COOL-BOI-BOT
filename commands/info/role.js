@@ -17,7 +17,7 @@ module.exports = {
 	async execute(message, args) {
 		const member = message.author;
 		if (!args[0]) {
-			return sendError('Please mention a role. (i.e `!role @mod` or `!role 775153592537579550`)', message.channel);
+			return sendError('Please mention a role. (i.e `/role @mod` or `/role 775153592537579550`)', message.channel);
 		}
 		const roleinfo = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 		const embed = new MessageEmbed()
@@ -27,7 +27,7 @@ module.exports = {
 			.addField('Role name: ', roleinfo.name, true)
 			.addField('Role ID: ', roleinfo.id)
 			.addField('Role Created: ', `<t:${Math.floor(roleinfo.createdTimestamp / 1000)}:f>`, true)
-			.setFooter(`Powered by the ${message.client.user.username}`, member.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `Powered by the ${message.client.user.username}`, iconURL: member.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await message.reply({ embeds: [embed] });
@@ -42,7 +42,7 @@ module.exports = {
 			.addField('Role name: ', role.name, true)
 			.addField('Role ID: ', role.id)
 			.addField('Role Created: ', `<t:${Math.floor(role.createdTimestamp / 1000)}:f>`, true)
-			.setFooter(`Powered by the ${interaction.client.user.username}`, user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `Powered by the ${interaction.client.user.username}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [embed] });

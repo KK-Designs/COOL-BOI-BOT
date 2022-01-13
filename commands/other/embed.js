@@ -29,15 +29,15 @@ module.exports = {
 
 		if (!args[0]) {
 			return await message.reply({
-				content: 'You must provide a title. Feilds are seperated by `|` Like this: `!embed Test embed | embed description | embed footer` ',
+				content: 'You must provide a title. Feilds are seperated by `|` Like this: `/embed Test embed | embed description | embed footer` ',
 			});
 		}
 		const customEmbed = new MessageEmbed()
 			.setColor(color.discord)
 			.setTitle(customargs[0])
-			.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setDescription(!customargs[1] ? '\u200B' : customargs[1])
-			.setFooter(!customargs[2] ? '\u200B' : customargs[2]);
+			.setFooter({ text: !customargs[2] ? '\u200B' : customargs[2] });
 
 		await message.reply({ embeds: [customEmbed] });
 	},
@@ -49,9 +49,9 @@ module.exports = {
 		const customEmbed = new MessageEmbed()
 			.setColor(color.discord)
 			.setTitle(title)
-			.setAuthor(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }))
+			.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
 			.setDescription(description)
-			.setFooter(footer);
+			.setFooter({ text: footer });
 
 		await interaction.reply({ embeds: [customEmbed] });
 	},

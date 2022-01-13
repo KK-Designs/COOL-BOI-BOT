@@ -29,7 +29,7 @@ module.exports = {
 			.addField('Total Commands', `${client.commands.size}`)
 			.addField('Total logs:', `${console.logs.length}`)
 			.addField('More Statistics', '[Click here](https://coolboibot.statuspage.io/ "See bot status on the web")')
-			.setFooter(`© ${message.client.user.username} ${new Date().getFullYear()} | v${version}`, client.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `© ${message.client.user.username} ${new Date().getFullYear()} | v${version}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(message.guild?.me.displayHexColor ?? color.discord);
 
@@ -53,7 +53,7 @@ module.exports = {
 			.addField('Total Commands', `${client.commands.size}`)
 			.addField('Total logs:', `${console.logs.length}`)
 			.addField('More Statistics', '[Click here](https://coolboibot.statuspage.io/ "See bot status on the web")')
-			.setFooter(`© ${interaction.client.user.username} ${new Date().getFullYear()} | v${version}`, client.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `© ${interaction.client.user.username} ${new Date().getFullYear()} | v${version}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp()
 			.setColor(interaction.guild?.me.displayHexColor ?? color.discord);
 		await interaction.reply({ embeds: [statusembed] });

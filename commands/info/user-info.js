@@ -82,7 +82,7 @@ module.exports = {
 			.addField('Activity: ', activity, true)
 			.addField('Roles', roles.join(' **|** '), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
-			.setFooter(`Powered by the ${message.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `Powered by the ${message.client.user.username}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 		return await message.reply({ embeds: [embed] });
 	},
@@ -140,7 +140,7 @@ module.exports = {
 			.addField('Activity: ', activity, true)
 			.addField('Roles', roles.join(` ${bold('|')} `), true)
 			.addField('Badges: ', badges.join(' ') || 'None', true)
-			.setFooter(`Powered by the ${interaction.client.user.username}`, member.user.displayAvatarURL({ dynamic: true }))
+			.setFooter({ text: `Powered by the ${interaction.client.user.username}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
 		return await interaction.reply({ embeds: [embed] });
 	},

@@ -25,10 +25,10 @@ module.exports = async (message, messageNew) => {
 				.setStyle('LINK'),
 		);
 	const embed = new MessageEmbed()
-		.setAuthor('📝 Message updated')
+		.setAuthor({ name: '📝 Message updated' })
 		.setColor(color.bot_theme)
 		.setDescription(`${messageNew.author} edited a message in ${message.channel}`)
-		.setFooter(`${client.user.username} MESSAGE LOGGING`)
+		.setFooter({ text: `${client.user.username} MESSAGE LOGGING` })
 		.setTimestamp();
 
 	if (!message.partial && message.content) {embed.addField('Old message:', `${message}`, true);}
@@ -36,7 +36,7 @@ module.exports = async (message, messageNew) => {
 	if (messageNew.content) {embed.addField('New message:', `${messageNew}`, true);}
 
 	const webhooks = await logChannel.fetchWebhooks();
-	const webhook = webhooks.find(wh => wh.owner.id === client.user.id);
+	const webhook = webhooks.find(wh => wh.token);
 
 	await webhook.send({
 		username: `${client.user.username} Logging`,
