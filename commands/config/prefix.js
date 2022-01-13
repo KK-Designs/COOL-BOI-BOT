@@ -1,3 +1,7 @@
+const prefix = require('discord-prefix');
+const { MessageEmbed } = require('discord.js');
+const color = require('../../color.json');
+const config = require('../../config.json');
 module.exports = {
 	name: 'prefix',
 	description: 'Get the bots prefix! ***This command prefix is always `!` ***',
@@ -6,33 +10,31 @@ module.exports = {
 	category: 'config',
 	clientPermissons: 'EMBED_LINKS',
 	permissons: 'ADMINISTRATOR',
-	execute(message, args) {
-		const prefix = require('discord-prefix');
-		const color = require('../../color.json');
-		const guildPrefix = prefix.getPrefix(
-			message.channel.type === 'dm' ? message.author.id : message.guild.id,
-		);
-		const { MessageEmbed } = require('discord.js');
-
+	options: {},
+	async execute(message) {
+		const { client } = message;
+		const guildPrefix = prefix.getPrefix(message.guild?.id ?? message.author.id) ?? config.defaultPrefix;
 		const embed = new MessageEmbed()
-			.setTitle(`The bots prefix is ${guildPrefix == null ? '!' : guildPrefix}`)
-			.setColor(
-				message.channel.type === 'dm'
-					? color.discord
-					: message.guild.me.displayHexColor,
-			)
-			.setThumbnail(
-				'https://images-ext-2.discordapp.net/external/PtRqDuS2wA-2WgNWTTLOwbG-B6ioUW6YPiRtxgs4ap4/https/cdn.discordapp.com/avatars/769415264306987068/699aa52d1dd597538fc33ceef502b1e6.webp',
-			)
+			.setTitle(`The bots prefix is ${guildPrefix}`)
+			.setColor(message.guild?.me.displayHexColor ?? color.discord)
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription('This command prefix is always `!` or a @mention')
-			.setFooter(
-				message.author.username,
-				message.author.displayAvatarURL({ dynamic: true }),
-			)
+			.setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
 			.setTimestamp();
-		message.channel.send({
-			embeds: [embed],
-			reply: { messageReference: message.id },
-		});
+
+		await message.reply({ embeds: [embed] });
+	},
+	async executeSlash(interaction) {
+		const { client } = interaction;
+		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.user.id) ?? config.defaultPrefix;
+		const embed = new MessageEmbed()
+			.setTitle(`The bots prefix is ${guildPrefix}`)
+			.setColor(interaction.guild?.me.displayHexColor ?? color.discord)
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+			.setDescription('This command prefix is always `!` or a @mention')
+			.setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+			.setTimestamp();
+
+		await interaction.reply({ embeds: [embed] });
 	},
 };

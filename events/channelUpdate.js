@@ -1,52 +1,49 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const db = require('quick.db');
+const { getLogChannel } = require('../utils.js');
+const color = require('../color.json');
+const config = require('../config.json');
+/** @type {(...args: import("discord.js").ClientEvents["channelUpdate"]) => Promise<any>} */
 module.exports = async (oldchannel, newchannel) => {
-	const { getLogChannel } = require('../utils.js');
-	const {
-		MessageEmbed,
-		MessageActionRow,
-		MessageButton,
-	} = require('discord.js');
-	const color = require('../color.json');
-	const db = require('quick.db');
-	if (oldchannel.type == 'DM' || oldchannel.name === newchannel.name) return;
+	if (oldchannel.type === 'DM' || oldchannel.name === newchannel.name) return;
 
-	if (getLogChannel(oldchannel.guild, db)) {
-		if (
-			!getLogChannel(oldchannel.guild, db)
-				.permissionsFor(newchannel.guild.me)
-				.has('VIEW_CHANNEL')
-		) {return;}
-		if (
-			!getLogChannel(oldchannel.guild, db)
-				.permissionsFor(newchannel.guild.me)
-				.has('SEND_MESSAGES')
-		) {return;}
-		const jumpToChannel = new MessageActionRow().addComponents(
+	const logChannel = getLogChannel(oldchannel.guild, db);
+
+	const { client } = newchannel;
+
+	if (!logChannel) return;
+
+	const botPerms = logChannel.permissionsFor(newchannel.guild.me);
+
+	if (!botPerms.has('VIEW_CHANNEL')) return;
+
+	if (!botPerms.has('SEND_MESSAGES')) return;
+
+	if (!botPerms.has('MANAGE_WEBHOOKS')) return;
+
+	const jumpToChannel = new MessageActionRow()
+		.addComponents(
 			new MessageButton()
-				.setURL(
-					`https://discord.com/channels/${newchannel.guild.id}/${newchannel.id}`,
-				)
+				.setURL(`https://discord.com/channels/${newchannel.guild.id}/${newchannel.id}`)
 				.setLabel('Go to channel')
 				.setEmoji('⬆️')
 				.setStyle('LINK'),
 		);
-		const embed = new MessageEmbed()
-			.setAuthor('📝 Channel updated')
-			.setColor(color.bot_theme)
-			.setDescription(`Channel Updated ${oldchannel}`)
-			.addField('Old channel:', `${oldchannel.name}`, true)
-			.addField('New channel:', `${newchannel.name}`, true)
-			.setFooter('COOL BOI BOT SERVER LOGGING')
-			.setTimestamp();
+	const embed = new MessageEmbed()
+		.setAuthor({ name: '📝 Channel updated' })
+		.setColor(color.bot_theme)
+		.setDescription(`Channel Updated ${oldchannel}`)
+		.addField('Old channel:', `${oldchannel.name}`, true)
+		.addField('New channel:', `${newchannel.name}`, true)
+		.setFooter({ text: `${client.user.username} SERVER LOGGING` })
+		.setTimestamp();
+	const webhooks = await logChannel.fetchWebhooks();
+	const webhook = webhooks.find(wh => wh.token);
 
-		const webhooks = await getLogChannel(oldchannel.guild, db).fetchWebhooks();
-		const webhook = webhooks.first();
-
-		await webhook.send({
-			username: 'COOL BOI BOT Logging',
-			avatarURL:
-				'https://cdn.discordapp.com/avatars/811024409863258172/f67bc2b8f122599864b02156cd67564b.png',
-			embeds: [embed],
-			components: [jumpToChannel],
-		});
-	}
+	await webhook.send({
+		username: `${client.user.username} Logging`,
+		avatarURL: config.webhookAvatarURL,
+		embeds: [embed],
+		components: [jumpToChannel],
+	});
 };

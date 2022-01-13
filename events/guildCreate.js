@@ -1,19 +1,13 @@
-module.exports = (guild) => {
-	let found = 0;
-	guild.channels.cache.map((channel) => {
-		if (found === 0) {
-			if (channel.type === 'GUILD_TEXT') {
-				if (channel.permissionsFor(guild.me).has('VIEW_CHANNEL') == true) {
-					if (channel.permissionsFor(guild.me).has('SEND_MESSAGES') == true) {
-						channel.send({
-							content:
-								'Hello and thanks for inviting me here! You can use `!help` to see all commands',
-						});
+/** @type {(...args: import("discord.js").ClientEvents["guildCreate"]) => Promise<any>} */
+module.exports = async guild => {
+	const channel = guild.channels.cache.find(
+		c => c.type === 'GUILD_TEXT' && c.permissionsFor(guild.me).has(['VIEW_CHANNEL', 'SEND_MESSAGES']),
+	);
 
-						found = 1;
-					}
-				}
-			}
-		}
+	return await channel?.send({
+		embeds: [{
+			color: 'GREEN',
+			description: '<:join:812013459298058260> Hello and thanks for inviting me here! You can use `/help` to see all commands',
+		}],
 	});
 };

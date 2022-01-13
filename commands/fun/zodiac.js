@@ -1,214 +1,65 @@
+const sendError = require('../../error.js');
+const bounds = [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21];
+const signs = [
+	'Capricorn', 'Aquarius', 'Pisces',
+	'Aries', 'Taurus', 'Gemini',
+	'Cancer', 'Leo', 'Virgo',
+	'Libra', 'Scorpio', 'Sagittarius',
+];
+const monthNames = [
+	'January', 'February', 'March',
+	'April', 'May', 'June',
+	'July', 'August', 'September',
+	'October', 'November', 'December',
+];
 module.exports = {
 	name: 'zodiac',
 	description: 'Returns your zodiac sign with the date spcified',
 	usage: '[mm dd]',
 	cooldown: 3,
 	category: 'fun',
-	execute(message, args) {
-		const sendError = require('../../error.js');
-		const month = parseInt(args[0]);
+	options: {
+		month: {
+			type: 'Integer',
+			description: 'The birth month',
+			choices: monthNames.reduce((obj, month, i) => ({ ...obj, [month]: i }), {}),
+		},
+		day: {
+			type: 'Integer',
+			description: 'The birth day',
+		},
+	},
+	async execute(message, args) {
+		const month = parseInt(args[0]) - 1;
 		const day = parseInt(args[1]);
 
 		if (!month) {
-			return sendError(
-				' please enter a valid number for month.',
-				message.channel,
-			);
+			return sendError('Please enter a valid number for month.', message.channel);
 		}
-
-		if (month < 1 || month > 12) {
-			return sendError(' please enter a valid month [1, 12].', message.channel);
+		if (month < 0 || month > 11) {
+			return sendError('Please enter a valid month [1, 12].', message.channel);
 		}
-
 		if (!day) {
-			return sendError(
-				' please enter a valid number for day.',
-				message.channel,
-			);
+			return sendError('Please enter a valid number for day.', message.channel);
 		}
+		if (day < 1 || day > 31) {
+			return sendError('Please enter a valid day [1, 31].', message.channel);
+		}
+		const signIndex = (month + +(day > bounds[month])) % monthNames.length;
+		const sign = signs[signIndex];
 
-		if (month === 1) {
-			if (day >= 1 && day <= 19) {
-				return message.channel.send({
-					content: ' your zodiac is Capricorn',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 20 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Aquarius',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 2) {
-			if (day >= 1 && day <= 18) {
-				return message.channel.send({
-					content: ' your zodiac is Aquarius',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 19 && day <= 29) {
-				return message.channel.send({
-					content: ' your zodiac is Pisces',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 3) {
-			if (day >= 1 && day <= 20) {
-				return message.channel.send({
-					content: ' your zodiac is Pisces',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 21 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Aries',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 4) {
-			if (day >= 1 && day <= 19) {
-				return message.channel.send({
-					content: ' your zodiac is Aries',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 20 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Taurus',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 5) {
-			if (day >= 1 && day <= 20) {
-				return message.channel.send({
-					content: ' your zodiac is Taurus',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 21 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Gemini',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 6) {
-			if (day >= 1 && day <= 20) {
-				return message.channel.send({
-					content: 'your zodiac is Gemini',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 21 && day <= 31) {
-				return message.channel.send({
-					content: 'your zodiac is Cancer',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 7) {
-			if (day >= 1 && day <= 22) {
-				return message.channel.send({
-					content: ' your zodiac is Cancer',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 23 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Leo',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 8) {
-			if (day >= 1 && day <= 22) {
-				return message.channel.send({
-					content: 'your zodiac is Leo',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 23 && day <= 31) {
-				return message.channel.send({
-					content: 'your zodiac is Virgo',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 9) {
-			if (day >= 1 && day <= 22) {
-				return message.channel.send({
-					content: 'your zodiac is Virgo',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 23 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Libra',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 10) {
-			if (day >= 1 && day <= 22) {
-				return message.channel.send({
-					content: 'your zodiac is Libra',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 23 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Scorpio',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 11) {
-			if (day >= 1 && day <= 21) {
-				return message.channel.send({
-					content: ' your zodiac is Scorpio',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 22 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Sagittarius',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else if (month === 12) {
-			if (day >= 1 && day <= 21) {
-				return message.channel.send({
-					content: ' your zodiac is Sagittarius',
-					reply: { messageReference: message.id },
-				});
-			}
-			if (day >= 22 && day <= 31) {
-				return message.channel.send({
-					content: ' your zodiac is Capricorn',
-					reply: { messageReference: message.id },
-				});
-			}
-			return sendError(' please enter a valid date.', message.channel);
-		}
-		else {
-			return sendError(' please enter a valid date.', message.channel);
-		}
+		await message.reply(`You're zodiac is ${sign}`);
+
+	},
+	async executeSlash(interaction) {
+		const month = interaction.options.getInteger('month', true);
+		const day = interaction.options.getInteger('day', true);
+
+		if (day < 1 || day > 31) {return await interaction.reply('Invalid day provided');}
+
+		const signIndex = (month + +(day > bounds[month])) % monthNames.length;
+		const sign = signs[signIndex];
+
+		await interaction.reply(`You're zodiac is ${sign}`);
 	},
 };

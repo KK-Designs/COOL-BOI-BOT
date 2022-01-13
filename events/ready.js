@@ -1,10 +1,17 @@
+const fs = require('fs');
 const Discord = require('discord.js');
+const config = require('../config.json');
 module.exports = async (client) => {
-	const trim = (str) => (`${str.slice(0, 34)}**********************************`);
+	// Fetch the current application
+	if (!client.application?.owner) await client.application?.fetch();
+	const trimToken = (str) => (`${str.slice(0, 34)}**********************************`);
 	const version = Discord.version;
-
-	console.log(`Ready! Logged in as ${client.user.tag} with  token of ${trim(client.token)}`);
-	console.log('© COOL BOI BOT 2021');
+	fs.writeFile('bot.log', `-----------------------${client.user.tag}'s Logs (${new Date()})-----------------------`, (err) => {
+		// In case of a error throw err.
+		if (err) throw err;
+	});
+	console.log(`Ready! Logged in as ${client.user.tag} with token of ${trimToken(client.token)}`);
+	console.log(`© ${client.user.username} ${new Date().getFullYear()}`);
 	console.log(`v${version}`);
 	const status = [
 		'status 1',
@@ -21,8 +28,7 @@ module.exports = async (client) => {
 					},
 				],
 			});
-		}
-		else {
+		} else {
 			client.user.setPresence({
 				activities: [
 					{
@@ -35,4 +41,6 @@ module.exports = async (client) => {
 	}, 15000);
 	const user = await client.users.fetch(process.env.OWNER_ID);
 	user.send('Bot is on <:check:807305471282249738>');
+	// We set the webhook avatar URL here
+	config.webhookAvatarURL = client.user.displayAvatarURL({ dynamic: true, format: 'png' });
 };

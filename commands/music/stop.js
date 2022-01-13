@@ -4,31 +4,29 @@ module.exports = {
 	cooldown: 5,
 	guildOnly: true,
 	category: 'music',
-	execute(message) {
+	options: {},
+	async execute(message) {
 		const { channel } = message.member.voice;
-		if (!channel) {
-			return message.channel.send({
-				content: 'You need to be in a voice channel to do this.',
-				reply: { messageReference: message.id },
-			});
-		}
-		channel.leave();
+
+		if (!channel) {return await message.reply({ content: 'You need to be in a voice channel to do this.' });}
+
 		const serverQueue = message.client.queue.get(message.guild.id);
-		if (!serverQueue) {
-			return message.channel.send({
-				content: 'There is nothing playing that I could stop for you.',
-				reply: { messageReference: message.id },
-			});
-		}
-		serverQueue.songs = [];
-		try {
-			serverQueue.connection.dispatcher.end('Stop command has been used!');
-			message.channel.send({ content: 'Stopped playing songs' });
-			message.client.queue.delete(message.guild.id);
-		}
-		catch (err) {
-			channel.leave();
-			return message.client.queue.delete(message.guild.id);
-		}
+
+		if (!serverQueue) {return await message.reply({ content: 'There is nothing playing that I could stop for you.' });}
+
+		serverQueue.destroy();
+		await message.reply({ content: 'Stopped playing songs' });
+	},
+	async executeSlash(interaction) {
+		const { channel } = interaction.member.voice;
+
+		if (!channel) {return await interaction.reply({ content: 'You need to be in a voice channel to do this.' });}
+
+		const serverQueue = interaction.client.queue.get(interaction.guild.id);
+
+		if (!serverQueue) {return await interaction.reply({ content: 'There is nothing playing that I could stop for you.' });}
+
+		serverQueue.destroy();
+		await interaction.reply({ content: 'Stopped playing songs' });
 	},
 };
