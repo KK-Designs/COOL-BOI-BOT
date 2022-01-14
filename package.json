@@ -47,7 +47,7 @@
         "discord-prefix": "^3.0.0",
         "discord-stop-spam-package": "^1.0.1",
         "discord-welcome-card": "^4.0.3",
-        "discord.js": "^13.5.1",
+        "discord.js": "^13.6.0",
         "dotenv": "^11.0.0",
         "ffmpeg-static": "^4.4.1",
         "figlet": "^1.5.2",
