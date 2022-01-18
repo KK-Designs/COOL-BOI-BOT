@@ -30,7 +30,7 @@
         "@discordjs/rest": "0.2.0-canary.0",
         "@discordjs/voice": "^0.7.5",
         "@stdlib/assert-is-uri": "^0.0.7",
-        "axios": "^0.24.0",
+        "axios": "^0.25.0",
         "bad-words": "^3.0.4",
         "better-sqlite3": "^7.4.6",
         "canvas": "^2.8.0",
