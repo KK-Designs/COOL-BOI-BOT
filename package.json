@@ -33,7 +33,7 @@
         "axios": "^0.25.0",
         "bad-words": "^3.0.4",
         "better-sqlite3": "^7.4.6",
-        "canvas": "^2.8.0",
+        "canvas": "^2.9.0",
         "capture-website": "^1.4.0",
         "chalk": "^4.1.2",
         "chancify": "^1.1.0",
