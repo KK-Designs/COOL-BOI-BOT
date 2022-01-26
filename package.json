@@ -52,7 +52,7 @@
         "ffmpeg-static": "^4.4.1",
         "figlet": "^1.5.2",
         "get-image-colors": "^2.0.1",
-        "googlethis": "^1.2.6",
+        "googlethis": "^1.2.7",
         "humanize-duration": "^3.27.1",
         "libsodium-wrappers": "^0.7.9",
         "mathjs": "^10.1.0",
