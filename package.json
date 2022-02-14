@@ -30,7 +30,7 @@
         "@discordjs/rest": "0.3.0",
         "@discordjs/voice": "^0.8.0",
         "@stdlib/assert-is-uri": "^0.0.7",
-        "axios": "^0.25.0",
+        "axios": "^0.26.0",
         "bad-words": "^3.0.4",
         "better-sqlite3": "^7.5.0",
         "canvas": "^2.9.0",
@@ -72,6 +72,6 @@
         "yuri-canvas": "github:KK-Designs/yuri-canvas"
     },
     "devDependencies": {
-        "eslint": "^8.8.0"
+        "eslint": "^8.9.0"
     }
 }
