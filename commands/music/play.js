@@ -190,10 +190,10 @@ async function getSongs(query) {
 		};
 	}
 	case 'yt_video': {
-		const song = await pdl.video_info(query);
+		const songInfo = await pdl.video_info(query);
 
 		return {
-			songs: [Song.create(song)],
+			songs: [Song.create(songInfo.video_details)],
 		};
 	}
 	case 'so_playlist':
