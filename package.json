@@ -9,6 +9,7 @@
 		"start": "pm2 start index.js",
 		"stop": "pm2 stop index.js",
 		"restart": "pm2 restart index.js",
+		"deploy": "node deploy.js",
 		"monit": "pm2 monit",
 		"lint": "eslint .",
 		"fix": "eslint . --fix"

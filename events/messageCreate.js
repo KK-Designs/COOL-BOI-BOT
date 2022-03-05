@@ -6,15 +6,13 @@ const DiscordStopSpam = require('discord-stop-spam-package');
 const { weirdToNormalChars } = require('weird-to-normal-chars');
 const isURI = require('@stdlib/assert-is-uri');
 const prefix = require('discord-prefix');
-// const { GoogleTranslator } = require('@translate-tools/core/translators/GoogleTranslator');
-// const { detect } = require('tinyld');
+const { detect } = require('tinyld');
 const sendError = require('../error');
 const config = require('../config.json');
 const color = require('../color.json');
 /** @type {Collection<string, Collection<string, number>>} */
 const cooldowns = new Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-// const translator = new GoogleTranslator();
 /** @type {(...args: import("discord.js").ClientEvents["messageCreate"]) => Promise<any>} */
 module.exports = async (message) => {
 	const { client } = message;
@@ -25,9 +23,8 @@ module.exports = async (message) => {
 	const SpamDetected = DiscordStopSpam.checkMessageInterval(message);
 
 	if (SpamDetected) return console.log('Spam detected; ignoring messages');
-	const detectorResult = await runDetector(message);
-	if (detectorResult?.crasher) {
-		const m = detectorResult.crasherMessage;
+	if (await runDetector(message).crasher) {
+		const m = await runDetector(message).crasherMessage;
 		m.reply({ embeds: [{
 			color: color.fail,
 			description: '<:X_:807305490160943104> Please don\'t send videos that crashes the discord client.',
@@ -38,16 +35,6 @@ module.exports = async (message) => {
 		});
 	}
 	if (message.author.bot) return;
-
-	// const detectedLang = detect(message.content);
-	// if (detectedLang !== 'en') {
-	// 	translator
-	// 		.translate(message.content, detectedLang, 'en')
-	// 		.then((translate) => {
-	// 			message.content = translate;
-	// 			console.log(message.content, translate);
-	// 		});
-	// }
 
 	if (message.channel.type === 'GUILD_TEXT') {
 		await handleLevels(message);
@@ -62,8 +49,18 @@ module.exports = async (message) => {
 	const [, matchedPrefix] = message.content.match(prefixRegex);
 
 	if (!message.content.startsWith(matchedPrefix)) return;
+
 	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	let commandName = args.shift().toLowerCase();
+
+	if (detect(commandName) && detect(commandName) !== 'en') {
+		console.log(`Command is not in English! translating to ${detect(commandName)}`);
+		let res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${detect(commandName)}&tl=en&dt=t&q=${commandName}`);
+		res = await res.json();
+		res = res && res[0] && res[0][0] && res[0].map(s => s[0]).join('');
+		if (!res.ok) console.log('Translation not found');
+		commandName = res;
+	}
 
 	console.log('Looking for command %s', commandName);
 	const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -89,7 +86,7 @@ module.exports = async (message) => {
 
 		if (!checkPermissions(message.member, message.channel, command.clientPermissions)) {return void await message.reply({ content: '<:no:803069123918823454> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.' });}
 	} else if (command.guildOnly) {
-		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `/help [command name]` to if it is server only command.' });
+		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.' });
 	}
 	addUserToCooldown(message.author, command);
 	console.log('Running command...');
