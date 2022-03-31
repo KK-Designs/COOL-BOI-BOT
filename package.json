@@ -68,7 +68,7 @@
         "smartestchatbot": "^2.0.1",
         "string-progressbar": "^1.0.4",
         "tinyld": "^1.2.3",
-        "weird-to-normal-chars": "^1.8.1",
+        "weird-to-normal-chars": "^1.8.2",
         "youtube-playlist-summary": "^2.1.6",
         "yuri-canvas": "github:KK-Designs/yuri-canvas"
     },
