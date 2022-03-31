@@ -55,7 +55,7 @@
         "get-image-colors": "^4.0.1",
         "googlethis": "^1.2.7",
         "humanize-duration": "^3.27.1",
-        "libsodium-wrappers": "^0.7.9",
+        "libsodium-wrappers": "^0.7.10",
         "mathjs": "^10.4.2",
         "meant": "^2.0.1",
         "ms": "^2.1.3",
