@@ -31,7 +31,7 @@
         "@discordjs/rest": "0.3.0",
         "@discordjs/voice": "^0.8.0",
         "@stdlib/assert-is-uri": "^0.0.8",
-        "axios": "^0.26.0",
+        "axios": "^0.26.1",
         "bad-words": "^3.0.4",
         "better-sqlite3": "^7.5.0",
         "canvas": "^2.9.0",
