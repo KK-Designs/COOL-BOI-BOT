@@ -29,5 +29,5 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 100 command
 ➡ And many, many more! \
 \
 \
-So what are you waiting for? Invite [COOL BOI BOT](https://discord.com/oauth2/authorize?client_id=811024409863258172&permissions=4294442967&scope=bot%20applications.commands 'Invite COOL BOI BOT')
+So what are you waiting for? Invite [COOL BOI BOT](https://discord.com/api/oauth2/authorize?client_id=811024409863258172&permissions=1540789497335&scope=bot%20applications.commands 'Invite COOL BOI BOT')
 now!
