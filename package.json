@@ -28,7 +28,7 @@
     "dependencies": {
         "@discordjs/builders": "^0.12.0",
         "@discordjs/opus": "^0.7.0",
-        "@discordjs/rest": "0.3.0",
+        "@discordjs/rest": "0.4.1",
         "@discordjs/voice": "^0.8.0",
         "@stdlib/assert-is-uri": "^0.0.8",
         "axios": "^0.26.1",
