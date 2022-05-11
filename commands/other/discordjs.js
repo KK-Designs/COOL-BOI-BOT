@@ -17,7 +17,7 @@ module.exports = {
 		const sendError = require('../../error.js');
 
 		if (!args.length) {return sendError('You need to supply search term like `${prefix}discordjs member`', message.channel);}
-
+		return await message.reply({ content: 'This command is temporarily down. Please try again later.' })
 		const search = args.join(' ');
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(search)}`);
 		const embed = await res.json();
@@ -63,6 +63,7 @@ module.exports = {
 	},
 	/** @param {import("discord.js").CommandInteraction} interaction */
 	async executeSlash(interaction) {
+		return await interaction.reply({ content: 'This command is temporarily down. Please try again later.' });
 		const search = interaction.options.getString('query', true);
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?src=stable&q=${encodeURIComponent(search)}`);
 		if (!res.ok) {

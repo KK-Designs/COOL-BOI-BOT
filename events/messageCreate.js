@@ -86,7 +86,7 @@ module.exports = async (message) => {
 
 		if (!checkPermissions(message.member, message.channel, command.clientPermissions)) {return void await message.reply({ content: '<:no:803069123918823454> looks like **I** don\'t have permission do run that command. Ask a server mod for help and try again later.' });}
 	} else if (command.guildOnly) {
-		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `!help [command name]` to if it is server only command.' });
+		return void await message.reply({ content: 'That is a server only command. I can\'t execute those inside DMs. Use `/help [command name]` to if it is server only command.' });
 	}
 	addUserToCooldown(message.author, command);
 	console.log('Running command...');

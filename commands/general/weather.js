@@ -3,6 +3,7 @@ const fetch = require('node-fetch').default;
 const { MessageEmbed } = require('discord.js');
 const sendError = require('../../error.js');
 const color = require('../../color.json');
+require('dotenv').config();
 module.exports = {
 	name: 'weather',
 	description: 'Gives the weather for the specified location  🌤️',
@@ -19,7 +20,7 @@ module.exports = {
 	async execute(message, args) {
 		const response = await axios
 			.get(
-				`https://api.openweathermap.org/data/2.5/weather?q=${args}&units=imperial&appid=c1ba87d2a335656425a17e4395303046`,
+				`https://api.openweathermap.org/data/2.5/weather?q=${args}&units=imperial&appid=${process.env.WEATHER_API}`,
 			)
 			.catch(() => null);
 		if (!response) {

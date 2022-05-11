@@ -8,6 +8,7 @@ module.exports = {
 	description: '🎶 Get lyrics for the currently playing song',
 	aliases: ['ly'],
 	cooldown: 3,
+	guildOnly: true,
 	category: 'music',
 	options: {},
 	async execute(message) {

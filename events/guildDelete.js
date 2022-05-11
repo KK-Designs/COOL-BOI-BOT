@@ -17,7 +17,7 @@ module.exports = async (guild) => {
 		console.log('Deleted welcome channel');
 		prefix.removePrefix(guild.id);
 		console.log('Deleted prefix');
-	} catch(e) {
+	} catch (e) {
 		return;
 	}
 };

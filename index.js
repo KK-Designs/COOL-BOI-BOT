@@ -27,6 +27,7 @@ const client = new Client({
 		'GUILD_MEMBER',
 		'USER',
 	],
+	ws: { properties: { $browser: 'Discord iOS' } },
 });
 
 client.commands = new Collection();
@@ -69,6 +70,7 @@ try {
 } catch (err) {
 	console.error(err);
 }
+console.log(process.env.BOT_TOKEN);
 client.login(process.env.BOT_TOKEN);
 const processing = false;
 process.on('SIGINT', async () => {

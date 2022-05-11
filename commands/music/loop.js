@@ -3,6 +3,7 @@ module.exports = {
 	name: 'loop',
 	description: '🔁 Toggle music loop',
 	cooldown: 3,
+	guildOnly: true,
 	category: 'music',
 	options: {},
 	async execute(message) {

@@ -273,7 +273,7 @@ module.exports = {
 	},
 	async executeSlash(interaction, client) {
 		const user = interaction.user;
-		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.author.id) ?? config.defaultPrefix;
+		const guildPrefix = prefix.getPrefix(interaction.guild?.id ?? interaction.user.id) ?? config.defaultPrefix;
 		const data = [];
 		const { commands } = client;
 		let name = interaction.options.getString('argument');

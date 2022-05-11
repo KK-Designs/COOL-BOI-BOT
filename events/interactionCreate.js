@@ -8,10 +8,13 @@ module.exports = async (interaction) => {
 	const command = commands.get(interaction.commandName);
 
 	if (!command?.executeSlash) return await interaction.reply('Unknown command');
+	if (command?.guildOnly) return await interaction.reply('That is a server only command. I can\'t execute those inside DMs. Use `/help [command name]` to if it is server only command.');
 
 	try {
 		await command.executeSlash(interaction, client);
-		db.add(`commands_${interaction.guild.id}_${interaction.user.id}`, 1);
+		if (interaction.guild) {
+			db.add(`commands_${interaction.guild.id}_${interaction.user.id}`, 1);
+		}
 	} catch (e) {
 		console.error(e);
 		const method = interaction.replied || interaction.deferred ? 'followUp' : 'reply';
