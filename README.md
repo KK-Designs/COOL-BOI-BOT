@@ -24,7 +24,7 @@ A multi-purpose, music, logging, moderation, and fun bot with almost 100 command
 \
 ➡ Leveling system! \
 \
-➡ Updates provided **VERY** frequently! \
+➡ Updates provided very frequently! \
 \
 ➡ And many, many more! \
 \
