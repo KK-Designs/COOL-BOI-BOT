@@ -4,8 +4,6 @@
 
 > ⚠ This bot is currently running on the previous version of `discord.js`, version 13.12.0, which is not the latest version (14.6.0). I will update it later. As of now, I don't have time to rewrite the entire code. Thank you for using COOL BOI BOT!
 
-> ⚠ Discord has told us to remove the music system as it violates YouTube and other streaming services' terms of service. As a result, all music commands are disabled. Our bot's verification will also come back soon. Thank you for using COOL BOI BOT!
-
 ---
 
 A multi-purpose, utility, logging, moderation, and fun bot with almost 100 commands! Built to provide an entertaining, fun space for your Discord server!
